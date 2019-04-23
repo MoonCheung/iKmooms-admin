@@ -28,3 +28,10 @@ export const saveErrorLogger = info => {
     method: 'post'
   })
 }
+
+export const getSystemList = () => {
+  return axios.request({
+    url: '/api/system',
+    method: 'post'
+  })
+}

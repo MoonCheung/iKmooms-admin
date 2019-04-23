@@ -42,11 +42,6 @@
             <Tag color="blue">{{Freememory}}</Tag>
           </p>
         </Card>
-        <Card>
-          <div style="text-align:center">
-            <img :src="imgUrl" />
-          </div>
-        </Card>
         </Col>
       </Row>
     </Content>
@@ -54,11 +49,12 @@
 </template>
 
 <script>
-import './index.less'
+import { getSystemList } from '@/api/data'
+import "./index.less";
 
 export default {
-  name: 'admin',
-  data () {
+  name: "admin",
+  data() {
     return {
       // 服务器状态
       constants: null,
@@ -68,12 +64,24 @@ export default {
       hostname: null,
       system: null,
       totalmemory: null,
-      Freememory: null,
-      imgUrl: './assets/images/iview.png'
-    }
+      Freememory: null
+    };
   },
-  created () {
-    console.log(process.env.NODE_ENV + '表示正在开发')
+  created() {
+    this.init();
+    console.log(process.env.NODE_ENV + "表示处于开发");
+  },
+  //该方法被混入vue实例里面
+  methods: {
+    init() {
+      // this.$axios.post("/api/system").then(res => {
+      //   console.log(this.data);
+      // });
+
+    getSystemList().then(res => {
+      console.log(res.data)
+      })
+    }
   }
-}
+};
 </script>

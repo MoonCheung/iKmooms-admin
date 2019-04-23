@@ -1,22 +1,43 @@
 # vue-admin
 
-## Install
+> My stunning vue-cli3 project
 
-```bush
-// install dependencies
+## Project setup
+
+```
 npm install
 ```
 
-## Run
+### Compiles and hot-reloads for development
 
-### Development
-
-```bush
+```
 npm run dev
 ```
 
-### Production(Build)
+### Compiles and minifies for production
 
-```bush
+```
 npm run build
 ```
+
+### Run your tests
+
+```
+npm run test
+```
+
+### Lints and fixes files
+
+```
+npm run lint
+```
+
+### Run your unit tests
+
+```
+npm run test:unit
+```
+
+### Customize configuration
+
+See [Configuration Reference](https://cli.vuejs.org/config/).

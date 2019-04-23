@@ -21,113 +21,113 @@ import parentView from '@/components/parent-view'
  */
 
 export default [{
-  path: '/login',
-  name: 'login',
-  meta: {
-    title: 'Login - 登录',
-    hideInMenu: true
-  },
-  component: () => import('@/view/login/login')
-},
-{
-  path: '/',
-  name: '_home',
-  redirect: '/home',
-  component: Main,
-  meta: {
-    hideInMenu: false,
-    notCache: true
-  },
-  children: [{
-    path: '/home',
-    name: 'home',
+    path: '/login',
+    name: 'login',
     meta: {
-      hideInMenu: false,
-      title: '仪表盘',
-      notCache: true,
-      icon: 'md-home'
+      title: 'Login - 登录',
+      hideInMenu: true
     },
-    component: () => import('@/view/admin')
-  }]
-},
-{
-  path: '/article',
-  name: 'article',
-  meta: {
-    icon: 'md-create',
-    title: '文章管理'
-  },
-  component: Main,
-  children: [{
-    path: 'level_2_1',
-    name: 'level_2_1',
-    meta: {
-      icon: 'md-funnel',
-      title: '二级-1'
-    },
-    component: () => import('@/view/multilevel/level-2-1.vue')
+    component: () => import('@/view/login/login')
   },
   {
-    path: 'level_2_2',
-    name: 'level_2_2',
+    path: '/',
+    name: '_home',
+    redirect: '/home',
+    component: Main,
     meta: {
-      access: ['super_admin'],
-      icon: 'md-funnel',
-      showAlways: true,
-      title: '二级-2'
+      hideInMenu: false,
+      notCache: true
     },
-    component: parentView,
     children: [{
-      path: 'level_2_2_1',
-      name: 'level_2_2_1',
+      path: '/home',
+      name: 'home',
       meta: {
-        icon: 'md-funnel',
-        title: '三级'
+        hideInMenu: false,
+        title: '仪表盘',
+        notCache: true,
+        icon: 'md-home'
       },
-      component: () => import('@/view/multilevel/level-2-2/level-3-1.vue')
+      component: () => import('@/view/admin')
     }]
   },
   {
-    path: 'level_2_3',
-    name: 'level_2_3',
+    path: '/article',
+    name: 'article',
     meta: {
-      icon: 'md-funnel',
-      title: '二级-3'
+      icon: 'md-create',
+      title: '文章管理'
     },
-    component: () => import('@/view/multilevel/level-2-3.vue')
+    component: Main,
+    children: [{
+        path: 'level_2_1',
+        name: 'level_2_1',
+        meta: {
+          icon: 'md-funnel',
+          title: '二级-1'
+        },
+        component: () => import('@/view/multilevel/level-2-1.vue')
+      },
+      {
+        path: 'level_2_2',
+        name: 'level_2_2',
+        meta: {
+          access: ['super_admin'],
+          icon: 'md-funnel',
+          showAlways: true,
+          title: '二级-2'
+        },
+        component: parentView,
+        children: [{
+          path: 'level_2_2_1',
+          name: 'level_2_2_1',
+          meta: {
+            icon: 'md-funnel',
+            title: '三级'
+          },
+          component: () => import('@/view/multilevel/level-2-2/level-3-1.vue')
+        }]
+      },
+      {
+        path: 'level_2_3',
+        name: 'level_2_3',
+        meta: {
+          icon: 'md-funnel',
+          title: '二级-3'
+        },
+        component: () => import('@/view/multilevel/level-2-3.vue')
+      }
+    ]
+  },
+  {
+    path: '/comment',
+    name: 'comment',
+    meta: {
+      icon: 'md-chatboxes',
+      title: '评论管理'
+    }
+  },
+  {
+    path: '/401',
+    name: 'error_401',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/error-page/401.vue')
+  },
+  {
+    path: '/500',
+    name: 'error_500',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/error-page/500.vue')
+  },
+  {
+    path: '*',
+    name: 'error_404',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/error-page/404.vue')
   }
-  ]
-},
-{
-  path: '/comment',
-  name: 'comment',
-  meta: {
-    icon: 'md-chatboxes',
-    title: '评论管理'
-  }
-},
-{
-  path: '/401',
-  name: 'error_401',
-  meta: {
-    hideInMenu: true
-  },
-  component: () => import('@/view/error-page/401.vue')
-},
-{
-  path: '/500',
-  name: 'error_500',
-  meta: {
-    hideInMenu: true
-  },
-  component: () => import('@/view/error-page/500.vue')
-},
-{
-  path: '*',
-  name: 'error_404',
-  meta: {
-    hideInMenu: true
-  },
-  component: () => import('@/view/error-page/404.vue')
-}
 ]

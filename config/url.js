@@ -1,6 +1,6 @@
 import env from './env'
-
-const DEV_URL = 'https://www.easy-mock.com/mock/5add9213ce4d0e69998a6f51/iview-admin/'
+//修改DEV_URL为当前前端网址地址
+const DEV_URL = 'http://127.0.0.1:8080/'
 const PRO_URL = 'https://produce.com'
 
 export default env === 'development' ? DEV_URL : PRO_URL
