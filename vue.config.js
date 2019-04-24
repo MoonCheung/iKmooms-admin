@@ -41,7 +41,7 @@ module.exports = {
       '/api': {
         target: 'http://127.0.0.1:3030',
         pathRewrite: {
-          '^/api': '/', // rewrite path
+          '^/api': '', // rewrite path
         },
         changeOrigin: true, // needed for virtual hosted sites
       }
