@@ -59,40 +59,29 @@ export default [{
     },
     component: Main,
     children: [{
-        path: 'level_2_1',
-        name: 'level_2_1',
+        path: 'articlelst',
+        name: 'articleList',
         meta: {
-          icon: 'md-funnel',
-          title: '二级-1'
+          icon: 'md-list-box',
+          title: '所有文章'
         },
         component: () => import('@/view/multilevel/level-2-1.vue')
       },
       {
-        path: 'level_2_2',
-        name: 'level_2_2',
+        path: 'pubArticle',
+        name: 'publicArticle',
         meta: {
-          access: ['super_admin'],
-          icon: 'md-funnel',
-          showAlways: true,
-          title: '二级-2'
+          icon: 'md-done-all',
+          title: '发布文章'
         },
-        component: parentView,
-        children: [{
-          path: 'level_2_2_1',
-          name: 'level_2_2_1',
-          meta: {
-            icon: 'md-funnel',
-            title: '三级'
-          },
-          component: () => import('@/view/multilevel/level-2-2/level-3-1.vue')
-        }]
+        component: () => import('@/view/multilevel/level-2-3.vue')
       },
       {
-        path: 'level_2_3',
-        name: 'level_2_3',
+        path: 'articlelbl',
+        name: 'articleLabel',
         meta: {
-          icon: 'md-funnel',
-          title: '二级-3'
+          icon: 'md-pricetags',
+          title: '文章标签'
         },
         component: () => import('@/view/multilevel/level-2-3.vue')
       }
@@ -112,7 +101,7 @@ export default [{
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/error-page/401.vue')
+    component: () => import('@/view/error/401.vue')
   },
   {
     path: '/500',
@@ -120,7 +109,7 @@ export default [{
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/error-page/500.vue')
+    component: () => import('@/view/error/500.vue')
   },
   {
     path: '*',
@@ -128,6 +117,6 @@ export default [{
     meta: {
       hideInMenu: true
     },
-    component: () => import('@/view/error-page/404.vue')
+    component: () => import('@/view/error/404.vue')
   }
 ]
