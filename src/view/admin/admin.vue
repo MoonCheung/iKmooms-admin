@@ -42,7 +42,6 @@
                 </div>
               </i-circle>
             </div>
-
             </Col>
           </Row>
         </Card>
@@ -131,38 +130,15 @@ export default {
       //   console.log(res.headers);
       // });
       getSystemList().then(res => {
-        let {
-          constants,
-          release,
-          platform,
-          hostname,
-          type,
-          totalmemory,
-          Freememory,
-          percentage,
-          cpus
-        } = res.data;
-        [
-          this.constants,
-          this.release,
-          this.platform,
-          this.hostname,
-          this.type,
-          this.totalmemory,
-          this.Freememory,
-          this.percentage,
-          this.cpus
-        ] = [
-          constants,
-          release,
-          platform,
-          hostname,
-          type,
-          totalmemory,
-          Freememory,
-          percentage,
-          cpus
-        ];
+        (this.constants = res.data.constants),
+          (this.release = res.data.release),
+          (this.platform = res.data.platform),
+          (this.hostname = res.data.hostname),
+          (this.type = res.data.type),
+          (this.totalmemory = res.data.totalmemory),
+          (this.Freememory = res.data.Freememory),
+          (this.percentage = res.data.percentage),
+          (this.cpus = res.data.cpus);
       });
     },
     changeInit() {

@@ -42,10 +42,10 @@ export default [{
       path: '/home',
       name: 'home',
       meta: {
-        hideInMenu: false,
+        icon: 'md-home',
         title: '仪表盘',
-        notCache: true,
-        icon: 'md-home'
+        hideInMenu: false,
+        notCache: true
       },
       component: () => import('@/view/admin')
     }]
@@ -53,37 +53,43 @@ export default [{
   {
     path: '/article',
     name: 'article',
+    redirect: '/article/artList',
     meta: {
       icon: 'md-create',
-      title: '文章管理'
+      title: '文章管理',
+      hideInMenu: false,
+      notCache: true
     },
     component: Main,
     children: [{
-        path: 'articlelst',
-        name: 'articleList',
+        path: 'artList',
+        name: 'article_artList',
         meta: {
           icon: 'md-list-box',
-          title: '所有文章'
+          title: '所有文章',
+          requiresAuth: true
         },
-        component: () => import('@/view/multilevel/level-2-1.vue')
+        component: () => import('@/view/article/articleList.vue')
       },
       {
-        path: 'pubArticle',
-        name: 'publicArticle',
+        path: 'artPublic',
+        name: 'article_artPublic',
         meta: {
           icon: 'md-done-all',
-          title: '发布文章'
+          title: '发布文章',
+          requiresAuth: true
         },
-        component: () => import('@/view/multilevel/level-2-3.vue')
+        component: () => import('@/view/article/articlePub.vue')
       },
       {
-        path: 'articlelbl',
-        name: 'articleLabel',
+        path: 'artLabel',
+        name: 'article_label',
         meta: {
           icon: 'md-pricetags',
-          title: '文章标签'
+          title: '文章标签',
+          requiresAuth: true
         },
-        component: () => import('@/view/multilevel/level-2-3.vue')
+        component: () => import('@/view/article/articleLabel.vue')
       }
     ]
   },
