@@ -10,22 +10,15 @@
 </template>
 
 <script>
-import { quillEditor } from "vue-quill-editor";
 import hljs from "highlight.js";
 import { ImageDrop } from "quill-image-drop-module";
 import ImageResize from "quill-image-resize-module";
 Quill.register("modules/imageDrop", ImageDrop);
 Quill.register("modules/imageResize", ImageResize);
-import "quill/dist/quill.core.css";
-import "quill/dist/quill.snow.css";
-import "quill/dist/quill.bubble.css";
 import "highlight.js/styles/monokai-sublime.css";
 
 export default {
   name: "Editor",
-  components: {
-    quillEditor
-  },
   props: {
     value: {
       type: String,
@@ -74,7 +67,6 @@ export default {
       }
     };
   },
-  //该方法被混入vue实例当中
   methods: {
     onEditorBlur(editor) {
       // console.log("editor blur!", editor);
