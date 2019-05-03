@@ -1,4 +1,3 @@
-
 const tokens = {
   admin: {
     token: 'admin-token'
@@ -24,35 +23,39 @@ const users = {
 }
 
 export default [
-  // user login
-  {
-    url: '/user/login',
-    type: 'post',
-    response: config => {
-      const { username } = config.body
-      const token = tokens[username]
+  // user login 等着删除这个
+  // {
+  //   url: '/user/login',
+  //   type: 'post',
+  //   response: config => {
+  //     const {
+  //       username
+  //     } = config.body
+  //     const token = tokens[username]
 
-      // mock error
-      if (!token) {
-        return {
-          code: 60204,
-          message: 'Account and password are incorrect.'
-        }
-      }
+  //     // mock error
+  //     if (!token) {
+  //       return {
+  //         code: 60204,
+  //         message: 'Account and password are incorrect.'
+  //       }
+  //     }
 
-      return {
-        code: 20000,
-        data: token
-      }
-    }
-  },
+  //     return {
+  //       code: 20000,
+  //       data: token
+  //     }
+  //   }
+  // },
 
   // get user info
   {
     url: '/user/info\.*',
     type: 'get',
     response: config => {
-      const { token } = config.query
+      const {
+        token
+      } = config.query
       const info = users[token]
 
       // mock error

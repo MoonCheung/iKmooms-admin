@@ -82,6 +82,12 @@ export default {
       curdate: FormatDate(new Date())
     };
   },
+  created() {
+    console.log(
+      "处于开发状态：" + process.env.VUE_APP_BASE_API,
+      process.env.ENV
+    );
+  },
   //计算属性被混入实例当中，且有缓存的
   computed: {
     editor() {
