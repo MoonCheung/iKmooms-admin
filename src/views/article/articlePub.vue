@@ -83,10 +83,8 @@ export default {
     };
   },
   created() {
-    console.log(
-      "处于开发状态：" + process.env.VUE_APP_BASE_API,
-      process.env.ENV
-    );
+    console.log("处于开发状态：" + process.env.VUE_APP_BASE_API);
+    console.log("处于开发状态：" + process.env.NODE_ENV);
   },
   //计算属性被混入实例当中，且有缓存的
   computed: {

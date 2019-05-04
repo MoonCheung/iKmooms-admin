@@ -9,7 +9,7 @@ function resolve(dir) {
 }
 
 const name = defaultSettings.title || 'vue Admin Template' // page title
-const port = 9528 // dev port
+const port = 8080 // dev port
 
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
@@ -37,7 +37,7 @@ module.exports = {
       // change xxx-api/login => mock/login
       // detail: https://cli.vuejs.org/config/#devserver-proxy
       // [process.env.VUE_APP_BASE_API]: {
-      //   target: `http://localhost:${port}/mock`,
+      //   target: `http://127.0.0.1:${port}/mock`,
       //   changeOrigin: true,
       //   pathRewrite: {
       //     ['^' + process.env.VUE_APP_BASE_API]: ''
@@ -70,7 +70,8 @@ module.exports = {
         'window.Quill': 'quill/dist/quill.js',
         'Quill': 'quill/dist/quill.js'
       }),
-    ]
+    ],
+    devtool: 'source-map'
   },
   chainWebpack(config) {
     config.plugins.delete('preload') // TODO: need test

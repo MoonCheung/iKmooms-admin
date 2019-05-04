@@ -114,26 +114,28 @@ export default {
         this.$refs.password.focus();
       });
     },
-    handleLogin() {
-      // this.$refs.loginForm.validate(valid => {
-      //   if (valid) {
-      //     this.loading = true;
-      //     this.$store
-      //       .dispatch("/login", this.loginForm)
-      //       .then(() => {
-      //         this.$router.push({ path: this.redirect || "/" });
-      //         this.loading = false;
-      //       })
-      //       .catch(() => {
-      //         this.loading = false;
-      //       });
-      //   } else {
-      //     console.log("error submit!!");
-      //     return false;
-      //   }
-      // });
-      console.log(this.$refs.loginForm);
-      console.log(this.$store.dispatch);
+    //点击login按钮出现有bug
+    handleLogin() { 
+      this.$refs.loginForm.validate(valid => {
+        if (valid) {
+          this.loading = true;
+          this.$store
+            .dispatch("login", this.loginForm)
+            .then(() => {
+              this.$router.push({ path: this.redirect || "/" });
+              this.loading = false;
+            })
+            .catch(() => {
+              this.loading = false;
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+        console.log(valid)
+      });
+      // console.log(this.$refs.loginForm);
+      // console.log(this.$store.dispatch); //vuex
     }
   }
 };
