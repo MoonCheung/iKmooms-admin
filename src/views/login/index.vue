@@ -114,13 +114,12 @@ export default {
         this.$refs.password.focus();
       });
     },
-    //点击login按钮出现有bug
-    handleLogin() { 
+    handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true;
           this.$store
-            .dispatch("login", this.loginForm)
+            .dispatch("user/login", this.loginForm)
             .then(() => {
               this.$router.push({ path: this.redirect || "/" });
               this.loading = false;
@@ -132,10 +131,7 @@ export default {
           console.log("error submit!!");
           return false;
         }
-        console.log(valid)
       });
-      // console.log(this.$refs.loginForm);
-      // console.log(this.$store.dispatch); //vuex
     }
   }
 };

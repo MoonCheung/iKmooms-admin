@@ -9,7 +9,7 @@ function resolve(dir) {
 }
 
 const name = defaultSettings.title || 'vue Admin Template' // page title
-const port = 8080 // dev port
+const port = 9528 // dev port
 
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
@@ -28,6 +28,7 @@ module.exports = {
   productionSourceMap: false,
   devServer: {
     port: port,
+    // TODO: 之前值为true, 现在修改为false
     open: true,
     overlay: {
       warnings: false,
@@ -36,24 +37,24 @@ module.exports = {
     proxy: {
       // change xxx-api/login => mock/login
       // detail: https://cli.vuejs.org/config/#devserver-proxy
-      // [process.env.VUE_APP_BASE_API]: {
-      //   target: `http://127.0.0.1:${port}/mock`,
-      //   changeOrigin: true,
-      //   pathRewrite: {
-      //     ['^' + process.env.VUE_APP_BASE_API]: ''
-      //   }
-      // }
-      //修改为自己本地koa服务器接口API
       [process.env.VUE_APP_BASE_API]: {
-        target: 'http://127.0.0.1:3030',
+        target: `http://127.0.0.1:${port}/mock`,
+        changeOrigin: true,
         pathRewrite: {
-          ['^' + process.env.VUE_APP_BASE_API]: '', // rewrite path
-        },
-        changeOrigin: true, // needed for virtual hosted sites
+          ['^' + process.env.VUE_APP_BASE_API]: ''
+        }
       }
+      //修改为自己本地koa服务器接口API
+      // [process.env.VUE_APP_BASE_API]: {
+      //   target: 'http://127.0.0.1:3030',
+      //   pathRewrite: {
+      //     ['^' + process.env.VUE_APP_BASE_API]: '/', // rewrite path
+      //   },
+      //   changeOrigin: true, // needed for virtual hosted sites
+      // }
     },
     // 暂时移除after:require()
-    // after: require('./mock/mock-server.js')
+    after: require('./mock/mock-server.js')
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
