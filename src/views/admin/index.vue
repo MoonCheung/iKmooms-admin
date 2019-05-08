@@ -8,11 +8,35 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { getSystemList } from "@/api/system";
 
 export default {
   name: "admin",
   computed: {
     ...mapGetters(["name", "roles"])
+  },
+  created() {
+    this.init();
+  },
+  methods: {
+    init() {
+      getSystemList()
+        .then(res => {
+          // (this.constants = res.data.constants),
+          //   (this.release = res.data.release),
+          //   (this.platform = res.data.platform),
+          //   (this.hostname = res.data.hostname),
+          //   (this.type = res.data.type),
+          //   (this.totalmemory = res.data.totalmemory),
+          //   (this.Freememory = res.data.Freememory),
+          //   (this.percentage = res.data.percentage),
+          //   (this.cpus = res.data.cpus);
+          console.log(res.data);
+        })
+        .catch(err => {
+          console.log("Catch报错:" + err);
+        });
+    }
   }
 };
 </script>
