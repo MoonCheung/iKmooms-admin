@@ -46,6 +46,7 @@ export const constantRoutes = [{
     path: '/',
     component: Layout,
     redirect: '/admin',
+    // alwaysShow: true,
     children: [{
       path: 'admin',
       name: 'admin',
@@ -214,12 +215,12 @@ export const asyncRoutes = [
   //   }]
   // },
 
-  // 404 page must be placed at the end !!!
-  // {
-  //   path: '*',
-  //   redirect: '/404',
-  //   hidden: true
-  // }
+  // 404 page must be placed at the end!!!
+  {
+    path: '*',
+    redirect: '/404',
+    hidden: true
+  }
 ]
 
 const createRouter = () => new Router({

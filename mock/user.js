@@ -48,40 +48,40 @@ export default [
   //   }
   // },
 
-  // get user info
-  {
-    url: '/user/info\.*',
-    type: 'get',
-    response: config => {
-      const {
-        token
-      } = config.query
-      const info = users[token]
+  // // get user info
+  // {
+  //   url: '/user/info\.*',
+  //   type: 'get',
+  //   response: config => {
+  //     const {
+  //       token
+  //     } = config.query
+  //     const info = users[token]
 
-      // mock error
-      if (!info) {
-        return {
-          code: 50008,
-          message: 'Login failed, unable to get user details.'
-        }
-      }
+  //     // mock error
+  //     if (!info) {
+  //       return {
+  //         code: 50008,
+  //         message: 'Login failed, unable to get user details.'
+  //       }
+  //     }
 
-      return {
-        code: 20000,
-        data: info
-      }
-    }
-  },
+  //     return {
+  //       code: 20000,
+  //       data: info
+  //     }
+  //   }
+  // },
 
-  // user logout
-  {
-    url: '/user/logout',
-    type: 'post',
-    response: _ => {
-      return {
-        code: 20000,
-        data: 'success'
-      }
-    }
-  }
+  // // user logout
+  // {
+  //   url: '/user/logout',
+  //   type: 'post',
+  //   response: _ => {
+  //     return {
+  //       code: 20000,
+  //       data: 'success'
+  //     }
+  //   }
+  // }
 ]

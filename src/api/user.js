@@ -1,6 +1,13 @@
 import request from '@/utils/request'
 
-export function login(data) {
+export function login({
+  username,
+  password
+}) {
+  const data = {
+    username,
+    password
+  }
   return request({
     url: '/api/login',
     method: 'post',
@@ -10,7 +17,7 @@ export function login(data) {
 
 export function getInfo(token) {
   return request({
-    url: '/user/info',
+    url: '/api/info',
     method: 'get',
     params: {
       token
@@ -20,7 +27,7 @@ export function getInfo(token) {
 
 export function logout() {
   return request({
-    url: '/user/logout',
+    url: '/api/logout',
     method: 'post'
   })
 }

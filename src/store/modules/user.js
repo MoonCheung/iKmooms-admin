@@ -47,17 +47,14 @@ const actions = {
       login({
         username: username.trim(),
         password: password
-      }).then(response => {
+      }).then(res => {
         const {
           data
-        } = response
+        } = res
+        // console.log(data);
         commit('SET_TOKEN', data.token)
         setToken(data.token)
         resolve()
-      }, res => {
-        //TODO：增加reject()
-        console.log(res)
-        reject()
       }).catch(error => {
         reject(error)
       })
@@ -70,13 +67,13 @@ const actions = {
     state
   }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
+      // console.log(state.token) //打印出admin
+      getInfo(state.token).then(res => {
         const {
           data
-        } = response
-
+        } = res
         if (!data) {
-          reject('Verification failed, please Login again.')
+          reject('验证失败，请再次登录.')
         }
 
         const {
@@ -85,9 +82,9 @@ const actions = {
           avatar
         } = data
 
-        // roles must be a non-empty array
+        // 角色必须是非空数组
         if (!roles || roles.length <= 0) {
-          reject('getInfo: roles must be a non-null array!')
+          reject('getInfo: 角色必须是非null数组！')
         }
 
         commit('SET_ROLES', roles)
