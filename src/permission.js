@@ -46,11 +46,8 @@ router.beforeEach(async (to, from, next) => {
           // 获取用户信息 
           // note: 角色必须是对象数组！例如：['admin']或['developer'，'editor']
           const {
-            roles,
-            name,
-            avatar
+            roles
           } = await store.dispatch('user/getInfo')
-          console.log(roles, name, avatar);
 
           // 根据角色生成可访问的路线图
           const accessRoutes = await store.dispatch('permission/generateRoutes', roles)

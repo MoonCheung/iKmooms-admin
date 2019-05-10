@@ -103,7 +103,9 @@ const actions = {
     state
   }) {
     return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
+      // console.log(state.token) //打印出admin
+      logout(state.token).then((res) => {
+        console.log(res);
         commit('SET_TOKEN', '')
         commit('SET_ROLES', [])
         removeToken()
