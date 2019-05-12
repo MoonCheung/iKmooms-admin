@@ -62,7 +62,7 @@ import { validUsername } from "@/utils/validate";
 
 export default {
   name: "Login",
-  data() {
+  data () {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
         callback(new Error("请输入正确的用户名"));
@@ -97,14 +97,14 @@ export default {
   },
   watch: {
     $route: {
-      handler: function(route) {
+      handler: function (route) {
         this.redirect = route.query && route.query.redirect;
       },
       immediate: true
     }
   },
   methods: {
-    showPwd() {
+    showPwd () {
       if (this.passwordType === "password") {
         this.passwordType = "";
       } else {
@@ -114,7 +114,7 @@ export default {
         this.$refs.password.focus();
       });
     },
-    handleLogin() {
+    handleLogin () {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true;
@@ -143,8 +143,8 @@ export default {
 /* 修复input 背景不协调 和光标变色 */
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
-$bg:#283443;
-$light_gray:#fff;
+$bg: #283443;
+$light_gray: #fff;
 $cursor: #fff;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
@@ -187,9 +187,9 @@ $cursor: #fff;
 </style>
 
 <style lang="scss" scoped>
-$bg:#2d3a4b;
-$dark_gray:#889aa4;
-$light_gray:#eee;
+$bg: #2d3a4b;
+$dark_gray: #889aa4;
+$light_gray: #eee;
 
 .login-container {
   min-height: 100%;

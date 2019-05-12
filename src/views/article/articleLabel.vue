@@ -4,7 +4,12 @@
 
 <script>
 export default {
-  name: "articleLabel"
+  name: "artlabel",
+  data () {
+    return {
+
+    }
+  }
 };
 </script>
 

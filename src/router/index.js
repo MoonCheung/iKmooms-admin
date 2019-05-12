@@ -46,7 +46,6 @@ export const constantRoutes = [{
     path: '/',
     component: Layout,
     redirect: '/admin',
-    // alwaysShow: true,
     children: [{
       path: 'admin',
       name: 'admin',
@@ -58,7 +57,7 @@ export const constantRoutes = [{
     }]
   },
   {
-    path: '/article',
+    path: '/art',
     component: Layout,
     redirect: '/article/artlist',
     name: 'Article',
@@ -96,10 +95,31 @@ export const constantRoutes = [{
     ]
   },
   {
-    path: '/comment',
+    path: '/catg',
     component: Layout,
-    redirect: '/comment/cmtlist',
+    redirect: '/catg/catglist',
+    name: 'Category',
+    alwaysShow: true, //一直显示根路由
+    meta: {
+      title: '分类管理',
+      icon: 'example'
+    },
+    children: [{
+      path: 'catglist',
+      name: 'categoryList',
+      component: () => import('@/views/category/categoryList'),
+      meta: {
+        title: '分类列表',
+        icon: 'tree'
+      }
+    }]
+  },
+  {
+    path: '/cmt',
+    component: Layout,
+    redirect: '/cmt/cmtlist',
     name: 'Comment',
+    alwaysShow: true, //一直显示根路由
     meta: {
       title: '评论管理',
       icon: 'example'

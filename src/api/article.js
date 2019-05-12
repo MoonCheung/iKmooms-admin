@@ -7,3 +7,11 @@ export function insertArticle(path, param) {
     data: param
   })
 }
+
+export function frontList(param) {
+  return request({
+    url: '/api/article/frontList',
+    method: 'get',
+    params: param
+  })
+}

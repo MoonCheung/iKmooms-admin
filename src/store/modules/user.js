@@ -51,7 +51,7 @@ const actions = {
         const {
           data
         } = res
-        // console.log(data);
+        // console.log(data); //从服务器获取用户信息
         commit('SET_TOKEN', data.token)
         setToken(data.token)
         resolve()
@@ -104,8 +104,7 @@ const actions = {
   }) {
     return new Promise((resolve, reject) => {
       // console.log(state.token) //打印出admin
-      logout(state.token).then((res) => {
-        console.log(res);
+      logout(state.token).then(() => {
         commit('SET_TOKEN', '')
         commit('SET_ROLES', [])
         removeToken()
