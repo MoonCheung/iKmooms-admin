@@ -65,12 +65,12 @@
                  ref="catgForm"
                  :rules="catgformRules">
           <el-form-item label="分类名称"
-                        prop="name">
+                        prop="categoryname">
             <el-input v-model="catgForm.categoryname"
                       placeholder="请输入分类名称"></el-input>
           </el-form-item>
           <el-form-item label="分类描述"
-                        prop="desc">
+                        prop="categorydesc">
             <el-input type="textarea"
                       v-model="catgForm.categorydesc"
                       placeholder="请输入分类描述"></el-input>
@@ -129,8 +129,8 @@ export default {
     },
     //创建新表单
     initForm () {
-      this.catgForm.name = "";
-      this.catgForm.desc = "";
+      this.catgForm.categoryname = "";
+      this.catgForm.categorydesc = "";
     },
     //添加分类
     addCatg () {
