@@ -159,6 +159,8 @@ export default {
               type: 'success',
               message: res.data.msg
             });
+            //再次获取分类列表
+            this.getCatgList();
           }
         })
       }).catch(action => {
@@ -215,8 +217,8 @@ export default {
         limit: this.limit
       }
       getCategory(param).then((res) => {
-        this.catgData = res.data.tagData;
-        if (res.data.tagData.length > 0) {
+        this.catgData = res.data.catgData;
+        if (res.data.catgData.length > 0) {
           this.total = res.data.total
         }
       })
