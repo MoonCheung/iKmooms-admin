@@ -31,3 +31,10 @@ export function delCategory(param) {
     data: param
   })
 }
+
+export function getAllCatgs() {
+  return request({
+    url: '/api/category/getallcatg',
+    method: 'get',
+  })
+}

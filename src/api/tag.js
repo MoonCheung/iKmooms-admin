@@ -31,3 +31,10 @@ export function delTags(param) {
     data: param
   })
 }
+
+export function getAllTags() {
+  return request({
+    url: '/api/tag/getalltag',
+    method: 'get',
+  })
+}

@@ -91,7 +91,7 @@
 import { addTags, getTags, editTags, delTags } from '@/api/tag'
 
 export default {
-  name: "artlabel",
+  name: "arttag",
   data () {
     return {
       //分页数据

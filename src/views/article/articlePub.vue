@@ -11,15 +11,32 @@
                      :model="form"
                      label-width="100px"
                      class="el-formtable">
-              <el-form-item label="文章标题">
+              <el-form-item label="文章标题"
+                            prop="title">
                 <el-input v-model="form.title"
                           class="el-forminput"
                           placeholder="请描写文章标题"></el-input>
               </el-form-item>
-              <el-form-item label="文章描述">
+              <el-form-item label="文章描述"
+                            prop="desc">
                 <el-input v-model="form.desc"
                           class="el-forminput"
                           placeholder="请描写文章描述"></el-input>
+              </el-form-item>
+              <el-form-item label="文章标签"
+                            prop="tag">
+                <el-select v-model="form.tag"
+                           multiple
+                           filterable
+                           default-first-option
+                           style="width: 500px;"
+                           placeholder="请选择文章标签">
+                  <el-option v-for="item in tagList"
+                             :key="item._id"
+                             :label="item.tagname"
+                             :value="item.tagname">
+                  </el-option>
+                </el-select>
               </el-form-item>
               <!-- <el-form-item label="发布日期">
                 <el-date-picker @change="changeDate"
@@ -30,7 +47,8 @@
                                 value-format="yyyy-MM-dd">
                 </el-date-picker>
               </el-form-item> -->
-              <el-form-item label="文章内容">
+              <el-form-item label="文章内容"
+                            prop="content">
                 <!-- 引入自定义富文本组件这里 -->
                 <v-quill-editor ref="myeditor"></v-quill-editor>
               </el-form-item>
@@ -46,7 +64,7 @@
             <div slot="header">
               <span>分类目录</span>
             </div>
-            <el-radio-group v-model="radio">
+            <!-- <el-radio-group v-model="radio">
               <div class="radio-first">
                 <el-radio label="front"
                           @click.native.prevent="clickitem('front')">
@@ -65,7 +83,25 @@
                   <span>CODE</span>
                 </el-radio>
               </div>
-            </el-radio-group>
+            </el-radio-group> -->
+            <el-select v-model="catg"
+                       placeholder="请选择">
+              <el-option v-for="item in catgList"
+                         :key="item._id"
+                         :label="item.categoryname"
+                         :value="item.categoryname">
+              </el-option>
+            </el-select>
+          </el-card>
+        </el-col>
+        <el-col :span="6">
+          <el-card>
+            <div slot="header">
+              <span>缩略图</span>
+            </div>
+            <div>
+
+            </div>
           </el-card>
         </el-col>
       </el-row>
@@ -76,6 +112,8 @@
 <script>
 import vQuillEditor from "@/components/quill-editor";
 import { insertArticle } from "@/api/article";
+import { getAllCatgs } from "@/api/category";
+import { getAllTags } from "@/api/tag";
 import { Notification } from 'element-ui';
 
 export default {
@@ -87,12 +125,23 @@ export default {
     return {
       form: {
         title: "",
-        desc: ""
+        desc: "",
+        tag: ""
       },
+      catg: "",
       htmlContent: "",
-      list: "",
-      radio: "",
-      curdate: FormatDate(new Date()),
+      list: "", //等会儿删除
+      tagList: [
+        // { _id: "1", tagname: "javascript" },
+        // { _id: "2", tagname: "nodejs", },
+        // { _id: "3", tagname: "前端" }
+      ],
+      catgList: [
+        // { _id: "1", categoryname: '测试分类1' },
+        // { _id: "2", categoryname: '测试分类2' },
+        // { _id: "3", categoryname: '测试分类3' }
+      ],
+      curdate: FormatDate(new Date())
     };
   },
   created () {
@@ -107,11 +156,11 @@ export default {
   },
   //该方法被混入实例当中...
   methods: {
-    clickitem (event) {
-      return this.list = event === this.radio ?
-        this.radio = '' :
-        this.radio = event
-    },
+    // clickitem (event) {
+    //   return this.list = event === this.radio ?
+    //     this.radio = '' :
+    //     this.radio = event
+    // },
     submitArticle () {
       let param = {
         title: this.form.title,
@@ -143,9 +192,28 @@ export default {
           }
         });
       }
+    },
+    //获取标签列表
+    getAllTagsList () {
+      getAllTags().then((res) => {
+        if (res.data.code == 1) {
+          this.tagList = res.data.result
+        }
+      })
+    },
+    //获取分类列表
+    getAllCatgList () {
+      getAllCatgs().then((res) => {
+        if (res.data.code == 1) {
+          this.catgList = res.data.result
+        }
+      })
     }
   },
-  mounted () { }
+  mounted () {
+    this.getAllTagsList();
+    this.getAllCatgList();
+  }
 };
 
 // 封装格式化日期

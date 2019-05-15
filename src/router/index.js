@@ -84,9 +84,9 @@ export const constantRoutes = [{
         }
       },
       {
-        path: 'artlabel',
-        name: 'articleLabel',
-        component: () => import('@/views/article/articleLabel'),
+        path: 'arttag',
+        name: 'articleTag',
+        component: () => import('@/views/article/articleTag'),
         meta: {
           title: '文章标签',
           icon: 'tree'
