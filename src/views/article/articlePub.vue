@@ -15,13 +15,26 @@
                             prop="title">
                 <el-input v-model="form.title"
                           class="el-forminput"
-                          placeholder="请描写文章标题"></el-input>
+                          placeholder="请输入文章标题"></el-input>
               </el-form-item>
               <el-form-item label="文章描述"
                             prop="desc">
                 <el-input v-model="form.desc"
                           class="el-forminput"
-                          placeholder="请描写文章描述"></el-input>
+                          placeholder="请输入文章描述"></el-input>
+              </el-form-item>
+              <el-form-item label="缩略图"
+                            prop="thumbnail">
+                <el-upload class="el-formupload"
+                           ref="upload"
+                           list-type="picture-card"
+                           :action="regionUrl"
+                           :http-request="uploadImg"
+                           :before-upload="beforeUpload"
+                           :on-preview="handlePreview"
+                           :on-remove="handleRemove">
+                  <i class="el-icon-plus"></i>
+                </el-upload>
               </el-form-item>
               <el-form-item label="文章标签"
                             prop="tag">
@@ -50,7 +63,10 @@
               <el-form-item label="文章内容"
                             prop="content">
                 <!-- 引入自定义富文本组件这里 -->
-                <v-quill-editor ref="myeditor"></v-quill-editor>
+                <v-quill-editor ref="myEditor"
+                                v-model="form.content"
+                                :domain="regionUrl"
+                                :baseUrl="qiniulink"></v-quill-editor>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary"
@@ -94,16 +110,6 @@
             </el-select>
           </el-card>
         </el-col>
-        <el-col :span="6">
-          <el-card>
-            <div slot="header">
-              <span>缩略图</span>
-            </div>
-            <div>
-
-            </div>
-          </el-card>
-        </el-col>
       </el-row>
     </el-main>
   </el-container>
@@ -111,10 +117,12 @@
 
 <script>
 import vQuillEditor from "@/components/quill-editor";
+import { getQNToken, uploadToQN } from "@/api/qiniu";
 import { insertArticle } from "@/api/article";
 import { getAllCatgs } from "@/api/category";
 import { getAllTags } from "@/api/tag";
 import { Notification } from 'element-ui';
+import axios from 'axios';
 
 export default {
   name: "artpub",
@@ -126,7 +134,8 @@ export default {
       form: {
         title: "",
         desc: "",
-        tag: ""
+        tag: "",
+        content: ""
       },
       catg: "",
       htmlContent: "",
@@ -141,6 +150,12 @@ export default {
         // { _id: "2", categoryname: '测试分类2' },
         // { _id: "3", categoryname: '测试分类3' }
       ],
+      //七牛云配置
+      token: '',
+      imageUrl: '',
+      regionUrl: 'https://upload-z2.qiniup.com', // 七牛云的上传地址，我这里是华南区
+      qiniulink: 'http://prk2mqfev.bkt.clouddn.com/',     // 这是七牛云空间的外链默认域名
+
       curdate: FormatDate(new Date())
     };
   },
@@ -151,7 +166,7 @@ export default {
   //计算属性被混入实例当中，且有缓存的
   computed: {
     editor () {
-      return this.$refs.myeditor.content;
+      return this.$refs.myEditor.content;
     }
   },
   //该方法被混入实例当中...
@@ -162,36 +177,36 @@ export default {
     //     this.radio = event
     // },
     submitArticle () {
-      let param = {
-        title: this.form.title,
-        desc: this.form.desc,
-        htmlContent: this.editor,
-        date: this.curdate,
-        list: this.list
-      };
-      if (Object.is(this.form.title, "")) {
-        this.$message({
-          message: '此文章标题不得为空，请输入标题',
-          type: 'warning'
-        });
-      } else {
-        insertArticle(this.radio, param).then(res => {
-          let { error } = res.data;
-          if (Object.is(error, 0)) {
-            this.$message({
-              message: '发布文章成功',
-              type: 'success'
-            });
-            [this.form.title, this.form.desc] = [""];
-            this.$refs.myeditor.content = "";
-          } else {
-            this.$message({
-              message: '发布文章失败',
-              type: 'error'
-            })
-          }
-        });
-      }
+      // let param = {
+      //   title: this.form.title,
+      //   desc: this.form.desc,
+      //   htmlContent: this.editor,
+      //   date: this.curdate,
+      //   list: this.list
+      // };
+      // if (Object.is(this.form.title, "")) {
+      //   this.$message({
+      //     message: '此文章标题不得为空，请输入标题',
+      //     type: 'warning'
+      //   });
+      // } else {
+      //   insertArticle(this.radio, param).then(res => {
+      //     let { error } = res.data;
+      //     if (Object.is(error, 0)) {
+      //       this.$message({
+      //         message: '发布文章成功',
+      //         type: 'success'
+      //       });
+      //       [this.form.title, this.form.desc] = [""];
+      //       this.$refs.myEditor.content = "";
+      //     } else {
+      //       this.$message({
+      //         message: '发布文章失败',
+      //         type: 'error'
+      //       })
+      //     }
+      //   });
+      // }
     },
     //获取标签列表
     getAllTagsList () {
@@ -208,6 +223,60 @@ export default {
           this.catgList = res.data.result
         }
       })
+    },
+    //删除缩略图
+    handleRemove (file, fileList) {
+      console.log(file, fileList);
+    },
+    //放大缩略图
+    handlePreview (file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    //上传缩略图
+    uploadImg (req) {
+      const config = {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      }
+      let filetype = ''
+      if (req.file.type === 'image/png') {
+        filetype = 'png'
+      } else {
+        filetype = 'jpg'
+      }
+      // 重命名要上传的文件
+      const keyname = 'blogs/image/' + new Date() + Math.floor(Math.random() * 100) + '.' + filetype
+      getQNToken().then(res => {
+        const formdata = new FormData() // 打印出空对象
+        // 利用append的内置方式
+        formdata.append('file', req.file)
+        formdata.append('token', res.data.result.token)
+        formdata.append('key', keyname)
+        // 使用axios封装函数直接上传七牛云引发报错,等上线之后就改的
+        // uploadToQN(this.regionUrl, formdata).then(res => {
+        //   this.imageUrl = 'http://' + this.qiniulink + '/' + res.data.key
+        //   // console.log(this.imageUrl);
+        // })
+        // 暂时使用引入axios，通过post方式请求获得数据返回的 
+        axios.post(this.regionUrl, formdata).then(res => {
+          this.imageUrl = this.qiniulink + res.data.key
+          console.log(this.imageUrl)
+        })
+      }).catch(err => {
+        console.error(err);
+      })
+    },
+    //上传图片之前验证文件合法性
+    beforeUpload (file) {
+      const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'
+      const isLt2M = file.size / 1024 / 1024 < 2
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 JPG 格式!')
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!')
+      }
+      return isJPG && isLt2M
     }
   },
   mounted () {

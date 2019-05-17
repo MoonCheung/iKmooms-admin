@@ -19,6 +19,8 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // 权限控制
 
+Vue.config.productionTip = false
+
 /**
  * If you don't want to use mock-server
  * you want to use mockjs for request interception
@@ -33,7 +35,6 @@ Vue.use(ElementUI, {
 })
 Vue.use(quillEditor)
 
-Vue.config.productionTip = false
 
 new Vue({
   el: '#app',
