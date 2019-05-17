@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 
-export function insertArticle(path, param) {
+export function insertArticle(param) {
   return request({
-    url: `/api/article/ins${path}`,
+    url: '/api/article/insfront',
     method: 'post',
     data: param
   })

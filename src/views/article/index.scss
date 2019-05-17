@@ -1,0 +1,18 @@
+.el-upload-list--picture-card .el-upload-list__item {
+  height: 100px;
+  width: 240px;
+}
+
+.el-upload--picture-card {
+  height: 100px;
+  width: 240px;
+  line-height: 100px;
+  border-radius: 2px;
+}
+
+.el-formtable {
+  .el-forminput {
+    min-width: 80%;
+    width: 80%;
+  }
+}

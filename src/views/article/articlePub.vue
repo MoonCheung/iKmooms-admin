@@ -24,7 +24,9 @@
                           placeholder="请输入文章描述"></el-input>
               </el-form-item>
               <el-form-item label="缩略图"
-                            prop="thumbnail">
+                            prop="banner">
+                <el-input v-model="form.banner"
+                          style="display:none" />
                 <el-upload class="el-formupload"
                            ref="upload"
                            list-type="picture-card"
@@ -80,26 +82,6 @@
             <div slot="header">
               <span>分类目录</span>
             </div>
-            <!-- <el-radio-group v-model="radio">
-              <div class="radio-first">
-                <el-radio label="front"
-                          @click.native.prevent="clickitem('front')">
-                  <span>前端开发</span>
-                </el-radio>
-              </div>
-              <div class="radio-two">
-                <el-radio label="diary"
-                          @click.native.prevent="clickitem('diary')">
-                  <span>生活日记</span>
-                </el-radio>
-              </div>
-              <div class="radio-three">
-                <el-radio label="code"
-                          @click.native.prevent="clickitem('code')">
-                  <span>CODE</span>
-                </el-radio>
-              </div>
-            </el-radio-group> -->
             <el-select v-model="catg"
                        placeholder="请选择">
               <el-option v-for="item in catgList"
@@ -123,6 +105,7 @@ import { getAllCatgs } from "@/api/category";
 import { getAllTags } from "@/api/tag";
 import { Notification } from 'element-ui';
 import axios from 'axios';
+import './index.scss'
 
 export default {
   name: "artpub",
@@ -134,12 +117,11 @@ export default {
       form: {
         title: "",
         desc: "",
+        thumbnail: "",
         tag: "",
         content: ""
       },
       catg: "",
-      htmlContent: "",
-      list: "", //等会儿删除
       tagList: [
         // { _id: "1", tagname: "javascript" },
         // { _id: "2", tagname: "nodejs", },
@@ -152,11 +134,9 @@ export default {
       ],
       //七牛云配置
       token: '',
-      imageUrl: '',
       regionUrl: 'https://upload-z2.qiniup.com', // 七牛云的上传地址，我这里是华南区
       qiniulink: 'http://prk2mqfev.bkt.clouddn.com/',     // 这是七牛云空间的外链默认域名
-
-      curdate: FormatDate(new Date())
+      // curdate: FormatDate(new Date())
     };
   },
   created () {
@@ -171,42 +151,38 @@ export default {
   },
   //该方法被混入实例当中...
   methods: {
-    // clickitem (event) {
-    //   return this.list = event === this.radio ?
-    //     this.radio = '' :
-    //     this.radio = event
-    // },
     submitArticle () {
-      // let param = {
-      //   title: this.form.title,
-      //   desc: this.form.desc,
-      //   htmlContent: this.editor,
-      //   date: this.curdate,
-      //   list: this.list
-      // };
-      // if (Object.is(this.form.title, "")) {
-      //   this.$message({
-      //     message: '此文章标题不得为空，请输入标题',
-      //     type: 'warning'
-      //   });
-      // } else {
-      //   insertArticle(this.radio, param).then(res => {
-      //     let { error } = res.data;
-      //     if (Object.is(error, 0)) {
-      //       this.$message({
-      //         message: '发布文章成功',
-      //         type: 'success'
-      //       });
-      //       [this.form.title, this.form.desc] = [""];
-      //       this.$refs.myEditor.content = "";
-      //     } else {
-      //       this.$message({
-      //         message: '发布文章失败',
-      //         type: 'error'
-      //       })
-      //     }
-      //   });
-      // }
+      let param = {
+        title: this.form.title,
+        desc: this.form.desc,
+        banner: this.form.banner,
+        tag: this.form.tag,
+        content: this.form.content,
+        catg: this.catg
+      };
+      if (Object.is(this.form.title, "")) {
+        this.$message({
+          message: '此文章标题不得为空，请输入标题',
+          type: 'warning'
+        });
+      } else {
+        insertArticle(param).then(res => {
+          if (res.data.code == 1) {
+            this.$message({
+              message: res.data.msg,
+              type: 'success'
+            });
+            this.$router.push({
+              name: 'articleList'
+            })
+          } else {
+            this.$message({
+              message: res.data.msg,
+              type: 'error'
+            })
+          }
+        });
+      }
     },
     //获取标签列表
     getAllTagsList () {
@@ -259,8 +235,7 @@ export default {
         // })
         // 暂时使用引入axios，通过post方式请求获得数据返回的 
         axios.post(this.regionUrl, formdata).then(res => {
-          this.imageUrl = this.qiniulink + res.data.key
-          console.log(this.imageUrl)
+          this.form.banner = this.qiniulink + res.data.key
         })
       }).catch(err => {
         console.error(err);
@@ -285,19 +260,10 @@ export default {
   }
 };
 
-// 封装格式化日期
-function FormatDate (strTime) {
-  let mydate = new Date(strTime);
-  return `${mydate.getFullYear()}年${mydate.getMonth() +
-    1}月${mydate.getDate()}日`;
-}
+// // 封装格式化日期
+// function FormatDate (strTime) {
+//   let mydate = new Date(strTime);
+//   return `${mydate.getFullYear()}年${mydate.getMonth() +
+//     1}月${mydate.getDate()}日`;
+// }
 </script>
-
-<style lang="scss" scoped>
-.el-formtable {
-  .el-forminput {
-    min-width: 80%;
-    width: 80%;
-  }
-}
-</style>
