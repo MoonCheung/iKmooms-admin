@@ -7,26 +7,28 @@
             <div slot="header">
               <span>撰写新文章</span>
             </div>
-            <el-form ref="form"
-                     :model="form"
+            <el-form ref="artform"
+                     :model="artform"
+                     :rules="formRules"
                      label-width="100px"
                      class="el-formtable">
               <el-form-item label="文章标题"
                             prop="title">
-                <el-input v-model="form.title"
+                <el-input v-model="artform.title"
                           class="el-forminput"
                           placeholder="请输入文章标题"></el-input>
               </el-form-item>
               <el-form-item label="文章描述"
                             prop="desc">
-                <el-input v-model="form.desc"
+                <el-input v-model="artform.desc"
                           class="el-forminput"
                           placeholder="请输入文章描述"></el-input>
               </el-form-item>
               <el-form-item label="缩略图"
                             prop="banner">
-                <el-input v-model="form.banner"
-                          style="display:none" />
+                <el-input type="hidden"
+                          v-model="artform.banner"
+                          style="display: none" />
                 <el-upload class="el-formupload"
                            ref="upload"
                            list-type="picture-card"
@@ -40,7 +42,7 @@
               </el-form-item>
               <el-form-item label="文章标签"
                             prop="tag">
-                <el-select v-model="form.tag"
+                <el-select v-model="artform.tag"
                            multiple
                            filterable
                            default-first-option
@@ -66,13 +68,13 @@
                             prop="content">
                 <!-- 引入自定义富文本组件这里 -->
                 <v-quill-editor ref="myEditor"
-                                v-model="form.content"
+                                v-model="artform.content"
                                 :domain="regionUrl"
                                 :baseUrl="qiniulink"></v-quill-editor>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary"
-                           @click="submitArticle">发布文章</el-button>
+                           @click="submitArticle('artform')">发布文章</el-button>
               </el-form-item>
             </el-form>
           </el-card>
@@ -100,7 +102,7 @@
 <script>
 import vQuillEditor from "@/components/quill-editor";
 import { getQNToken, uploadToQN } from "@/api/qiniu";
-import { insertArticle } from "@/api/article";
+import { insertArticle, getArtDetl } from "@/api/article";
 import { getAllCatgs } from "@/api/category";
 import { getAllTags } from "@/api/tag";
 import { Notification } from 'element-ui';
@@ -114,14 +116,26 @@ export default {
   },
   data () {
     return {
-      form: {
+      artform: {
         title: "",
         desc: "",
-        thumbnail: "",
+        banner: "",
         tag: "",
         content: ""
       },
       catg: "",
+      formRules: {
+        title: [
+          { required: true, message: '标题不能为空', trigger: 'blur' },
+          { min: 3, max: 5, message: '建议输入长度在 3 到 5个字符', trigger: 'blur' }
+        ],
+        desc: [
+          { required: true, message: '描述不能为空', trigger: 'blur' }
+        ],
+        tag: [
+          { type: 'array', required: true, message: '请至少选择一个标签', trigger: 'change' }
+        ]
+      },
       tagList: [
         // { _id: "1", tagname: "javascript" },
         // { _id: "2", tagname: "nodejs", },
@@ -153,35 +167,39 @@ export default {
   methods: {
     submitArticle () {
       let param = {
-        title: this.form.title,
-        desc: this.form.desc,
-        banner: this.form.banner,
-        tag: this.form.tag,
-        content: this.form.content,
+        title: this.artform.title,
+        desc: this.artform.desc,
+        banner: this.artform.banner,
+        tag: this.artform.tag,
+        content: this.artform.content,
         catg: this.catg
       };
-      if (Object.is(this.form.title, "")) {
+      if (Object.is(this.catg, "")) {
         this.$message({
-          message: '此文章标题不得为空，请输入标题',
+          message: '文章分类不得为空，请再次选择',
           type: 'warning'
         });
       } else {
-        insertArticle(param).then(res => {
-          if (res.data.code == 1) {
-            this.$message({
-              message: res.data.msg,
-              type: 'success'
+        this.$refs.artform.validate((valid) => {
+          if (valid) {
+            insertArticle(param).then(res => {
+              if (res.data.code == 1) {
+                this.$message({
+                  message: res.data.msg,
+                  type: 'success'
+                });
+                this.$router.push({
+                  name: 'articleList'
+                })
+              } else {
+                this.$message({
+                  message: res.data.msg,
+                  type: 'error'
+                })
+              }
             });
-            this.$router.push({
-              name: 'articleList'
-            })
-          } else {
-            this.$message({
-              message: res.data.msg,
-              type: 'error'
-            })
           }
-        });
+        })
       }
     },
     //获取标签列表
@@ -235,7 +253,7 @@ export default {
         // })
         // 暂时使用引入axios，通过post方式请求获得数据返回的 
         axios.post(this.regionUrl, formdata).then(res => {
-          this.form.banner = this.qiniulink + res.data.key
+          this.artform.banner = this.qiniulink + res.data.key
         })
       }).catch(err => {
         console.error(err);
@@ -252,11 +270,22 @@ export default {
         this.$message.error('上传头像图片大小不能超过 2MB!')
       }
       return isJPG && isLt2M
+    },
+    //获取文章详情
+    getArtDetails () {
+      let id = this.$route.query.id
+      getArtDetl(id).then((res) => {
+        console.log(res);
+      })
     }
   },
   mounted () {
     this.getAllTagsList();
     this.getAllCatgList();
+    let method = this.$route.query.method;
+    if (method === 'edit') {
+      this.getArtDetails();
+    }
   }
 };
 

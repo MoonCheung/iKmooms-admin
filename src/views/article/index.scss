@@ -1,3 +1,4 @@
+//articlePub.vue的样式表
 .el-upload-list--picture-card .el-upload-list__item {
   height: 100px;
   width: 240px;
@@ -15,4 +16,20 @@
     min-width: 80%;
     width: 80%;
   }
+}
+
+//articleList.vue的样式表
+.art-table-expand {
+  font-size: 0;
+}
+
+.art-table-expand label {
+  width: 80px;
+  color: #99a9bf;
+}
+
+.art-table-expand .el-form-item {
+  margin-right: 0;
+  margin-bottom: 0;
+  width: 100%;
 }
