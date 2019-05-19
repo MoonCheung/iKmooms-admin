@@ -96,7 +96,7 @@
 </template>
 
 <script>
-import { articleList, editArticle } from "@/api/article"
+import { articleList, editArticle, delArticle, chgArtStatus } from "@/api/article"
 import { MessageBox } from 'element-ui';
 import './index.scss'
 
@@ -126,7 +126,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        // 带查询参数
+        // 带有查询参数
         this.$router.push({
           name: 'articlePub',
           query: {
@@ -143,11 +143,66 @@ export default {
     },
     //改变文章状态
     chgArt (param) {
-      console.log(param);
+      let sts;
+      param.status === 0 ? sts = 1 : sts = 0;
+      let data = {
+        id: param.id,
+        status: sts
+      }
+      this.$confirm('确认要改变该文章状态?', '提示', {
+        distinguishCancelAndClose: true,
+        confirmButtonText: '确认',
+        cancelButtonText: '返回'
+      }).then(() => {
+        chgArtStatus(data).then(res => {
+          if (res.data.code == 1) {
+            this.$message({
+              type: 'success',
+              message: res.data.msg
+            });
+            //再次获取文章列表
+            this.getArtList();
+          } else {
+            this.$message({
+              type: 'error',
+              message: res.data.msg
+            });
+          }
+        })
+      }).catch(action => {
+        this.$message({
+          type: 'info',
+          message: action === 'cancel'
+            ? '放弃改变并离开页面'
+            : '停留在当前页面'
+        })
+      });
     },
     //删除文章
     delArt (param) {
-      console.log(param);
+      this.$confirm('确认要删除该文章?', '提示', {
+        distinguishCancelAndClose: true,
+        confirmButtonText: '确认',
+        cancelButtonText: '返回'
+      }).then(() => {
+        delArticle(param).then(res => {
+          if (res.data.code == 1) {
+            this.$message({
+              type: 'success',
+              message: res.data.msg
+            });
+            //再次获取文章列表
+            this.getArtList();
+          }
+        })
+      }).catch(action => {
+        this.$message({
+          type: 'info',
+          message: action === 'cancel'
+            ? '放弃删除并离开页面'
+            : '停留在当前页面'
+        })
+      });
     },
     //获取文章列表
     getArtList () {

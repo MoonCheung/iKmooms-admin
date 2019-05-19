@@ -29,15 +29,18 @@
                 <el-input type="hidden"
                           v-model="artform.banner"
                           style="display: none" />
-                <el-upload class="el-formupload"
+                <el-upload class="el-formLoader"
                            ref="upload"
                            list-type="picture-card"
+                           :show-file-list="false"
                            :action="regionUrl"
                            :http-request="uploadImg"
-                           :before-upload="beforeUpload"
-                           :on-preview="handlePreview"
-                           :on-remove="handleRemove">
-                  <i class="el-icon-plus"></i>
+                           :before-upload="beforeUpload">
+                  <img v-if="artform.banner"
+                       :src="artform.banner"
+                       class="el-formbanner">
+                  <i v-else
+                     class="el-icon-plus"></i>
                 </el-upload>
               </el-form-item>
               <el-form-item label="文章标签"
@@ -102,7 +105,7 @@
 <script>
 import vQuillEditor from "@/components/quill-editor";
 import { getQNToken, uploadToQN } from "@/api/qiniu";
-import { insertArticle, getArtDetl } from "@/api/article";
+import { insertArticle, getArtDetl, editArticle } from "@/api/article";
 import { getAllCatgs } from "@/api/category";
 import { getAllTags } from "@/api/tag";
 import { Notification } from 'element-ui';
@@ -146,6 +149,7 @@ export default {
         // { _id: "2", categoryname: '测试分类2' },
         // { _id: "3", categoryname: '测试分类3' }
       ],
+      bannerList: "",
       //七牛云配置
       token: '',
       regionUrl: 'https://upload-z2.qiniup.com', // 七牛云的上传地址，我这里是华南区
@@ -159,14 +163,15 @@ export default {
   },
   //计算属性被混入实例当中，且有缓存的
   computed: {
-    editor () {
-      return this.$refs.myEditor.content;
-    }
+    // editor () {
+    //   return this.$refs.myEditor.content;
+    // }
   },
   //该方法被混入实例当中...
   methods: {
     submitArticle () {
       let param = {
+        id: this.$route.query.id,
         title: this.artform.title,
         desc: this.artform.desc,
         banner: this.artform.banner,
@@ -182,22 +187,41 @@ export default {
       } else {
         this.$refs.artform.validate((valid) => {
           if (valid) {
-            insertArticle(param).then(res => {
-              if (res.data.code == 1) {
-                this.$message({
-                  message: res.data.msg,
-                  type: 'success'
-                });
-                this.$router.push({
-                  name: 'articleList'
-                })
-              } else {
-                this.$message({
-                  message: res.data.msg,
-                  type: 'error'
-                })
-              }
-            });
+            if (this.$route.query.method !== 'edit') {
+              insertArticle(param).then(res => {
+                if (res.data.code == 1) {
+                  this.$message({
+                    message: res.data.msg,
+                    type: 'success'
+                  });
+                  this.$router.push({
+                    name: 'articleList'
+                  })
+                } else {
+                  this.$message({
+                    message: res.data.msg,
+                    type: 'error'
+                  })
+                }
+              });
+            } else {
+              editArticle(param).then(res => {
+                if (res.data.code == 1) {
+                  this.$message({
+                    message: res.data.msg,
+                    type: 'success'
+                  });
+                  this.$router.push({
+                    name: 'articleList'
+                  })
+                } else {
+                  this.$message({
+                    message: res.data.msg,
+                    type: 'error'
+                  })
+                }
+              })
+            }
           }
         })
       }
@@ -217,15 +241,6 @@ export default {
           this.catgList = res.data.result
         }
       })
-    },
-    //删除缩略图
-    handleRemove (file, fileList) {
-      console.log(file, fileList);
-    },
-    //放大缩略图
-    handlePreview (file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
     },
     //上传缩略图
     uploadImg (req) {
@@ -273,9 +288,15 @@ export default {
     },
     //获取文章详情
     getArtDetails () {
-      let id = this.$route.query.id
-      getArtDetl(id).then((res) => {
-        console.log(res);
+      let param = {
+        id: this.$route.query.id
+      }
+      getArtDetl(param).then((res) => {
+        if (res.data.code == 1) {
+          this.artform = res.data.ArtDetlData;
+          this.catg = res.data.ArtDetlData.catg;
+          this.$refs.myEditor.content = res.data.ArtDetlData.content;
+        }
       })
     }
   },

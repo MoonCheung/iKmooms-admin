@@ -146,7 +146,7 @@ export default {
     },
     //删除标签
     delTag (param) {
-      this.$confirm('确认要删除该标签?', '提示信息', {
+      this.$confirm('确认要删除该标签?', '提示', {
         distinguishCancelAndClose: true,
         confirmButtonText: '确认',
         cancelButtonText: '返回'

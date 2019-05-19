@@ -31,3 +31,19 @@ export function getArtDetl(param) {
     data: param
   })
 }
+
+export function delArticle(param) {
+  return request({
+    url: '/api/article/delart',
+    method: 'post',
+    data: param
+  })
+}
+
+export function chgArtStatus(param) {
+  return request({
+    url: '/api/article/chgartsts',
+    method: 'post',
+    data: param
+  })
+}

@@ -148,7 +148,7 @@ export default {
     },
     //删除分类
     delCatg (param) {
-      this.$confirm('确认要删除该分类?', '提示信息', {
+      this.$confirm('确认要删除该分类?', '提示', {
         distinguishCancelAndClose: true,
         confirmButtonText: '确认',
         cancelButtonText: '返回'

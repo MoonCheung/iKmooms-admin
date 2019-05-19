@@ -1,4 +1,9 @@
 //articlePub.vue的样式表
+.el-formupload {
+  height: 100px;
+  line-height: 100px;
+}
+
 .el-upload-list--picture-card .el-upload-list__item {
   height: 100px;
   width: 240px;
@@ -9,6 +14,19 @@
   width: 240px;
   line-height: 100px;
   border-radius: 2px;
+}
+
+.el-formLoader {
+  .el-upload {
+    position: relative;
+    overflow: hidden;
+  }
+}
+
+.el-formbanner {
+  height: 100px;
+  width: 240px;
+  line-height: 100px;
 }
 
 .el-formtable {
