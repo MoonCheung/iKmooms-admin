@@ -63,7 +63,7 @@ export const constantRoutes = [{
     name: 'Article',
     meta: {
       title: '文章管理',
-      icon: 'example'
+      icon: 'webcreate'
     },
     children: [{
         path: 'artlist',
@@ -71,7 +71,16 @@ export const constantRoutes = [{
         component: () => import('@/views/article/articleList'),
         meta: {
           title: '文章列表',
-          icon: 'tree'
+          icon: 'documenttext'
+        }
+      },
+      {
+        path: 'catglist',
+        name: 'categoryList',
+        component: () => import('@/views/article/articleCatg'),
+        meta: {
+          title: '分类目录',
+          icon: 'webfolder'
         }
       },
       {
@@ -80,7 +89,7 @@ export const constantRoutes = [{
         component: () => import('@/views/article/articlePub'),
         meta: {
           title: '发布文章',
-          icon: 'table'
+          icon: 'webdoneall'
         }
       },
       {
@@ -89,30 +98,10 @@ export const constantRoutes = [{
         component: () => import('@/views/article/articleTag'),
         meta: {
           title: '文章标签',
-          icon: 'tree'
+          icon: 'pricetags'
         }
       }
     ]
-  },
-  {
-    path: '/catg',
-    component: Layout,
-    redirect: '/catg/catglist',
-    name: 'Category',
-    alwaysShow: true, //一直显示根路由
-    meta: {
-      title: '分类管理',
-      icon: 'example'
-    },
-    children: [{
-      path: 'catglist',
-      name: 'categoryList',
-      component: () => import('@/views/category/categoryList'),
-      meta: {
-        title: '分类列表',
-        icon: 'tree'
-      }
-    }]
   },
   {
     path: '/cmt',
@@ -122,7 +111,7 @@ export const constantRoutes = [{
     alwaysShow: true, //一直显示根路由
     meta: {
       title: '评论管理',
-      icon: 'example'
+      icon: 'webchatboxes'
     },
     children: [{
       path: 'cmtlist',
@@ -130,7 +119,7 @@ export const constantRoutes = [{
       component: () => import('@/views/comment/commentList'),
       meta: {
         title: '评论列表',
-        icon: 'tree'
+        icon: 'list'
       }
     }]
   },
