@@ -14,7 +14,8 @@
                          @click="addCatg">创建</el-button>
             </div>
             <el-table :data="catgData"
-                      style="width: 100%">
+                      style="width: 100%"
+                      v-loading="listLoading">
               <el-table-column type="index"
                                width="50">
               </el-table-column>
@@ -45,14 +46,20 @@
       <!-- 分页 -->
       <el-row>
         <el-col :span="24">
-          <el-pagination style="margin-top: 15px"
+          <!-- <el-pagination style="margin-top: 15px"
                          @size-change="handleSizeChange"
                          @current-change="handleCurrentChange"
                          :current-page="currentPage"
                          :page-size="limit"
                          layout="total, prev, pager, next, jumper"
                          :total="total">
-          </el-pagination>
+          </el-pagination> -->
+          <v-pagination v-show="total > 0"
+                        style="padding-top:10px;"
+                        :total="total"
+                        :page.sync="currentPage"
+                        :limit.sync="limit"
+                        @pagination="getCatgList" />
         </el-col>
       </el-row>
       <!-- 对话框 -->
@@ -90,9 +97,14 @@
 <script>
 import { addCategory, getCategory, editCategory, delCategory } from "@/api/category"
 import { Message } from 'element-ui'
+import vPagination from '@/components/Pagination';
+import { Loading } from 'element-ui';
 
 export default {
   name: "catglist",
+  components: {
+    vPagination
+  },
   data () {
     return {
       //分页数据
@@ -117,16 +129,14 @@ export default {
           { required: true, message: '描述不能为空', trigger: 'blur' }
         ]
       },
-      todo: ""
+      todo: "",
+      listLoading: true
     }
   },
+  created () {
+    this.getCatgList();
+  },
   methods: {
-    handleSizeChange (val) {
-      this.limit = val;
-    },
-    handleCurrentChange (val) {
-      this.currentPage = val;
-    },
     //创建新表单
     initForm () {
       this.catgForm.categoryname = "";
@@ -212,6 +222,7 @@ export default {
     },
     //获取分类列表
     getCatgList () {
+      this.listLoading = true
       let param = {
         curPage: this.currentPage,
         limit: this.limit
@@ -221,11 +232,12 @@ export default {
         if (res.data.catgData.length > 0) {
           this.total = res.data.total
         }
+        this.listLoading = false
       })
     }
   },
   mounted () {
-    this.getCatgList();
+
   }
 }
 </script>

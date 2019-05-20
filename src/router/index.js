@@ -124,15 +124,15 @@ export const constantRoutes = [{
     }]
   },
   {
-    path: '/form',
+    path: '/config',
     component: Layout,
     children: [{
       path: 'index',
-      name: 'Form',
-      component: () => import('@/views/form/index'),
+      name: 'config',
+      component: () => import('@/views/config/index'),
       meta: {
-        title: 'Form',
-        icon: 'form'
+        title: '全局设置',
+        icon: 'settings'
       }
     }]
   },

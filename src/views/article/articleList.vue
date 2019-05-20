@@ -10,7 +10,8 @@
             </div>
             <div>
               <el-table :data="artListData"
-                        style="width:100%">
+                        style="width:100%"
+                        v-loading="listLoading">
                 <el-table-column type="expand">
                   <template v-slot="props">
                     <el-form label-position="right"
@@ -32,6 +33,9 @@
                 <el-table-column type="index"
                                  label="ID"
                                  width="40">
+                  <!-- <template v-slot="props">
+                    <span>{{ props.$row.id }}</span>
+                  </template> -->
                 </el-table-column>
                 <el-table-column prop="title"
                                  label="标题"
@@ -80,14 +84,12 @@
       <!-- 分页 -->
       <el-row>
         <el-col :span="24">
-          <el-pagination style="margin-top: 15px"
-                         @size-change="handleSizeChange"
-                         @current-change="handleCurrentChange"
-                         :current-page="currentPage"
-                         :page-size="limit"
-                         layout="total, prev, pager, next, jumper"
-                         :total="total">
-          </el-pagination>
+          <v-pagination v-show="total > 0"
+                        style="padding-top:10px;"
+                        :total="total"
+                        :page.sync="currentPage"
+                        :limit.sync="limit"
+                        @pagination="getArtList" />
         </el-col>
       </el-row>
 
@@ -97,11 +99,16 @@
 
 <script>
 import { articleList, editArticle, delArticle, chgArtStatus } from "@/api/article"
+import vPagination from '@/components/Pagination';
 import { MessageBox } from 'element-ui';
+import { Loading } from 'element-ui';
 import './index.scss'
 
 export default {
   name: "artlist",
+  components: {
+    vPagination
+  },
   data () {
     return {
       //表单数据
@@ -110,15 +117,13 @@ export default {
       currentPage: 1,
       limit: 10,
       total: 1,
+      listLoading: true
     }
   },
+  created () {
+    this.getArtList();
+  },
   methods: {
-    handleSizeChange (val) {
-      this.limit = val;
-    },
-    handleCurrentChange (val) {
-      this.currentPage = val;
-    },
     //编辑文章
     editArt (param) {
       this.$confirm('此操作确定重新编辑文章吗?', '提示', {
@@ -206,22 +211,24 @@ export default {
     },
     //获取文章列表
     getArtList () {
+      this.listLoading = true
       let param = {
         curPage: this.currentPage,
         limit: this.limit
       }
       articleList(param).then((res) => {
+        console.log(res);
         if (res.data.code == 1) {
           this.artListData = res.data.artData
           this.total = res.data.total
         }
+        setTimeout(() => {
+          this.listLoading = false
+        }, 1.5 * 500)
       }).catch(err => {
         console.error(err)
       })
     }
-  },
-  mounted () {
-    this.getArtList();
   }
 };
 </script>
