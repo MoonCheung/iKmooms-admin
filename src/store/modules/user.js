@@ -1,16 +1,6 @@
-import {
-  login,
-  logout,
-  getInfo
-} from '@/api/user'
-import {
-  getToken,
-  setToken,
-  removeToken
-} from '@/utils/auth'
-import {
-  resetRouter
-} from '@/router'
+import { login, logout, getInfo } from '@/api/user'
+import { getToken, setToken, removeToken } from '@/utils/auth'
+import { resetRouter } from '@/router'
 
 const state = {
   token: getToken(),
@@ -36,96 +26,81 @@ const mutations = {
 
 const actions = {
   // user login
-  login({
-    commit
-  }, userInfo) {
-    const {
-      username,
-      password
-    } = userInfo
+  login({ commit }, userInfo) {
+    const { username, password } = userInfo
     return new Promise((resolve, reject) => {
       login({
         username: username.trim(),
         password: password
-      }).then(res => {
-        const {
-          data
-        } = res
-        // console.log(data); //从服务器获取用户信息
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
-        resolve()
-      }).catch(error => {
-        reject(error)
       })
+        .then(res => {
+          const { data } = res
+          // console.log(data); //从服务器获取用户信息
+          commit('SET_TOKEN', data.token)
+          setToken(data.token)
+          resolve()
+        })
+        .catch(error => {
+          reject(error)
+        });
     })
   },
 
   // get user info
-  getInfo({
-    commit,
-    state
-  }) {
+  getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       // console.log(state.token) //打印出admin
-      getInfo(state.token).then(res => {
-        const {
-          data
-        } = res
-        if (!data) {
-          reject('验证失败，请再次登录.')
-        }
+      getInfo(state.token)
+        .then(res => {
+          const { data } = res
+          if (!data) {
+            reject('验证失败，请再次登录.')
+          }
 
-        const {
-          roles,
-          name,
-          avatar
-        } = data
+          const { roles, name, avatar } = data
 
-        // 角色必须是非空数组
-        if (!roles || roles.length <= 0) {
-          reject('getInfo: 角色必须是非null数组！')
-        }
+          // 角色必须是非空数组
+          if (!roles || roles.length <= 0) {
+            reject('getInfo: 角色必须是非null数组！')
+          }
 
-        commit('SET_ROLES', roles)
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
-        resolve(data)
-      }).catch(error => {
-        reject(error)
-      })
+          commit('SET_ROLES', roles)
+          commit('SET_NAME', name)
+          commit('SET_AVATAR', avatar)
+          resolve(data)
+        })
+        .catch(error => {
+          reject(error)
+        });
     })
   },
 
   // user logout
-  logout({
-    commit,
-    state
-  }) {
+  logout({ commit, state }) {
     return new Promise((resolve, reject) => {
       // console.log(state.token) //打印出admin
-      logout(state.token).then(() => {
-        commit('SET_TOKEN', '')
-        commit('SET_ROLES', [])
-        removeToken()
-        resetRouter()
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
+      logout(state.token)
+        .then(() => {
+          commit('SET_TOKEN', '')
+          commit('SET_ROLES', [])
+          removeToken()
+          resetRouter()
+          resolve()
+        })
+        .catch(error => {
+          reject(error)
+        });
     })
   },
 
   // remove token
-  resetToken({
-    commit
-  }) {
+  resetToken({ commit }) {
     return new Promise(resolve => {
       commit('SET_TOKEN', '')
       commit('SET_ROLES', [])
       removeToken()
       resolve()
-    })
+    });
   }
 }
 

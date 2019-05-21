@@ -2,23 +2,50 @@ module.exports = {
   root: true,
   parserOptions: {
     parser: 'babel-eslint',
-    sourceType: 'module'
+    ecmaVersion: 2017,
+    sourceType: 'module',
   },
   env: {
     browser: true,
     node: true,
     es6: true,
   },
-  extends: ['plugin:vue/recommended', 'eslint:recommended'],
-
+  // extends: ['plugin:vue/essential', 'eslint:recommended'],
+  extends: [
+    // 'plugin:vue/strongly-recommended',
+    'plugin:vue/essential',
+    'plugin:prettier/recommended',
+    'plugin:vue/base',
+    '@vue/standard',
+  ],
+  "plugins": [
+    "vue"
+  ],
   // add your custom rules here
   //it is base on https://github.com/vuejs/eslint-config-vue
   rules: {
+    // 关闭冲突规则
+    'prettier/prettier': [
+      'error',
+      {
+        //使用单引号而不是双引号。
+        singleQuote: true,
+        //多行时尽可能打印尾随逗号。
+        trailingComma: 'none',
+        // 在对象文字中打印括号之间的空格。
+        bracketSpacing: true,
+        // 将>多行JSX元素放在最后一行的末尾，而不是单独放在下一行（不适用于自闭元素）。
+        jsxBracketSameLine: true,
+        parser: 'flow'
+      },
+    ],
+    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
     "vue/max-attributes-per-line": [2, {
-      "singleline": 10,
+      "singleline": 20,
       "multiline": {
         "max": 1,
-        "allowFirstLine": false
+        "allowFirstLine": true
       }
     }],
     "vue/singleline-html-element-content-newline": "off",
@@ -74,7 +101,7 @@ module.exports = {
     'new-parens': 2,
     'no-array-constructor': 2,
     'no-caller': 2,
-    'no-console': 'off',
+    // 'no-console': 'off',
     'no-class-assign': 2,
     'no-cond-assign': 2,
     'no-const-assign': 2,
@@ -174,7 +201,7 @@ module.exports = {
       'after': true
     }],
     'space-before-blocks': [2, 'always'],
-    'space-before-function-paren': [2, 'never'],
+    'space-before-function-paren': [2, 'always'],
     'space-in-parens': [2, 'never'],
     'space-infix-ops': 2,
     'space-unary-ops': [2, {
@@ -191,7 +218,6 @@ module.exports = {
     'yield-star-spacing': [2, 'both'],
     'yoda': [2, 'never'],
     'prefer-const': 2,
-    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
     'object-curly-spacing': [2, 'always', {
       objectsInObjects: false
     }],

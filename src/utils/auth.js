@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
 
-//TODO: vue_admin_template_token 修改为 vue_admin
+// TODO: vue_admin_template_token 修改为 vue_admin
 const TokenKey = 'vue_admin'
 
 export function getToken() {

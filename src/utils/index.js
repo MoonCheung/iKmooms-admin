@@ -17,10 +17,10 @@ export function parseTime(time, cFormat) {
   if (typeof time === 'object') {
     date = time
   } else {
-    if ((typeof time === 'string') && (/^[0-9]+$/.test(time))) {
+    if (typeof time === 'string' && /^[0-9]+$/.test(time)) {
       time = parseInt(time)
     }
-    if ((typeof time === 'number') && (time.toString().length === 10)) {
+    if (typeof time === 'number' && time.toString().length === 10) {
       time = time * 1000
     }
     date = new Date(time)
@@ -44,7 +44,7 @@ export function parseTime(time, cFormat) {
       value = '0' + value
     }
     return value || 0
-  })
+  });
   return time_str
 }
 
@@ -102,11 +102,11 @@ export function param2Obj(url) {
   }
   return JSON.parse(
     '{"' +
-    decodeURIComponent(search)
-    .replace(/"/g, '\\"')
-    .replace(/&/g, '","')
-    .replace(/=/g, '":"')
-    .replace(/\+/g, ' ') +
-    '"}'
+      decodeURIComponent(search)
+        .replace(/"/g, '\\"')
+        .replace(/&/g, '","')
+        .replace(/=/g, '":"')
+        .replace(/\+/g, ' ') +
+      '"}'
   )
 }

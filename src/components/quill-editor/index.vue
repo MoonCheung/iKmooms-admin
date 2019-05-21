@@ -10,67 +10,67 @@
 </template>
 
 <script>
-import hljs from "highlight.js";
+import hljs from 'highlight.js'
 import { container, ImageExtend, QuillWatch } from 'quill-image-extend-module'
-import { getQNToken, uploadToQN } from "@/api/qiniu";
-import { ImageDrop } from "quill-image-drop-module";
-import ImageResize from "quill-image-resize-module";
+import { getQNToken, uploadToQN } from '@/api/qiniu'
+import { ImageDrop } from 'quill-image-drop-module'
+import ImageResize from 'quill-image-resize-module'
+import 'highlight.js/styles/monokai-sublime.css'
+import { Message } from 'element-ui'
+import axios from 'axios'
 Quill.register('modules/ImageExtend', ImageExtend)
-Quill.register("modules/imageDrop", ImageDrop);
-Quill.register("modules/imageResize", ImageResize);
-import "highlight.js/styles/monokai-sublime.css";
-import { Message } from 'element-ui';
-import axios from 'axios';
+Quill.register('modules/imageDrop', ImageDrop)
+Quill.register('modules/imageResize', ImageResize)
 
 // 自定义Quill编辑器
 const toolbarOptions = [
-  ["bold", "italic", "underline", "strike"],
-  ["blockquote", "code-block"],
+  ['bold', 'italic', 'underline', 'strike'],
+  ['blockquote', 'code-block'],
   [{ header: 1 }, { header: 2 }],
-  [{ list: "ordered" }, { list: "bullet" }],
-  [{ script: "sub" }, { script: "super" }],
-  [{ indent: "-1" }, { indent: "+1" }],
-  [{ direction: "rtl" }],
-  [{ size: ["small", false, "large", "huge"] }],
+  [{ list: 'ordered' }, { list: 'bullet' }],
+  [{ script: 'sub' }, { script: 'super' }],
+  [{ indent: '-1' }, { indent: '+1' }],
+  [{ direction: 'rtl' }],
+  [{ size: ['small', false, 'large', 'huge'] }],
   [{ header: [1, 2, 3, 4, 5, 6, false] }],
   [{ font: [] }],
   [{ color: [] }, { background: [] }],
   [{ align: [] }],
-  ["clean"],
-  ["link", "image", "video"]
+  ['clean'],
+  ['link', 'image', 'video']
 ]
 
 const qiniu = {
   token: ''
-};
+}
 
 const getToken = function () {
   getQNToken().then(res => {
     qiniu.token = res.data.result.token
   })
 }
-getToken();
+getToken()
 
 export default {
-  name: "Editor",
+  name: 'Editor',
   props: {
     value: {
       type: String,
-      default: ""
+      default: ''
     },
-    domain: String, //七牛云上传的域地址,类型为String 比如自己所在地区选择，而这里是华南
-    baseUrl: String, //从七牛云上拿到自己的上传地址,类型为String,
+    domain: String, // 七牛云上传的域地址,类型为String 比如自己所在地区选择，而这里是华南
+    baseUrl: String // 从七牛云上拿到自己的上传地址,类型为String,
   },
   data () {
     return {
-      content: "",
+      content: '',
       editorOption: {
         placeholder: '请输入文章内容...',
         modules: {
           toolbar: {
-            container: toolbarOptions,  // 工具栏
+            container: toolbarOptions, // 工具栏
             handlers: {
-              'image': function () {
+              image: function () {
                 QuillWatch.emit(this.quill.id)
               }
             }
@@ -86,43 +86,47 @@ export default {
           imageDrop: true,
           imageResize: {
             displayStyles: {
-              backgroundColor: "black",
-              border: "none",
-              color: "white"
+              backgroundColor: 'black',
+              border: 'none',
+              color: 'white'
             },
-            modules: ["Resize", "DisplaySize", "Toolbar"]
+            modules: ['Resize', 'DisplaySize', 'Toolbar']
           },
           ImageExtend: {
             name: 'file',
-            size: 2,  // 单位为M, 1M = 1024KB
+            size: 2, // 单位为M, 1M = 1024KB
             action: this.domain,
-            headers: (xhr) => { },
-            response: (res) => {
-              return this.baseUrl + res.key;
+            headers: xhr => { },
+            response: res => {
+              return this.baseUrl + res.key
             },
             start: () => { },
             end: () => {
-              getToken();
+              getToken()
             },
             error: () => { },
             change: (xhr, formData) => {
               // 跟随form 提交必要参数
-              let file = formData.get('file');
-              let suffix = file.name.split('.');
-              let ext = suffix.splice(suffix.length - 1, 1)[0];
+              const file = formData.get('file')
+              const suffix = file.name.split('.')
+              const ext = suffix.splice(suffix.length - 1, 1)[0]
               //  文件名称
-              formData.append('key', `blogs/image/${suffix.join('.')}_${new Date() + Math.floor(Math.random() * 100)}.${ext}`);
-              formData.append('token', qiniu.token);
+              formData.append(
+                'key',
+                `blogs/image/${suffix.join('.')}_${new Date() +
+                Math.floor(Math.random() * 100)}.${ext}`
+              )
+              formData.append('token', qiniu.token)
             }
-          },
+          }
         }
       }
-    };
+    }
   },
   watch: {
-    //通过$emit方式子组件向父组件通信
+    // 通过$emit方式子组件向父组件通信
     content (newVal, oldVal) {
-      this.$emit('input', newVal);
+      this.$emit('input', newVal)
     }
   },
   methods: {
@@ -134,9 +138,9 @@ export default {
     },
     onEditorReady (editor) {
       // console.log("editor ready!", editor);
-    },
+    }
   }
-};
+}
 </script>
 
 <style lang="sass">

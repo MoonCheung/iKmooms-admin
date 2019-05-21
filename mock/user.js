@@ -32,7 +32,6 @@ export default [
   //       username
   //     } = config.body
   //     const token = tokens[username]
-
   //     // mock error
   //     if (!token) {
   //       return {
@@ -40,14 +39,12 @@ export default [
   //         message: 'Account and password are incorrect.'
   //       }
   //     }
-
   //     return {
   //       code: 20000,
   //       data: token
   //     }
   //   }
   // },
-
   // // get user info
   // {
   //   url: '/user/info\.*',
@@ -57,7 +54,6 @@ export default [
   //       token
   //     } = config.query
   //     const info = users[token]
-
   //     // mock error
   //     if (!info) {
   //       return {
@@ -65,14 +61,12 @@ export default [
   //         message: 'Login failed, unable to get user details.'
   //       }
   //     }
-
   //     return {
   //       code: 20000,
   //       data: info
   //     }
   //   }
   // },
-
   // // user logout
   // {
   //   url: '/user/logout',

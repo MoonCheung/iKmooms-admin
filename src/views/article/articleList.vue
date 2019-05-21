@@ -18,7 +18,7 @@
                              inline
                              class="art-table-expand">
                       <el-form-item label="标签">
-                        <el-tag v-for="(item,index) in props.row.tag"
+                        <el-tag v-for="(item, index) in props.row.tag"
                                 :key="index"
                                 style="margin-right: 5px;">
                           <span>{{ item }}</span>
@@ -58,7 +58,7 @@
                                  header-align="center"
                                  align="center">
                   <template v-slot="props">
-                    {{props.row.status == 0? "私密": "公开"}}
+                    {{ props.row.status == 0 ? '私密' : '公开' }}
                   </template>
                 </el-table-column>
                 <el-table-column width="220"
@@ -70,7 +70,7 @@
                                @click.native.prevent="editArt(scope.row)">编辑</el-button>
                     <el-button type="info"
                                size="small"
-                               @click.native.prevent="chgArt(scope.row)">{{scope.row.status == 0? "公开": "私密"}}</el-button>
+                               @click.native.prevent="chgArt(scope.row)">{{ scope.row.status == 0 ? '公开' : '私密' }}</el-button>
                     <el-button type="danger"
                                size="small"
                                @click.native.prevent="delArt(scope.row)">删除</el-button>
@@ -92,28 +92,31 @@
                         @pagination="getArtList" />
         </el-col>
       </el-row>
-
     </el-main>
   </el-container>
 </template>
 
 <script>
-import { articleList, editArticle, delArticle, chgArtStatus } from "@/api/article"
-import vPagination from '@/components/Pagination';
-import { MessageBox } from 'element-ui';
-import { Loading } from 'element-ui';
+import {
+  articleList,
+  editArticle,
+  delArticle,
+  chgArtStatus
+} from '@/api/article'
+import vPagination from '@/components/Pagination'
+
 import './index.scss'
 
 export default {
-  name: "artlist",
+  name: 'Artlist',
   components: {
     vPagination
   },
   data () {
     return {
-      //表单数据
+      // 表单数据
       artListData: [],
-      //分页数据
+      // 分页数据
       currentPage: 1,
       limit: 10,
       total: 1,
@@ -121,36 +124,38 @@ export default {
     }
   },
   created () {
-    this.getArtList();
+    this.getArtList()
   },
   methods: {
-    //编辑文章
+    // 编辑文章
     editArt (param) {
       this.$confirm('此操作确定重新编辑文章吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        // 带有查询参数
-        this.$router.push({
-          name: 'articlePub',
-          query: {
-            id: param.id,
-            method: 'edit'
-          }
+      })
+        .then(() => {
+          // 带有查询参数
+          this.$router.push({
+            name: 'articlePub',
+            query: {
+              id: param.id,
+              method: 'edit'
+            }
+          })
         })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消编辑'
-        });
-      });
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消编辑'
+          })
+        })
     },
-    //改变文章状态
+    // 改变文章状态
     chgArt (param) {
-      let sts;
-      param.status === 0 ? sts = 1 : sts = 0;
-      let data = {
+      let sts
+      param.status === 0 ? (sts = 1) : (sts = 0)
+      const data = {
         id: param.id,
         status: sts
       }
@@ -158,77 +163,81 @@ export default {
         distinguishCancelAndClose: true,
         confirmButtonText: '确认',
         cancelButtonText: '返回'
-      }).then(() => {
-        chgArtStatus(data).then(res => {
-          if (res.data.code == 1) {
-            this.$message({
-              type: 'success',
-              message: res.data.msg
-            });
-            //再次获取文章列表
-            this.getArtList();
-          } else {
-            this.$message({
-              type: 'error',
-              message: res.data.msg
-            });
-          }
+      })
+        .then(() => {
+          chgArtStatus(data).then(res => {
+            if (res.data.code == 1) {
+              this.$message({
+                type: 'success',
+                message: res.data.msg
+              })
+              // 再次获取文章列表
+              this.getArtList()
+            } else {
+              this.$message({
+                type: 'error',
+                message: res.data.msg
+              })
+            }
+          })
         })
-      }).catch(action => {
-        this.$message({
-          type: 'info',
-          message: action === 'cancel'
-            ? '放弃改变并离开页面'
-            : '停留在当前页面'
+        .catch(action => {
+          this.$message({
+            type: 'info',
+            message:
+              action === 'cancel' ? '放弃改变并离开页面' : '停留在当前页面'
+          })
         })
-      });
     },
-    //删除文章
+    // 删除文章
     delArt (param) {
       this.$confirm('确认要删除该文章?', '提示', {
         distinguishCancelAndClose: true,
         confirmButtonText: '确认',
         cancelButtonText: '返回'
-      }).then(() => {
-        delArticle(param).then(res => {
-          if (res.data.code == 1) {
-            this.$message({
-              type: 'success',
-              message: res.data.msg
-            });
-            //再次获取文章列表
-            this.getArtList();
-          }
+      })
+        .then(() => {
+          delArticle(param).then(res => {
+            if (res.data.code == 1) {
+              this.$message({
+                type: 'success',
+                message: res.data.msg
+              })
+              // 再次获取文章列表
+              this.getArtList()
+            }
+          })
         })
-      }).catch(action => {
-        this.$message({
-          type: 'info',
-          message: action === 'cancel'
-            ? '放弃删除并离开页面'
-            : '停留在当前页面'
+        .catch(action => {
+          this.$message({
+            type: 'info',
+            message:
+              action === 'cancel' ? '放弃删除并离开页面' : '停留在当前页面'
+          })
         })
-      });
     },
-    //获取文章列表
+    // 获取文章列表
     getArtList () {
       this.listLoading = true
-      let param = {
+      const param = {
         curPage: this.currentPage,
         limit: this.limit
       }
-      articleList(param).then((res) => {
-        console.log(res);
-        if (res.data.code == 1) {
-          this.artListData = res.data.artData
-          this.total = res.data.total
-        }
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1.5 * 500)
-      }).catch(err => {
-        console.error(err)
-      })
+      articleList(param)
+        .then(res => {
+          console.log(res)
+          if (res.data.code == 1) {
+            this.artListData = res.data.artData
+            this.total = res.data.total
+          }
+          setTimeout(() => {
+            this.listLoading = false
+          }, 1.5 * 500)
+        })
+        .catch(err => {
+          console.error(err)
+        })
     }
   }
-};
+}
 </script>

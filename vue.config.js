@@ -3,7 +3,6 @@ const path = require('path')
 const defaultSettings = require('./src/settings.js')
 const webpack = require('webpack')
 
-
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
@@ -24,7 +23,7 @@ module.exports = {
   outputDir: 'dist',
   assetsDir: 'static',
   // lintOnSave: process.env.NODE_ENV === 'development',
-  lintOnSave: false, //暂时的
+  lintOnSave: false,
   productionSourceMap: false,
   devServer: {
     port: port,
@@ -48,15 +47,15 @@ module.exports = {
         target: 'http://localhost:3030',
         changeOrigin: true, // needed for virtual hosted sites
         pathRewrite: {
-          ['^' + process.env.VUE_APP_BASE_API]: '', // rewrite path
-        },
+          ['^' + process.env.VUE_APP_BASE_API]: '' // rewrite path
+        }
         // router: {
         //   // when request.headers.host == 'dev.localhost:3000',
         //   // override target 'http://www.example.org' to 'http://localhost:8000'
         //   '127.0.0.1:3030/api': 'http://127.0.0.1:9528'
         // }
       }
-    },
+    }
     // 暂时移除after:require()
     // after: require('./mock/mock-server.js')
   },
@@ -69,12 +68,12 @@ module.exports = {
         '@': resolve('src')
       }
     },
-    //人工配置:
+    // 人工配置:
     plugins: [
       new webpack.ProvidePlugin({
         'window.Quill': 'quill/dist/quill.js',
-        'Quill': 'quill/dist/quill.js'
-      }),
+        Quill: 'quill/dist/quill.js'
+      })
     ],
     devtool: 'source-map'
   },
@@ -112,47 +111,43 @@ module.exports = {
 
     config
       // https://webpack.js.org/configuration/devtool/#development
-      .when(process.env.NODE_ENV === 'development',
-        config => config.devtool('cheap-source-map')
+      .when(process.env.NODE_ENV === 'development', config =>
+        config.devtool('cheap-source-map')
       )
 
-    config
-      .when(process.env.NODE_ENV !== 'development',
-        config => {
-          config
-            .plugin('ScriptExtHtmlWebpackPlugin')
-            .after('html')
-            .use('script-ext-html-webpack-plugin', [{
-              // `runtime` must same as runtimeChunk name. default is `runtime`
-              inline: /runtime\..*\.js$/
-            }])
-            .end()
-          config
-            .optimization.splitChunks({
-              chunks: 'all',
-              cacheGroups: {
-                libs: {
-                  name: 'chunk-libs',
-                  test: /[\\/]node_modules[\\/]/,
-                  priority: 10,
-                  chunks: 'initial' // only package third parties that are initially dependent
-                },
-                elementUI: {
-                  name: 'chunk-elementUI', // split elementUI into a single package
-                  priority: 20, // the weight needs to be larger than libs and app or it will be packaged into libs or app
-                  test: /[\\/]node_modules[\\/]_?element-ui(.*)/ // in order to adapt to cnpm
-                },
-                commons: {
-                  name: 'chunk-commons',
-                  test: resolve('src/components'), // can customize your rules
-                  minChunks: 3, //  minimum common number
-                  priority: 5,
-                  reuseExistingChunk: true
-                }
-              }
-            })
-          config.optimization.runtimeChunk('single')
+    config.when(process.env.NODE_ENV !== 'development', config => {
+      config
+        .plugin('ScriptExtHtmlWebpackPlugin')
+        .after('html')
+        .use('script-ext-html-webpack-plugin', [{
+          // `runtime` must same as runtimeChunk name. default is `runtime`
+          inline: /runtime\..*\.js$/
+        }])
+        .end()
+      config.optimization.splitChunks({
+        chunks: 'all',
+        cacheGroups: {
+          libs: {
+            name: 'chunk-libs',
+            test: /[\\/]node_modules[\\/]/,
+            priority: 10,
+            chunks: 'initial' // only package third parties that are initially dependent
+          },
+          elementUI: {
+            name: 'chunk-elementUI', // split elementUI into a single package
+            priority: 20, // the weight needs to be larger than libs and app or it will be packaged into libs or app
+            test: /[\\/]node_modules[\\/]_?element-ui(.*)/ // in order to adapt to cnpm
+          },
+          commons: {
+            name: 'chunk-commons',
+            test: resolve('src/components'), // can customize your rules
+            minChunks: 3, //  minimum common number
+            priority: 5,
+            reuseExistingChunk: true
+          }
         }
-      )
+      })
+      config.optimization.runtimeChunk('single')
+    });
   }
 }

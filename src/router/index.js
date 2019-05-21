@@ -1,10 +1,10 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-
-Vue.use(Router)
+import Vue from 'vue';
+import Router from 'vue-router';
 
 /* Layout */
-import Layout from '@/layout'
+import Layout from '@/layout';
+
+Vue.use(Router);
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -30,7 +30,8 @@ import Layout from '@/layout'
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
-export const constantRoutes = [{
+export const constantRoutes = [
+  {
     path: '/login',
     component: () => import('@/views/login/index'),
     hidden: true
@@ -46,15 +47,17 @@ export const constantRoutes = [{
     path: '/',
     component: Layout,
     redirect: '/admin',
-    children: [{
-      path: 'admin',
-      name: 'admin',
-      component: () => import('@/views/admin/index'),
-      meta: {
-        title: '仪盘表',
-        icon: 'dashboard'
+    children: [
+      {
+        path: 'admin',
+        name: 'admin',
+        component: () => import('@/views/admin/index'),
+        meta: {
+          title: '仪盘表',
+          icon: 'dashboard'
+        }
       }
-    }]
+    ]
   },
   {
     path: '/art',
@@ -65,7 +68,8 @@ export const constantRoutes = [{
       title: '文章管理',
       icon: 'webcreate'
     },
-    children: [{
+    children: [
+      {
         path: 'artlist',
         name: 'articleList',
         component: () => import('@/views/article/articleList'),
@@ -108,34 +112,38 @@ export const constantRoutes = [{
     component: Layout,
     redirect: '/cmt/cmtlist',
     name: 'Comment',
-    alwaysShow: true, //一直显示根路由
+    alwaysShow: true, // 一直显示根路由
     meta: {
       title: '评论管理',
       icon: 'webchatboxes'
     },
-    children: [{
-      path: 'cmtlist',
-      name: 'commentList',
-      component: () => import('@/views/comment/commentList'),
-      meta: {
-        title: '评论列表',
-        icon: 'list'
+    children: [
+      {
+        path: 'cmtlist',
+        name: 'commentList',
+        component: () => import('@/views/comment/commentList'),
+        meta: {
+          title: '评论列表',
+          icon: 'list'
+        }
       }
-    }]
+    ]
   },
   {
     path: '/config',
     component: Layout,
-    children: [{
-      path: 'index',
-      name: 'config',
-      component: () => import('@/views/config/index'),
-      meta: {
-        title: '全局设置',
-        icon: 'settings'
+    children: [
+      {
+        path: 'index',
+        name: 'config',
+        component: () => import('@/views/config/index'),
+        meta: {
+          title: '全局设置',
+          icon: 'settings'
+        }
       }
-    }]
-  },
+    ]
+  }
 ]
 
 /**
@@ -232,13 +240,14 @@ export const asyncRoutes = [
   }
 ]
 
-const createRouter = () => new Router({
-  mode: 'history', // require service support
-  scrollBehavior: () => ({
-    y: 0
-  }),
-  routes: constantRoutes
-})
+const createRouter = () =>
+  new Router({
+    mode: 'history', // require service support
+    scrollBehavior: () => ({
+      y: 0
+    }),
+    routes: constantRoutes
+  })
 
 const router = createRouter()
 

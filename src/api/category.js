@@ -35,6 +35,6 @@ export function delCategory(param) {
 export function getAllCatgs() {
   return request({
     url: '/api/category/getallcatg',
-    method: 'get',
+    method: 'get'
   })
 }

@@ -4,9 +4,8 @@
 
 <script>
 export default {
-  name: "commentList"
-};
+  name: 'CommentList'
+}
 </script>
 
-<style>
-</style>
+<style></style>

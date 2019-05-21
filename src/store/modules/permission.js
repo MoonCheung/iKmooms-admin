@@ -1,7 +1,4 @@
-import {
-  asyncRoutes,
-  constantRoutes
-} from '@/router'
+import { asyncRoutes, constantRoutes } from '@/router'
 
 /**
  * 使用meta.role确定当前用户是否具有权限
@@ -52,9 +49,7 @@ const mutations = {
 }
 
 const actions = {
-  generateRoutes({
-    commit
-  }, roles) {
+  generateRoutes({ commit }, roles) {
     return new Promise(resolve => {
       let accessedRoutes
       if (roles.includes('admin')) {
@@ -64,7 +59,7 @@ const actions = {
       }
       commit('SET_ROUTES', accessedRoutes)
       resolve(accessedRoutes)
-    })
+    });
   }
 }
 

@@ -17,8 +17,7 @@
                       style="width: 100%"
                       v-loading="listLoading">
               <el-table-column type="index"
-                               width="50">
-              </el-table-column>
+                               width="50"> </el-table-column>
               <el-table-column prop="tagname"
                                label="标签名称">
               </el-table-column>
@@ -26,8 +25,7 @@
                                label="标签描述">
               </el-table-column>
               <el-table-column prop="cdate"
-                               label="创建日期">
-              </el-table-column>
+                               label="创建日期"> </el-table-column>
               <el-table-column label="操作"
                                width="160">
                 <template v-slot="scope">
@@ -46,14 +44,6 @@
       <!-- 分页 -->
       <el-row>
         <el-col :span="24">
-          <!-- <el-pagination style="margin-top: 15px"
-                         @size-change="handleSizeChange"
-                         @current-change="handleCurrentChange"
-                         :current-page="currentPage"
-                         :page-size="limit"
-                         layout="total, prev, pager, next, jumper"
-                         :total="total">
-          </el-pagination> -->
           <v-pagination v-show="total > 0"
                         style="padding-top:10px;"
                         :total="total"
@@ -96,148 +86,146 @@
 
 <script>
 import { addTags, getTags, editTags, delTags } from '@/api/tag'
-import vPagination from '@/components/Pagination';
-import { Loading } from 'element-ui';
+import vPagination from '@/components/Pagination'
 
 export default {
-  name: "arttag",
+  name: 'Arttag',
   components: {
     vPagination
   },
   data () {
     return {
-      //分页数据
+      // 分页数据
       currentPage: 1,
       limit: 10,
       total: 1,
-      //表单数据
+      // 表单数据
       tagsData: [],
       dialogFormVisible: false,
-      //对话框
+      // 对话框
       tagsForm: {
         id: '',
         tagname: '',
         tagdesc: ''
       },
       tagsformRules: {
-        tagname: [
-          { required: true, message: '名称不能为空', trigger: 'blur' },
-        ],
-        tagdesc: [
-          { required: true, message: '描述不能为空', trigger: 'blur' }
-        ]
+        tagname: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
+        tagdesc: [{ required: true, message: '描述不能为空', trigger: 'blur' }]
       },
-      todo: "",
+      todo: '',
       listLoading: true
     }
   },
   created () {
-    this.getTagList();
+    this.getTagList()
   },
   methods: {
-    //创建新表单
+    // 创建新表单
     initForm () {
-      this.tagsForm.tagname = "";
-      this.tagsForm.tagdesc = "";
+      this.tagsForm.tagname = ''
+      this.tagsForm.tagdesc = ''
     },
-    //添加标签
+    // 添加标签
     addTag () {
-      let _self = this;
-      _self.todo = 'add';
+      const _self = this
+      _self.todo = 'add'
       _self.initForm()
-      _self.dialogFormVisible = true;
+      _self.dialogFormVisible = true
     },
-    //编辑标签
+    // 编辑标签
     editTag (param) {
-      let _self = this;
-      _self.todo = 'edit';
-      _self.dialogFormVisible = true;
+      const _self = this
+      _self.todo = 'edit'
+      _self.dialogFormVisible = true
       _self.tagsForm = param
     },
-    //删除标签
+    // 删除标签
     delTag (param) {
       this.$confirm('确认要删除该标签?', '提示', {
         distinguishCancelAndClose: true,
         confirmButtonText: '确认',
         cancelButtonText: '返回'
-      }).then(() => {
-        delTags(param).then(res => {
-          if (res.data.code == 1) {
-            this.$message({
-              type: 'success',
-              message: res.data.msg
-            });
-            //再次获取分类列表
-            this.getTagList();
-          }
+      })
+        .then(() => {
+          delTags(param).then(res => {
+            if (res.data.code === 1) {
+              this.$message({
+                type: 'success',
+                message: res.data.msg
+              })
+              // 再次获取分类列表
+              this.getTagList()
+            }
+          })
         })
-      }).catch(action => {
-        this.$message({
-          type: 'info',
-          message: action === 'cancel'
-            ? '放弃删除并离开页面'
-            : '停留在当前页面'
+        .catch(action => {
+          this.$message({
+            type: 'info',
+            message:
+              action === 'cancel' ? '放弃删除并离开页面' : '停留在当前页面'
+          })
         })
-      });
     },
-    //向服务器提交数据
+    // 向服务器提交数据
     submitData (tagsForm) {
-      this.$refs.tagsForm.validate((valid) => {
+      this.$refs.tagsForm.validate(valid => {
         if (valid) {
           if (this.todo === 'add') {
-            addTags(this.tagsForm).then((res) => {
-              if (res.data.code == 1) {
-                this.dialogFormVisible = false;
-                this.getTagList();
-                this.$message({
-                  message: res.data.msg,
-                  type: 'success'
-                });
-              } else {
-                this.$message.error(res.data.msg);
-              }
-            }).catch(err => {
-              console.error(err)
-            })
+            addTags(this.tagsForm)
+              .then(res => {
+                if (res.data.code === 1) {
+                  this.dialogFormVisible = false
+                  this.getTagList()
+                  this.$message({
+                    message: res.data.msg,
+                    type: 'success'
+                  })
+                } else {
+                  this.$message.error(res.data.msg)
+                }
+              })
+              .catch(err => {
+                console.error(err)
+              })
           } else {
-            editTags(this.tagsForm).then((res) => {
-              if (res.data.code == 1) {
-                this.dialogFormVisible = false;
-                this.getTagList();
-                this.$message({
-                  message: res.data.msg,
-                  type: 'success'
-                });
-              } else {
-                this.$message.error(res.data.msg);
-              }
-            }).catch(err => {
-              console.error(err)
-            })
+            editTags(this.tagsForm)
+              .then(res => {
+                if (res.data.code === 1) {
+                  this.dialogFormVisible = false
+                  this.getTagList()
+                  this.$message({
+                    message: res.data.msg,
+                    type: 'success'
+                  })
+                } else {
+                  this.$message.error(res.data.msg)
+                }
+              })
+              .catch(err => {
+                console.error(err)
+              })
           }
         }
       })
     },
     // 获取标签列表
     getTagList () {
-      this.listLoading = true;
-      let param = {
+      this.listLoading = true
+      const param = {
         curPage: this.currentPage,
         limit: this.limit
       }
-      getTags(param).then((res) => {
+      getTags(param).then(res => {
         this.tagsData = res.data.tagsData
         if (res.data.tagsData.length > 0) {
           this.total = res.data.total
         }
-        this.listLoading = false;
+        this.listLoading = false
       })
     }
   },
-  mounted () {
-
-  }
-};
+  mounted () { }
+}
 </script>
 
 <style>

@@ -1,4 +1,4 @@
- <template>
+<template>
   <el-container>
     <el-main>
       <el-row>
@@ -17,8 +17,7 @@
                       style="width: 100%"
                       v-loading="listLoading">
               <el-table-column type="index"
-                               width="50">
-              </el-table-column>
+                               width="50"> </el-table-column>
               <el-table-column prop="categoryname"
                                label="分类名称">
               </el-table-column>
@@ -26,8 +25,7 @@
                                label="分类描述">
               </el-table-column>
               <el-table-column prop="cdate"
-                               label="创建日期">
-              </el-table-column>
+                               label="创建日期"> </el-table-column>
               <el-table-column label="操作"
                                width="160">
                 <template v-slot="scope">
@@ -95,26 +93,29 @@
 </template>
 
 <script>
-import { addCategory, getCategory, editCategory, delCategory } from "@/api/category"
-import { Message } from 'element-ui'
-import vPagination from '@/components/Pagination';
-import { Loading } from 'element-ui';
+import {
+  addCategory,
+  getCategory,
+  editCategory,
+  delCategory
+} from '@/api/category'
+import vPagination from '@/components/Pagination'
 
 export default {
-  name: "catglist",
+  name: 'Catglist',
   components: {
     vPagination
   },
   data () {
     return {
-      //分页数据
+      // 分页数据
       currentPage: 1,
       limit: 10,
       total: 1,
-      //表单数据
+      // 表单数据
       catgData: [],
       dialogFormVisible: false,
-      //对话框
+      // 对话框
       catgForm: {
         id: '',
         categoryname: '',
@@ -123,112 +124,122 @@ export default {
       catgformRules: {
         categoryname: [
           { required: true, message: '名称不能为空', trigger: 'blur' },
-          { min: 3, max: 5, message: '建议输入长度在 3 到 5个字符', trigger: 'blur' }
+          {
+            min: 3,
+            max: 5,
+            message: '建议输入长度在 3 到 5个字符',
+            trigger: 'blur'
+          }
         ],
         categorydesc: [
           { required: true, message: '描述不能为空', trigger: 'blur' }
         ]
       },
-      todo: "",
+      todo: '',
       listLoading: true
     }
   },
   created () {
-    this.getCatgList();
+    this.getCatgList()
   },
   methods: {
-    //创建新表单
+    // 创建新表单
     initForm () {
-      this.catgForm.categoryname = "";
-      this.catgForm.categorydesc = "";
+      this.catgForm.categoryname = ''
+      this.catgForm.categorydesc = ''
     },
-    //添加分类
+    // 添加分类
     addCatg () {
-      let _self = this;
-      _self.todo = 'add';
+      const _self = this
+      _self.todo = 'add'
       _self.initForm()
-      _self.dialogFormVisible = true;
+      _self.dialogFormVisible = true
     },
-    //编辑分类
+    // 编辑分类
     editCatg (param) {
-      let _self = this;
-      _self.todo = 'edit';
-      _self.dialogFormVisible = true;
+      const _self = this
+      _self.todo = 'edit'
+      _self.dialogFormVisible = true
       _self.catgForm = param
     },
-    //删除分类
+    // 删除分类
     delCatg (param) {
       this.$confirm('确认要删除该分类?', '提示', {
         distinguishCancelAndClose: true,
         confirmButtonText: '确认',
         cancelButtonText: '返回'
-      }).then(() => {
-        delCategory(param).then(res => {
-          if (res.data.code == 1) {
-            this.$message({
-              type: 'success',
-              message: res.data.msg
-            });
-            //再次获取分类列表
-            this.getCatgList();
-          }
+      })
+        .then(() => {
+          delCategory(param).then(res => {
+            if (res.data.code == 1) {
+              this.$message({
+                type: 'success',
+                message: res.data.msg
+              })
+              // 再次获取分类列表
+              this.getCatgList()
+            }
+          })
         })
-      }).catch(action => {
-        this.$message({
-          type: 'info',
-          message: action === 'cancel'
-            ? '放弃删除并离开页面'
-            : '停留在当前页面'
+        .catch(action => {
+          this.$message({
+            type: 'info',
+            message:
+              action === 'cancel' ? '放弃删除并离开页面' : '停留在当前页面'
+          })
         })
-      });
     },
-    //向服务器提交数据
+    // 向服务器提交数据
     submitData (catgForm) {
-      this.$refs.catgForm.validate((valid) => {
+      this.$refs.catgForm.validate(valid => {
         if (valid) {
           if (this.todo === 'add') {
-            addCategory(this.catgForm).then(res => {
-              if (res.data.code == 1) {
-                this.dialogFormVisible = false;
-                this.getCatgList();
-                this.$message({
-                  message: res.data.msg,
-                  type: 'success'
-                });
-              } else {
-                this.$message.error(res.data.msg);
-              }
-            }).catch(err => {
-              console.error(err)
-            })
+            addCategory(this.catgForm)
+              .then(res => {
+                if (res.data.code == 1) {
+                  this.dialogFormVisible = false
+                  this.getCatgList()
+                  this.$message({
+                    message: res.data.msg,
+                    type: 'success'
+                  })
+                } else {
+                  this.$message.error(res.data.msg)
+                }
+              })
+              .catch(err => {
+                console.error(err)
+              })
           } else {
-            editCategory(this.catgForm).then(res => {
-              if (res.data.code == 1) {
-                this.dialogFormVisible = false;
-                this.getCatgList();
-                this.$message({
-                  message: res.data.msg,
-                  type: 'success'
-                });
-              } else {
-                this.$message.error(res.data.msg);
-              }
-            }).catch(err => {
-              console.error(err)
-            })
+            editCategory(this.catgForm)
+              .then(res => {
+                if (res.data.code == 1) {
+                  this.dialogFormVisible = false
+                  this.getCatgList()
+                  this.$message({
+                    message: res.data.msg,
+                    type: 'success'
+                  })
+                } else {
+                  this.$message.error(res.data.msg)
+                }
+              })
+              .catch(err => {
+                console.error(err)
+              })
           }
         }
       })
     },
-    //获取分类列表
+    // 获取分类列表
     getCatgList () {
       this.listLoading = true
-      let param = {
+      const param = {
         curPage: this.currentPage,
         limit: this.limit
       }
-      getCategory(param).then((res) => {
-        this.catgData = res.data.catgData;
+      getCategory(param).then(res => {
+        this.catgData = res.data.catgData
         if (res.data.catgData.length > 0) {
           this.total = res.data.total
         }
@@ -236,9 +247,7 @@ export default {
       })
     }
   },
-  mounted () {
-
-  }
+  mounted () { }
 }
 </script>
 

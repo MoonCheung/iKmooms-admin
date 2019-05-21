@@ -1,6 +1,7 @@
 <template>
   <section class="app-main">
-    <transition name="fade-transform" mode="out-in">
+    <transition name="fade-transform"
+mode="out-in">
       <router-view :key="key" />
     </transition>
   </section>
@@ -10,7 +11,7 @@
 export default {
   name: 'AppMain',
   computed: {
-    key() {
+    key () {
       return this.$route.fullPath
     }
   }
@@ -25,7 +26,7 @@ export default {
   position: relative;
   overflow: hidden;
 }
-.fixed-header+.app-main {
+.fixed-header + .app-main {
   padding-top: 50px;
 }
 </style>

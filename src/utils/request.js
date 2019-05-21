@@ -1,12 +1,7 @@
 import axios from 'axios'
-import {
-  MessageBox,
-  Message
-} from 'element-ui'
+import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
-import {
-  getToken
-} from '@/utils/auth'
+import { getToken } from '@/utils/auth'
 
 // 创建axios实例
 const service = axios.create({
@@ -49,7 +44,7 @@ service.interceptors.response.use(
    */
   response => {
     const res = response
-    //TODO: 这个是Mock Data数据
+    // TODO: 这个是Mock Data数据
     // if the custom code is not 20000, it is judged as an error.
     // if (res.code !== 20000) {
     //   Message({
@@ -75,7 +70,7 @@ service.interceptors.response.use(
     // } else {
     //   return res
     // }
-    return res;
+    return res
   },
   error => {
     console.log('respone拦截器: ' + error) // for debug
