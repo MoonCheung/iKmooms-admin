@@ -94,7 +94,7 @@ import {
 import vPagination from '@/components/Pagination'
 
 export default {
-  name: 'Catglist',
+  name: 'CatgList',
   components: {
     vPagination
   },

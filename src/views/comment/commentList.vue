@@ -1,5 +1,5 @@
 <template>
-  <div>评论列表</div>
+  <div>暂时开发评论列表功能</div>
 </template>
 
 <script>

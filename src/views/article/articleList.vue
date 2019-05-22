@@ -33,9 +33,6 @@
                 <el-table-column type="index"
                                  label="ID"
                                  width="40">
-                  <template v-slot="props">
-                    <span>{{ props.row.uid }}</span>
-                  </template>
                 </el-table-column>
                 <el-table-column prop="title"
                                  label="标题"
@@ -107,7 +104,7 @@ import vPagination from '@/components/Pagination'
 import './index.scss'
 
 export default {
-  name: 'Artlist',
+  name: 'ArtList',
   components: {
     vPagination
   },

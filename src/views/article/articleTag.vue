@@ -89,7 +89,7 @@ import { addTags, getTags, editTags, delTags } from '@/api/tag'
 import vPagination from '@/components/Pagination'
 
 export default {
-  name: 'Arttag',
+  name: 'ArtTag',
   components: {
     vPagination
   },

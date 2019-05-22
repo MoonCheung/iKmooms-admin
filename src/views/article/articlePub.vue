@@ -112,7 +112,7 @@ import axios from 'axios'
 import './index.scss'
 
 export default {
-  name: 'Artpub',
+  name: 'ArtPub',
   components: {
     vQuillEditor
   },
