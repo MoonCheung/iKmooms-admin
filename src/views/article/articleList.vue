@@ -33,9 +33,9 @@
                 <el-table-column type="index"
                                  label="ID"
                                  width="40">
-                  <!-- <template v-slot="props">
-                    <span>{{ props.$row.id }}</span>
-                  </template> -->
+                  <template v-slot="props">
+                    <span>{{ props.row.uid }}</span>
+                  </template>
                 </el-table-column>
                 <el-table-column prop="title"
                                  label="标题"
@@ -99,7 +99,6 @@
 <script>
 import {
   articleList,
-  editArticle,
   delArticle,
   chgArtStatus
 } from '@/api/article'
@@ -166,7 +165,7 @@ export default {
       })
         .then(() => {
           chgArtStatus(data).then(res => {
-            if (res.data.code == 1) {
+            if (res.data.code === 1) {
               this.$message({
                 type: 'success',
                 message: res.data.msg
@@ -198,13 +197,18 @@ export default {
       })
         .then(() => {
           delArticle(param).then(res => {
-            if (res.data.code == 1) {
+            if (res.data.code === 1) {
               this.$message({
                 type: 'success',
                 message: res.data.msg
               })
               // 再次获取文章列表
               this.getArtList()
+            } else {
+              this.$message({
+                type: 'error',
+                message: res.data.msg
+              })
             }
           })
         })
@@ -225,8 +229,7 @@ export default {
       }
       articleList(param)
         .then(res => {
-          console.log(res)
-          if (res.data.code == 1) {
+          if (res.data.code === 1) {
             this.artListData = res.data.artData
             this.total = res.data.total
           }

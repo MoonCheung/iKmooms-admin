@@ -104,7 +104,7 @@
 
 <script>
 import vQuillEditor from '@/components/quill-editor'
-import { getQNToken, uploadToQN } from '@/api/qiniu'
+import { getQNToken } from '@/api/qiniu'
 import { insertArticle, getArtDetl, editArticle } from '@/api/article'
 import { getAllCatgs } from '@/api/category'
 import { getAllTags } from '@/api/tag'

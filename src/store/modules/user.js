@@ -26,7 +26,7 @@ const mutations = {
 
 const actions = {
   // user login
-  login({ commit }, userInfo) {
+  login ({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
       login({
@@ -42,12 +42,12 @@ const actions = {
         })
         .catch(error => {
           reject(error)
-        });
+        })
     })
   },
 
   // get user info
-  getInfo({ commit, state }) {
+  getInfo ({ commit, state }) {
     return new Promise((resolve, reject) => {
       // console.log(state.token) //打印出admin
       getInfo(state.token)
@@ -71,12 +71,12 @@ const actions = {
         })
         .catch(error => {
           reject(error)
-        });
+        })
     })
   },
 
   // user logout
-  logout({ commit, state }) {
+  logout ({ commit, state }) {
     return new Promise((resolve, reject) => {
       // console.log(state.token) //打印出admin
       logout(state.token)
@@ -89,18 +89,18 @@ const actions = {
         })
         .catch(error => {
           reject(error)
-        });
+        })
     })
   },
 
   // remove token
-  resetToken({ commit }) {
+  resetToken ({ commit }) {
     return new Promise(resolve => {
       commit('SET_TOKEN', '')
       commit('SET_ROLES', [])
       removeToken()
       resolve()
-    });
+    })
   }
 }
 

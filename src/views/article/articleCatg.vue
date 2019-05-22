@@ -44,14 +44,6 @@
       <!-- 分页 -->
       <el-row>
         <el-col :span="24">
-          <!-- <el-pagination style="margin-top: 15px"
-                         @size-change="handleSizeChange"
-                         @current-change="handleCurrentChange"
-                         :current-page="currentPage"
-                         :page-size="limit"
-                         layout="total, prev, pager, next, jumper"
-                         :total="total">
-          </el-pagination> -->
           <v-pagination v-show="total > 0"
                         style="padding-top:10px;"
                         :total="total"
@@ -171,7 +163,7 @@ export default {
       })
         .then(() => {
           delCategory(param).then(res => {
-            if (res.data.code == 1) {
+            if (res.data.code === 1) {
               this.$message({
                 type: 'success',
                 message: res.data.msg
@@ -196,7 +188,7 @@ export default {
           if (this.todo === 'add') {
             addCategory(this.catgForm)
               .then(res => {
-                if (res.data.code == 1) {
+                if (res.data.code === 1) {
                   this.dialogFormVisible = false
                   this.getCatgList()
                   this.$message({
@@ -213,7 +205,7 @@ export default {
           } else {
             editCategory(this.catgForm)
               .then(res => {
-                if (res.data.code == 1) {
+                if (res.data.code === 1) {
                   this.dialogFormVisible = false
                   this.getCatgList()
                   this.$message({

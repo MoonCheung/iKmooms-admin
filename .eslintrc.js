@@ -12,33 +12,35 @@ module.exports = {
   },
   // extends: ['plugin:vue/essential', 'eslint:recommended'],
   extends: [
-    // 'plugin:vue/strongly-recommended',
     'plugin:vue/essential',
-    'plugin:prettier/recommended',
-    'plugin:vue/base',
-    '@vue/standard',
+    'eslint:recommended',
+    // 'plugin:prettier/recommended',
+    // 'plugin:vue/base',
+    // '@vue/standard',
   ],
   "plugins": [
+    "flowtype",
+    "html",
     "vue"
   ],
   // add your custom rules here
   //it is base on https://github.com/vuejs/eslint-config-vue
   rules: {
     // 关闭冲突规则
-    'prettier/prettier': [
-      'error',
-      {
-        //使用单引号而不是双引号。
-        singleQuote: true,
-        //多行时尽可能打印尾随逗号。
-        trailingComma: 'none',
-        // 在对象文字中打印括号之间的空格。
-        bracketSpacing: true,
-        // 将>多行JSX元素放在最后一行的末尾，而不是单独放在下一行（不适用于自闭元素）。
-        jsxBracketSameLine: true,
-        parser: 'flow'
-      },
-    ],
+    // 'prettier/prettier': [
+    //   'error',
+    //   {
+    //     //使用单引号而不是双引号。
+    //     singleQuote: true,
+    //     //多行时尽可能打印尾随逗号。
+    //     trailingComma: 'none',
+    //     // 在对象文字中打印括号之间的空格。
+    //     bracketSpacing: true,
+    //     // 将>多行JSX元素放在最后一行的末尾，而不是单独放在下一行（不适用于自闭元素）。
+    //     jsxBracketSameLine: true,
+    //     parser: 'flow'
+    //   },
+    // ],
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
     "vue/max-attributes-per-line": [2, {
