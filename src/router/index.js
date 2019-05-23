@@ -30,8 +30,7 @@ Vue.use(Router)
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
-export const constantRoutes = [
-  {
+export const constantRoutes = [{
     path: '/login',
     component: () => import('@/views/login/index'),
     hidden: true
@@ -47,17 +46,15 @@ export const constantRoutes = [
     path: '/',
     component: Layout,
     redirect: '/admin',
-    children: [
-      {
-        path: 'admin',
-        name: 'admin',
-        component: () => import('@/views/admin/index'),
-        meta: {
-          title: '仪盘表',
-          icon: 'dashboard'
-        }
+    children: [{
+      path: 'admin',
+      name: 'admin',
+      component: () => import('@/views/admin/index'),
+      meta: {
+        title: '仪盘表',
+        icon: 'dashboard'
       }
-    ]
+    }]
   },
   {
     path: '/art',
@@ -68,10 +65,9 @@ export const constantRoutes = [
       title: '文章管理',
       icon: 'webcreate'
     },
-    children: [
-      {
+    children: [{
         path: 'artlist',
-        name: 'articleList',
+        name: 'ArtList',
         component: () => import('@/views/article/articleList'),
         meta: {
           title: '文章列表',
@@ -80,16 +76,17 @@ export const constantRoutes = [
       },
       {
         path: 'catglist',
-        name: 'categoryList',
+        name: 'CatgList',
         component: () => import('@/views/article/articleCatg'),
         meta: {
           title: '分类目录',
-          icon: 'webfolder'
+          icon: 'webfolder',
+          noCache: true // 不会被 <keep-alive> 缓存
         }
       },
       {
         path: 'artpub',
-        name: 'articlePub',
+        name: 'ArtPub',
         component: () => import('@/views/article/articlePub'),
         meta: {
           title: '发布文章',
@@ -98,11 +95,12 @@ export const constantRoutes = [
       },
       {
         path: 'arttag',
-        name: 'articleTag',
+        name: 'ArtTag',
         component: () => import('@/views/article/articleTag'),
         meta: {
           title: '文章标签',
-          icon: 'pricetags'
+          icon: 'pricetags',
+          noCache: true // 不会被 <keep-alive> 缓存
         }
       }
     ]
@@ -117,32 +115,28 @@ export const constantRoutes = [
       title: '评论管理',
       icon: 'webchatboxes'
     },
-    children: [
-      {
-        path: 'cmtlist',
-        name: 'commentList',
-        component: () => import('@/views/comment/commentList'),
-        meta: {
-          title: '评论列表',
-          icon: 'list'
-        }
+    children: [{
+      path: 'cmtlist',
+      name: 'commentList',
+      component: () => import('@/views/comment/commentList'),
+      meta: {
+        title: '评论列表',
+        icon: 'list'
       }
-    ]
+    }]
   },
   {
     path: '/config',
     component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'config',
-        component: () => import('@/views/config/index'),
-        meta: {
-          title: '全局设置',
-          icon: 'settings'
-        }
+    children: [{
+      path: 'index',
+      name: 'config',
+      component: () => import('@/views/config/index'),
+      meta: {
+        title: '全局设置',
+        icon: 'settings'
       }
-    ]
+    }]
   }
 ]
 
@@ -252,7 +246,7 @@ const createRouter = () =>
 const router = createRouter()
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
-export function resetRouter () {
+export function resetRouter() {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router
 }

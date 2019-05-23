@@ -211,7 +211,7 @@ export default {
                     type: 'success'
                   })
                   this.$router.push({
-                    name: 'articleList'
+                    name: 'ArtList'
                   })
                 } else {
                   this.$message({

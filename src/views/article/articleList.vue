@@ -133,7 +133,7 @@ export default {
         .then(() => {
           // 带有查询参数
           this.$router.push({
-            name: 'articlePub',
+            name: 'ArtPub',
             query: {
               id: param.id,
               method: 'edit'
