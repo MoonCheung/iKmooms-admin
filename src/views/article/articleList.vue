@@ -3,7 +3,7 @@
     <el-main>
       <el-row>
         <el-col :span="24">
-          <el-card class="box-card">
+          <el-card class="art-card">
             <div slot="header"
                  class="art-header">
               <span>文章列表</span>
@@ -100,7 +100,6 @@ import {
   chgArtStatus
 } from '@/api/article'
 import vPagination from '@/components/Pagination'
-
 import './index.scss'
 
 export default {

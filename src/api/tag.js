@@ -38,3 +38,10 @@ export function getAllTags() {
     method: 'get'
   })
 }
+
+export function getTagTotals() {
+  return request({
+    url: '/api/tag/gettagtot',
+    method: 'get'
+  })
+}

@@ -3,7 +3,7 @@
     <el-main>
       <el-row>
         <el-col :span="24">
-          <el-card class="box-card">
+          <el-card class="art-card">
             <div slot="header"
                  class="tags-header">
               <span>文章标签</span>
@@ -87,6 +87,7 @@
 <script>
 import { addTags, getTags, editTags, delTags } from '@/api/tag'
 import vPagination from '@/components/Pagination'
+import './index.scss'
 
 export default {
   name: 'ArtTag',

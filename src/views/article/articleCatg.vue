@@ -3,7 +3,7 @@
     <el-main>
       <el-row>
         <el-col :span="24">
-          <el-card class="box-card">
+          <el-card class="art-card">
             <div slot="header"
                  class="catg-header">
               <span>分类管理</span>
@@ -92,6 +92,7 @@ import {
   delCategory
 } from '@/api/category'
 import vPagination from '@/components/Pagination'
+import './index.scss'
 
 export default {
   name: 'CatgList',

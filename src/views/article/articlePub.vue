@@ -3,7 +3,7 @@
     <el-main>
       <el-row :gutter="20">
         <el-col :span="18">
-          <el-card>
+          <el-card class="art-card">
             <div slot="header">
               <span>撰写新文章</span>
             </div>
@@ -194,7 +194,7 @@ export default {
                     type: 'success'
                   })
                   this.$router.push({
-                    name: 'articleList'
+                    name: 'ArtList'
                   })
                 } else {
                   this.$message({

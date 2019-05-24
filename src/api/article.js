@@ -47,3 +47,10 @@ export function chgArtStatus(param) {
     data: param
   })
 }
+
+export function artAllLists() {
+  return request({
+    url: '/api/article/artalllist',
+    method: 'get',
+  })
+}

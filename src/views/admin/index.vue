@@ -13,7 +13,7 @@
               <div class="card-panel-text">
                 全站文章数
               </div>
-              <div class="card-panel-num">无数据</div>
+              <div class="card-panel-num">{{artNum}}</div>
             </div>
           </el-card>
         </el-col>
@@ -28,7 +28,7 @@
               <div class="card-panel-text">
                 全站标签数
               </div>
-              <div class="card-panel-num">无数据</div>
+              <div class="card-panel-num">{{tagNum}}</div>
             </div>
           </el-card>
         </el-col>
@@ -67,28 +67,104 @@
         <el-col :span="12">
           <el-card class="box-card">
             <div slot="header"
-                 class="clearfix">
+                 class="clearfix card-header">
               <span>最近发布文章</span>
             </div>
-            <div>文章内容</div>
+            <div>
+              <el-table :data="artData"
+                        style="width: 100%"
+                        max-height="228">
+                <el-table-column prop="uid"
+                                 type="index"
+                                 label="ID"
+                                 width="50">
+                  <template v-slot="props">
+                    {{ props.row.uid }}
+                  </template>
+                </el-table-column>
+                <el-table-column prop="title"
+                                 label="标题">
+                </el-table-column>
+                <el-table-column fixed="right"
+                                 prop="cdate"
+                                 label="发布时间"
+                                 width="150"
+                                 header-align="center">
+                </el-table-column>
+              </el-table>
+            </div>
           </el-card>
         </el-col>
         <el-col :span="12">
           <el-card class="box-card">
             <div slot="header"
-                 class="clearfix">
+                 class="clearfix card-header">
               <span>本机统计数据</span>
-              <el-button style="float: right; padding: 3px 0"
-                         type="text">刷新</el-button>
+              <el-button style="float: right; padding: 0"
+                         type="text"
+                         @click.prevent="changeInit">刷新</el-button>
             </div>
-            <div class="card-data">
-              本机数据
-            </div>
-            <div class="card-progress">
-              <el-progress type="circle"
-                           :percentage="100"
-                           status="text">Done</el-progress>
-            </div>
+            <el-row>
+              <el-col :span="12">
+                <div class="card-status">
+                  <div>
+                    <span>运行状态：</span>
+                    <el-tag :type="Object.is(constants, '0')? 'success':'danger'"
+                            size="small">{{Object.is(constants,'0')? '服务器正在运行':'服务器出现错误'}}</el-tag>
+                  </div>
+                  <div>
+                    <span>操作系统：</span>
+                    <el-tag color="#495060"
+                            size="small"
+                            class="card-tag">{{type}}</el-tag>
+                  </div>
+                  <div>
+                    <span>服务器主机名：</span>
+                    <el-tag color="#409EFF"
+                            size="small"
+                            class="card-tag">{{hostname}}</el-tag>
+                  </div>
+                  <div>
+                    <span>Nodejs编译系统：</span>
+                    <el-tag color="#4CBE63"
+                            size="small"
+                            class="card-tag">{{platform}}</el-tag>
+                  </div>
+                  <div>
+                    <span>服务器发行版本：</span>
+                    <el-tag color="#495060"
+                            size="small"
+                            class="card-tag">{{release}}</el-tag>
+                  </div>
+                  <div>
+                    <span>服务器总内存数：</span>
+                    <el-tag color="#409EFF"
+                            size="small"
+                            class="card-tag">{{totalmemory}}</el-tag>
+                  </div>
+                  <div>
+                    <span>服务器可用内存数：</span>
+                    <el-tag color="#409EFF"
+                            size="small"
+                            class="card-tag">{{freememory}}</el-tag>
+                  </div>
+                </div>
+              </el-col>
+              <el-col :span="12">
+                <div class="card-progress">
+                  <el-progress type="circle"
+                               :percentage="percentage"
+                               :width="220"
+                               status="text">
+                    <div class="card-progress-text">
+                      <h1>内存使用率</h1>
+                      <p>综合服务器内存占比</p>
+                      <span>总占百分比:<i>{{percentage}}%</i></span>
+                    </div>
+                  </el-progress>
+                </div>
+              </el-col>
+            </el-row>
           </el-card>
         </el-col>
       </el-row>
@@ -99,6 +175,8 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getSystemList } from '@/api/system'
+import { artAllLists } from '@/api/article'
+import { getTagTotals } from '@/api/tag'
 import './index.scss'
 
 export default {
@@ -106,27 +184,63 @@ export default {
   computed: {
     ...mapGetters(['name', 'roles'])
   },
+  data () {
+    return {
+      constants: null,
+      type: null,
+      release: null,
+      platform: null,
+      hostname: null,
+      totalmemory: null,
+      freememory: null,
+      percentage: 0,
+      // 表单数据
+      artData: [],
+      // 文章数
+      artNum: 0,
+      // 标签数
+      tagNum: 0
+    }
+  },
   created () {
-    this.init()
+    this.initSystem();
+    this.artAllList();
+    this.tagAllTotal();
   },
   methods: {
-    init () {
-      getSystemList()
-        .then(res => {
-          // (this.constants = res.data.constants),
-          //   (this.release = res.data.release),
-          //   (this.platform = res.data.platform),
-          //   (this.hostname = res.data.hostname),
-          //   (this.type = res.data.type),
-          //   (this.totalmemory = res.data.totalmemory),
-          //   (this.Freememory = res.data.Freememory),
-          //   (this.percentage = res.data.percentage),
-          //   (this.cpus = res.data.cpus);
-          console.log(res.data)
-        })
-        .catch(err => {
-          console.log('Catch报错:' + err)
-        })
+    initSystem () {
+      getSystemList().then(res => {
+        if (res.data.code === 1) {
+          (this.constants = res.data.constants),
+            (this.release = res.data.release),
+            (this.platform = res.data.platform),
+            (this.hostname = res.data.hostname),
+            (this.type = res.data.type),
+            (this.totalmemory = res.data.totalmemory),
+            (this.percentage = res.data.percentage),
+            (this.freememory = res.data.Freememory)
+        }
+      }).catch(err => {
+        console.error(err)
+      })
+    },
+    changeInit () {
+      this.initSystem();
+    },
+    artAllList () {
+      artAllLists().then(res => {
+        if (res.data.code === 1) {
+          this.artData = res.data.artListData
+          this.artNum = res.data.artTotalData
+        }
+      })
+    },
+    tagAllTotal () {
+      getTagTotals().then(res => {
+        if (res.data.code === 1) {
+          this.tagNum = res.data.tagTotalData
+        }
+      })
     }
   }
 }
