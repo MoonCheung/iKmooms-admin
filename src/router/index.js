@@ -31,113 +31,113 @@ Vue.use(Router)
  * all roles can be accessed
  */
 export const constantRoutes = [{
-    path: '/login',
-    component: () => import('@/views/login/index'),
-    hidden: true
-  },
+  path: '/login',
+  component: () => import('@/views/login/index'),
+  hidden: true
+},
 
-  {
-    path: '/404',
-    component: () => import('@/views/404'),
-    hidden: true
-  },
+{
+  path: '/404',
+  component: () => import('@/views/404'),
+  hidden: true
+},
 
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/admin',
-    children: [{
-      path: 'admin',
-      name: 'admin',
-      component: () => import('@/views/admin/index'),
-      meta: {
-        title: '仪盘表',
-        icon: 'dashboard'
-      }
-    }]
-  },
-  {
-    path: '/art',
-    component: Layout,
-    redirect: '/article/artlist',
-    name: 'Article',
+{
+  path: '/',
+  component: Layout,
+  redirect: '/admin',
+  children: [{
+    path: 'admin',
+    name: 'admin',
+    component: () => import('@/views/admin/index'),
     meta: {
-      title: '文章管理',
-      icon: 'webcreate'
-    },
-    children: [{
-        path: 'artlist',
-        name: 'ArtList',
-        component: () => import('@/views/article/articleList'),
-        meta: {
-          title: '文章列表',
-          icon: 'documenttext'
-        }
-      },
-      {
-        path: 'catglist',
-        name: 'CatgList',
-        component: () => import('@/views/article/articleCatg'),
-        meta: {
-          title: '分类目录',
-          icon: 'webfolder',
-          noCache: true // 不会被 <keep-alive> 缓存
-        }
-      },
-      {
-        path: 'artpub',
-        name: 'ArtPub',
-        component: () => import('@/views/article/articlePub'),
-        meta: {
-          title: '发布文章',
-          icon: 'webdoneall'
-        }
-      },
-      {
-        path: 'arttag',
-        name: 'ArtTag',
-        component: () => import('@/views/article/articleTag'),
-        meta: {
-          title: '文章标签',
-          icon: 'pricetags',
-          noCache: true // 不会被 <keep-alive> 缓存
-        }
-      }
-    ]
+      title: '仪盘表',
+      icon: 'dashboard'
+    }
+  }]
+},
+{
+  path: '/art',
+  component: Layout,
+  redirect: '/article/artlist',
+  name: 'Article',
+  meta: {
+    title: '文章管理',
+    icon: 'webcreate'
   },
-  {
-    path: '/cmt',
-    component: Layout,
-    redirect: '/cmt/cmtlist',
-    name: 'Comment',
-    alwaysShow: true, // 一直显示根路由
+  children: [{
+    path: 'artlist',
+    name: 'ArtList',
+    component: () => import('@/views/article/articleList'),
     meta: {
-      title: '评论管理',
-      icon: 'webchatboxes'
-    },
-    children: [{
-      path: 'cmtlist',
-      name: 'commentList',
-      component: () => import('@/views/comment/commentList'),
-      meta: {
-        title: '评论列表',
-        icon: 'list'
-      }
-    }]
+      title: '文章列表',
+      icon: 'documenttext'
+    }
   },
   {
-    path: '/config',
-    component: Layout,
-    children: [{
-      path: 'index',
-      name: 'config',
-      component: () => import('@/views/config/index'),
-      meta: {
-        title: '全局设置',
-        icon: 'settings'
-      }
-    }]
+    path: 'catglist',
+    name: 'CatgList',
+    component: () => import('@/views/article/articleCatg'),
+    meta: {
+      title: '分类目录',
+      icon: 'webfolder',
+      noCache: true // 不会被 <keep-alive> 缓存
+    }
+  },
+  {
+    path: 'artpub',
+    name: 'ArtPub',
+    component: () => import('@/views/article/articlePub'),
+    meta: {
+      title: '发布文章',
+      icon: 'webdoneall'
+    }
+  },
+  {
+    path: 'arttag',
+    name: 'ArtTag',
+    component: () => import('@/views/article/articleTag'),
+    meta: {
+      title: '文章标签',
+      icon: 'pricetags',
+      noCache: true // 不会被 <keep-alive> 缓存
+    }
   }
+  ]
+},
+{
+  path: '/cmt',
+  component: Layout,
+  redirect: '/cmt/cmtlist',
+  name: 'Comment',
+  alwaysShow: true, // 一直显示根路由
+  meta: {
+    title: '评论管理',
+    icon: 'webchatboxes'
+  },
+  children: [{
+    path: 'cmtlist',
+    name: 'commentList',
+    component: () => import('@/views/comment/commentList'),
+    meta: {
+      title: '评论列表',
+      icon: 'list'
+    }
+  }]
+},
+{
+  path: '/config',
+  component: Layout,
+  children: [{
+    path: 'index',
+    name: 'config',
+    component: () => import('@/views/config/index'),
+    meta: {
+      title: '全局设置',
+      icon: 'settings'
+    }
+  }]
+}
 ]
 
 /**
@@ -246,7 +246,7 @@ const createRouter = () =>
 const router = createRouter()
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
-export function resetRouter() {
+export function resetRouter () {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router
 }

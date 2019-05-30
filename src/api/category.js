@@ -1,6 +1,15 @@
+/*
+ * @Description: 文章分类API
+ * @Author: MoonCheung
+ * @Github: https://github.com/MoonCheung
+ * @Date: 2019-05-12 22:10:15
+ * @LastEditors: MoonCheung
+ * @LastEditTime: 2019-05-30 17:27:41
+ */
+
 import request from '@/utils/request'
 
-export function addCategory(param) {
+export function addCategory (param) {
   return request({
     url: '/api/category/addcatg',
     method: 'post',
@@ -8,7 +17,7 @@ export function addCategory(param) {
   })
 }
 
-export function getCategory(param) {
+export function getCategory (param) {
   return request({
     url: '/api/category/getcatg',
     method: 'post',
@@ -16,7 +25,7 @@ export function getCategory(param) {
   })
 }
 
-export function editCategory(param) {
+export function editCategory (param) {
   return request({
     url: '/api/category/editcatg',
     method: 'post',
@@ -24,7 +33,7 @@ export function editCategory(param) {
   })
 }
 
-export function delCategory(param) {
+export function delCategory (param) {
   return request({
     url: '/api/category/delcatg',
     method: 'post',
@@ -32,7 +41,7 @@ export function delCategory(param) {
   })
 }
 
-export function getAllCatgs() {
+export function getAllCatgs () {
   return request({
     url: '/api/category/getallcatg',
     method: 'get'

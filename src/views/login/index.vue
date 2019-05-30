@@ -118,10 +118,15 @@ export default {
           this.loading = true
           this.$store
             .dispatch('user/login', this.loginForm)
-            .then(() => {
-              // TODO: 括号里面res是打印undefined
+            .then((res) => {
+              if (res.data.code === 1) {
+                this.$message({
+                  message: res.data.msg,
+                  type: 'success'
+                });
+              }
               this.$router.push({ path: this.redirect || '/' })
-              // console.log(this.$router);
+              // console.log(this.$router); //路由信息
               this.loading = false
             })
             .catch(() => {

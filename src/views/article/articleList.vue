@@ -94,11 +94,7 @@
 </template>
 
 <script>
-import {
-  articleList,
-  delArticle,
-  chgArtStatus
-} from '@/api/article'
+import { articleList, delArticle, chgArtStatus } from '@/api/article'
 import vPagination from '@/components/Pagination'
 import './index.scss'
 

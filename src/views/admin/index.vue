@@ -203,29 +203,29 @@ export default {
     }
   },
   created () {
-    this.initSystem();
-    this.artAllList();
-    this.tagAllTotal();
+    this.initSystem()
+    this.artAllList()
+    this.tagAllTotal()
   },
   methods: {
     initSystem () {
       getSystemList().then(res => {
         if (res.data.code === 1) {
-          (this.constants = res.data.constants),
-            (this.release = res.data.release),
-            (this.platform = res.data.platform),
-            (this.hostname = res.data.hostname),
-            (this.type = res.data.type),
-            (this.totalmemory = res.data.totalmemory),
-            (this.percentage = res.data.percentage),
-            (this.freememory = res.data.Freememory)
+          this.constants = res.data.constants,
+            this.release = res.data.release,
+            this.platform = res.data.platform,
+            this.hostname = res.data.hostname,
+            this.type = res.data.type,
+            this.totalmemory = res.data.totalmemory,
+            this.percentage = res.data.percentage,
+            this.freememory = res.data.Freememory
         }
       }).catch(err => {
         console.error(err)
       })
     },
     changeInit () {
-      this.initSystem();
+      this.initSystem()
     },
     artAllList () {
       artAllLists().then(res => {
@@ -233,6 +233,8 @@ export default {
           this.artData = res.data.artListData
           this.artNum = res.data.artTotalData
         }
+      }).catch(err => {
+        console.error(err)
       })
     },
     tagAllTotal () {
@@ -240,6 +242,8 @@ export default {
         if (res.data.code === 1) {
           this.tagNum = res.data.tagTotalData
         }
+      }).catch(err => {
+        console.error(err)
       })
     }
   }

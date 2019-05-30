@@ -85,12 +85,7 @@
 </template>
 
 <script>
-import {
-  addCategory,
-  getCategory,
-  editCategory,
-  delCategory
-} from '@/api/category'
+import { addCategory, getCategory, editCategory, delCategory } from '@/api/category'
 import vPagination from '@/components/Pagination'
 import './index.scss'
 
