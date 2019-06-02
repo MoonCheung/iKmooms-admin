@@ -113,7 +113,7 @@ export default {
               //  文件名称
               formData.append(
                 'key',
-                `blogs/image/${suffix.join('.')}_${new Date() +
+                `blogs/image/${suffix.join('.')}_${new Date().getTime() +
                 Math.floor(Math.random() * 100)}.${ext}`
               )
               formData.append('token', qiniu.token)

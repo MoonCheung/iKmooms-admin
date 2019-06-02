@@ -255,10 +255,9 @@ export default {
       // 重命名要上传的文件
       const keyname =
         'blogs/image/' +
-        new Date() +
+        new Date().getTime() +
         Math.floor(Math.random() * 100) +
-        '.' +
-        filetype
+        '.' + filetype
       getQNToken()
         .then(res => {
           const formdata = new FormData() // 打印出空对象
@@ -268,8 +267,8 @@ export default {
           formdata.append('key', keyname)
           // 使用axios封装函数直接上传七牛云引发报错,等上线之后就改的
           // uploadToQN(this.regionUrl, formdata).then(res => {
-          //   this.imageUrl = 'http://' + this.qiniulink + '/' + res.data.key
-          //   // console.log(this.imageUrl);
+          //   this.artform.banner = this.qiniulink + res.data.key
+          //   // console.log(this.artform.banner);
           // })
           // 暂时使用引入axios，通过post方式请求获得数据返回的
           axios.post(this.regionUrl, formdata, config).then(res => {
