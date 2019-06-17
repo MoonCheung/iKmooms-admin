@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-05-01 20:49:50
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-05-30 17:27:46
+ * @LastEditTime: 2019-06-16 18:01:13
  */
 
 import request from '@/utils/request'
@@ -60,6 +60,13 @@ export function chgArtStatus (param) {
 export function artAllLists () {
   return request({
     url: '/api/article/artalllist',
+    method: 'get'
+  })
+}
+
+export function getPvTotals () {
+  return request({
+    url: '/api/art/getpvtot',
     method: 'get'
   })
 }

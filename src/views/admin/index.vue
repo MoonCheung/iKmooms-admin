@@ -43,7 +43,7 @@
               <div class="card-panel-text">
                 全站阅读数
               </div>
-              <div class="card-panel-num">无数据</div>
+              <div class="card-panel-num">{{pvNum}}</div>
             </div>
           </el-card>
         </el-col>
@@ -175,7 +175,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getSystemList } from '@/api/system'
-import { artAllLists } from '@/api/article'
+import { artAllLists, getPvTotals } from '@/api/article'
 import { getTagTotals } from '@/api/tag'
 import './index.scss'
 
@@ -199,13 +199,16 @@ export default {
       // 文章数
       artNum: 0,
       // 标签数
-      tagNum: 0
+      tagNum: 0,
+      // 阅读数
+      pvNum: 0,
     }
   },
   created () {
     this.initSystem()
     this.artAllList()
     this.tagAllTotal()
+    this.pvAllTotal()
   },
   methods: {
     initSystem () {
@@ -244,6 +247,15 @@ export default {
         }
       }).catch(err => {
         console.error(err)
+      })
+    },
+    pvAllTotal () {
+      getPvTotals().then(res => {
+        if (res.data.code === 1) {
+          this.pvNum = res.data.result["0"].pv_count
+        }
+      }).catch(err => {
+        console.error(err);
       })
     }
   }

@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-05-01 14:22:03
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-05-30 17:27:55
+ * @LastEditTime: 2019-06-17 23:14:30
  */
 
 import request from '@/utils/request'
@@ -36,5 +36,13 @@ export function logout (token) {
     url: '/api/logout',
     method: 'post',
     data: token
+  })
+}
+
+export function updateUserInfo (param) {
+  return request({
+    url: '/api/upduser',
+    method: 'patch',
+    data: param
   })
 }

@@ -113,9 +113,9 @@ export default {
         categoryname: [
           { required: true, message: '名称不能为空', trigger: 'blur' },
           {
-            min: 3,
+            min: 2,
             max: 5,
-            message: '建议输入长度在 3 到 5个字符',
+            message: '建议输入长度在 2 到 5个字符',
             trigger: 'blur'
           }
         ],

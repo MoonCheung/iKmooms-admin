@@ -1,12 +1,7 @@
 import axios from 'axios'
-import {
-  MessageBox,
-  Message
-} from 'element-ui'
+import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
-import {
-  getToken
-} from '@/utils/auth'
+import { getToken } from '@/utils/auth'
 
 // 创建axios实例
 const service = axios.create({
@@ -25,7 +20,7 @@ service.interceptors.request.use(
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
       // config.headers['X-Token'] = getToken()
-      let token = getToken();
+      const token = getToken()
       config.headers.common['Authorization'] = `Bearer ${token}`
     }
     return config

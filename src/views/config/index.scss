@@ -1,0 +1,43 @@
+// config的样式表
+.conf-header {
+  margin-top: 10px;
+  margin-bottom: 12px;
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 28px;
+}
+
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    border-color: #409eff;
+  }
+
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+}
+
+.el-siteform {
+  .el-inputform {
+    min-width: 50%;
+    width: 50%;
+  }
+}
