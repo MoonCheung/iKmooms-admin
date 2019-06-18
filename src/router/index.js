@@ -27,205 +27,134 @@ Vue.use(Router)
 
 /**
  * constantRoutes
- * a base page that does not have permission requirements
- * all roles can be accessed
+ * //所有权限通用路由表
+ * //如首页和登录页和一些不用权限的公用页面
  */
-export const constantRoutes = [{
-  path: '/login',
-  component: () => import('@/views/login/index'),
-  hidden: true
-},
 
-{
-  path: '/404',
-  component: () => import('@/views/404'),
-  hidden: true
-},
+export const constantRoutes = [
+  {
+    path: '/login',
+    component: () => import('@/views/login/index'),
+    hidden: true
+  },
 
-{
-  path: '/',
-  component: Layout,
-  redirect: '/admin',
-  children: [{
-    path: 'admin',
-    name: 'admin',
-    component: () => import('@/views/admin/index'),
-    meta: {
-      title: '仪盘表',
-      icon: 'dashboard'
-    }
-  }]
-},
-{
-  path: '/art',
-  component: Layout,
-  redirect: '/article/artlist',
-  name: 'Article',
-  meta: {
-    title: '文章管理',
-    icon: 'webcreate'
-  },
-  children: [{
-    path: 'artlist',
-    name: 'ArtList',
-    component: () => import('@/views/article/articleList'),
-    meta: {
-      title: '文章列表',
-      icon: 'documenttext'
-    }
-  },
   {
-    path: 'catglist',
-    name: 'CatgList',
-    component: () => import('@/views/article/articleCatg'),
-    meta: {
-      title: '分类目录',
-      icon: 'webfolder',
-      noCache: true // 不会被 <keep-alive> 缓存
-    }
+    path: '/404',
+    component: () => import('@/views/404'),
+    hidden: true
   },
+
   {
-    path: 'artpub',
-    name: 'ArtPub',
-    component: () => import('@/views/article/articlePub'),
-    meta: {
-      title: '发布文章',
-      icon: 'webdoneall'
-    }
-  },
-  {
-    path: 'arttag',
-    name: 'ArtTag',
-    component: () => import('@/views/article/articleTag'),
-    meta: {
-      title: '文章标签',
-      icon: 'pricetags',
-      noCache: true // 不会被 <keep-alive> 缓存
-    }
+    path: '/',
+    component: Layout,
+    redirect: '/admin',
+    children: [
+      {
+        path: 'admin',
+        name: 'admin',
+        component: () => import('@/views/admin/index'),
+        meta: {
+          title: '仪盘表',
+          icon: 'dashboard'
+        }
+      }
+    ]
   }
-  ]
-},
-{
-  path: '/cmt',
-  component: Layout,
-  redirect: '/cmt/cmtlist',
-  name: 'Comment',
-  alwaysShow: true, // 一直显示根路由
-  meta: {
-    title: '评论管理',
-    icon: 'webchatboxes'
-  },
-  children: [{
-    path: 'cmtlist',
-    name: 'commentList',
-    component: () => import('@/views/comment/commentList'),
-    meta: {
-      title: '评论列表',
-      icon: 'list'
-    }
-  }]
-},
-{
-  path: '/config',
-  component: Layout,
-  children: [{
-    path: 'index',
-    name: 'config',
-    component: () => import('@/views/config/index'),
-    meta: {
-      title: '全局设置',
-      icon: 'settings'
-    }
-  }]
-}
 ]
 
 /**
  * asyncRoutes
- * the routes that need to be dynamically loaded based on user roles
+ * //异步挂载的路由
+ * //动态需要根据权限加载的路由表
  */
 export const asyncRoutes = [
-  // {
-  //   path: '/nested',
-  //   component: Layout,
-  //   redirect: '/nested/menu1',
-  //   name: 'Nested',
-  //   meta: {
-  //     title: 'Nested',
-  //     icon: 'nested'
-  //   },
-  //   children: [{
-  //       path: 'menu1',
-  //       component: () => import('@/views/nested/menu1/index'), // Parent router-view
-  //       name: 'Menu1',
-  //       meta: {
-  //         title: 'Menu1'
-  //       },
-  //       children: [{
-  //           path: 'menu1-1',
-  //           component: () => import('@/views/nested/menu1/menu1-1'),
-  //           name: 'Menu1-1',
-  //           meta: {
-  //             title: 'Menu1-1'
-  //           }
-  //         },
-  //         {
-  //           path: 'menu1-2',
-  //           component: () => import('@/views/nested/menu1/menu1-2'),
-  //           name: 'Menu1-2',
-  //           meta: {
-  //             title: 'Menu1-2'
-  //           },
-  //           children: [{
-  //               path: 'menu1-2-1',
-  //               component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-  //               name: 'Menu1-2-1',
-  //               meta: {
-  //                 title: 'Menu1-2-1'
-  //               }
-  //             },
-  //             {
-  //               path: 'menu1-2-2',
-  //               component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-  //               name: 'Menu1-2-2',
-  //               meta: {
-  //                 title: 'Menu1-2-2'
-  //               }
-  //             }
-  //           ]
-  //         },
-  //         {
-  //           path: 'menu1-3',
-  //           component: () => import('@/views/nested/menu1/menu1-3'),
-  //           name: 'Menu1-3',
-  //           meta: {
-  //             title: 'Menu1-3'
-  //           }
-  //         }
-  //       ]
-  //     },
-  //     {
-  //       path: 'menu2',
-  //       component: () => import('@/views/nested/menu2/index'),
-  //       meta: {
-  //         title: 'menu2'
-  //       }
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   path: 'external-link',
-  //   component: Layout,
-  //   children: [{
-  //     path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-  //     meta: {
-  //       title: 'External Link',
-  //       icon: 'link'
-  //     }
-  //   }]
-  // },
-
+  {
+    path: '/art',
+    component: Layout,
+    redirect: '/article/artlist',
+    name: 'Article',
+    meta: {
+      title: '文章管理',
+      icon: 'webcreate'
+    },
+    children: [
+      {
+        path: 'artlist',
+        name: 'ArtList',
+        component: () => import('@/views/article/articleList'),
+        meta: {
+          title: '文章列表',
+          icon: 'documenttext'
+        }
+      },
+      {
+        path: 'catglist',
+        name: 'CatgList',
+        component: () => import('@/views/article/articleCatg'),
+        meta: {
+          title: '分类目录',
+          icon: 'webfolder',
+          noCache: true // 不会被 <keep-alive> 缓存
+        }
+      },
+      {
+        path: 'artpub',
+        name: 'ArtPub',
+        component: () => import('@/views/article/articlePub'),
+        meta: {
+          title: '发布文章',
+          icon: 'webdoneall'
+        }
+      },
+      {
+        path: 'arttag',
+        name: 'ArtTag',
+        component: () => import('@/views/article/articleTag'),
+        meta: {
+          title: '文章标签',
+          icon: 'pricetags',
+          noCache: true // 不会被 <keep-alive> 缓存
+        }
+      }
+    ]
+  },
+  {
+    path: '/cmt',
+    component: Layout,
+    redirect: '/cmt/cmtlist',
+    name: 'Comment',
+    alwaysShow: true, // 一直显示根路由
+    meta: {
+      title: '评论管理',
+      icon: 'webchatboxes'
+    },
+    children: [
+      {
+        path: 'cmtlist',
+        name: 'commentList',
+        component: () => import('@/views/comment/commentList'),
+        meta: {
+          title: '评论列表',
+          icon: 'list'
+        }
+      }
+    ]
+  },
+  {
+    path: '/config',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'config',
+        component: () => import('@/views/config/index'),
+        meta: {
+          title: '全局设置',
+          icon: 'settings'
+        }
+      }
+    ]
+  },
   // 404 page must be placed at the end!!!
   {
     path: '*',

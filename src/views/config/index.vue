@@ -4,7 +4,8 @@
       <el-row>
         <el-col :span="24">
           <el-card class="conf-card">
-            <el-tabs tab-position="left">
+            <el-tabs tab-position="left"
+                     class="conf-head">
               <el-tab-pane label="个人设置">
                 <el-row>
                   <el-col :span="24">
@@ -17,10 +18,10 @@
                            label-width="80px"
                            :model="userform"
                            :rules="userRules">
-                    <el-col :span="12">
-                      <el-form-item prop="username"
+                    <el-col :span="10">
+                      <el-form-item prop="nickname"
                                     label="昵称">
-                        <el-input v-model="userform.username"
+                        <el-input v-model="userform.nickname"
                                   placeholder="昵称"></el-input>
                       </el-form-item>
                       <el-form-item prop="oldPwd"
@@ -28,6 +29,7 @@
                         <el-input type="password"
                                   v-model="userform.oldPwd"
                                   autocomplete="off"
+                                  show-password
                                   placeholder="原来密码"></el-input>
                       </el-form-item>
                       <el-form-item prop="newPwd"
@@ -35,6 +37,7 @@
                         <el-input type="password"
                                   v-model="userform.newPwd"
                                   autocomplete="off"
+                                  show-password
                                   placeholder="新的密码"></el-input>
                       </el-form-item>
                       <el-form-item prop="checkPwd"
@@ -42,6 +45,7 @@
                         <el-input type="password"
                                   v-model="userform.checkPwd"
                                   autocomplete="off"
+                                  show-password
                                   placeholder="确认密码"></el-input>
                       </el-form-item>
                       <el-form-item prop="intro"
@@ -57,11 +61,12 @@
                                   placeholder="邮箱"></el-input>
                       </el-form-item>
                       <el-form-item>
-                        <el-button type="primary"
-                                   @click="submitUserForm('userform')">更新信息</el-button>
+                        <el-button :loading="confLoading"
+                                   type="primary"
+                                   @click.native.prevent="submitUserForm('userform')">更新信息</el-button>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="12">
+                    <el-col :span="14">
                       <el-form-item prop="imageUrl"
                                     label="头像">
                         <el-input type="hidden"
@@ -95,31 +100,31 @@
                              label-width="100px"
                              :model="siteform"
                              :rules="siteRules">
-                      <el-form-item class="el-inputform"
-                                    prop="sitename"
+                      <el-form-item prop="sitename"
                                     label="站点标题">
-                        <el-input v-model="siteform.sitename"></el-input>
+                        <el-input class="el-inputform"
+                                  v-model="siteform.sitename"></el-input>
                       </el-form-item>
-                      <el-form-item class="el-inputform"
-                                    prop="subhead"
+                      <el-form-item prop="subhead"
                                     label="副标题">
-                        <el-input v-model="siteform.subhead"></el-input>
+                        <el-input class="el-inputform"
+                                  v-model="siteform.subhead"></el-input>
                       </el-form-item>
-                      <el-form-item class="el-inputform"
-                                    prop="keyword"
+                      <el-form-item prop="keyword"
                                     label="关键词">
-                        <el-input v-model="siteform.keyword"></el-input>
+                        <el-input class="el-inputform"
+                                  v-model="siteform.keyword"></el-input>
                       </el-form-item>
-                      <el-form-item class="el-inputform"
-                                    prop="sitedesc"
+                      <el-form-item prop="sitedesc"
                                     label="站点描述">
                         <el-input type="textarea"
+                                  class="el-inputform"
                                   v-model="siteform.sitedesc"></el-input>
                       </el-form-item>
-                      <el-form-item class="el-inputform"
-                                    prop="ICPNo"
+                      <el-form-item prop="ICPNo"
                                     label="ICP备案号">
-                        <el-input v-model="siteform.ICPNo"></el-input>
+                        <el-input class="el-inputform"
+                                  v-model="siteform.ICPNo"></el-input>
                       </el-form-item>
                       <el-form-item>
                         <el-button type="primary"
@@ -169,7 +174,7 @@ export default {
     return {
       //个人设置
       userform: {
-        username: '',
+        nickname: '',
         oldPwd: '',
         newPwd: '',
         checkPwd: '',
@@ -185,12 +190,12 @@ export default {
         sitedesc: '',
         ICPNo: ''
       },
+      confLoading: false,
       regionUrl: 'https://upload-z2.qiniup.com', // 七牛云的上传地址，我这里是华南区
       qiniulink: 'https://img.ikmoons.com/',     // 这是七牛云空间的外链默认域名
       userRules: {
-        username: [
+        nickname: [
           { required: true, message: '请输入名称', trigger: 'blur' },
-          { min: 2, max: 5, message: '长度在 2 到 5 个字符', trigger: 'blur' }
         ],
         oldPwd: [
           { required: true, message: '请输入原来密码', trigger: 'blur' },
@@ -238,6 +243,16 @@ export default {
     })
   },
   methods: {
+    initForm () {
+      let self = this;
+      self.userform.nickname = '',
+        self.userform.oldPwd = '',
+        self.userform.newPwd = '',
+        self.userform.checkPwd = '',
+        self.userform.intro = '',
+        self.userform.email = '',
+        self.userform.imageUrl = ''
+    },
     //将图片上传七牛云
     uploadImg (req) {
       const config = {
@@ -290,7 +305,7 @@ export default {
     submitUserForm () {
       let param = {
         id: this.id,
-        username: this.userform.username,
+        nickname: this.userform.nickname,
         oldPwd: md5(this.userform.oldPwd),
         newPwd: md5(this.userform.newPwd),
         intro: this.userform.intro,
@@ -298,9 +313,29 @@ export default {
         avatar: this.userform.imageUrl
       }
       this.$refs.userform.validate(valid => {
+        this.confLoading = true;
         if (valid) {
           this.$store.dispatch('user/updateUserInfo', param).then(res => {
-            console.log(res);
+            if (res.data.code === 1) {
+              this.$message({
+                message: res.data.msg,
+                type: 'success'
+              })
+              this.initForm();
+              this.confLoading = false;
+            } else if (res.data.error === 1) {
+              this.$message({
+                message: res.data.msg,
+                type: 'error'
+              })
+              this.confLoading = false;
+            } else {
+              this.$message({
+                message: res.data.msg,
+                type: 'error'
+              })
+              this.confLoading = false;
+            }
           })
         }
       })

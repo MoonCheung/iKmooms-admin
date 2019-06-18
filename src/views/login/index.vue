@@ -46,17 +46,13 @@
                  type="primary"
                  style="width:100%;margin-bottom:30px;"
                  @click.native.prevent="handleLogin">Login</el-button>
-
-      <!-- <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
-        <span> password: any</span>
-      </div> -->
     </el-form>
   </div>
 </template>
 
 <script>
 import { validUsername } from '@/utils/validate'
+import md5 from 'md5'
 
 export default {
   name: 'Login',
@@ -77,8 +73,8 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '123456'
+        username: '',
+        password: ''
       },
       loginRules: {
         username: [
@@ -113,11 +109,15 @@ export default {
       })
     },
     handleLogin () {
+      let param = {
+        username: this.loginForm.username,
+        password: md5(this.loginForm.password)
+      }
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
           this.$store
-            .dispatch('user/login', this.loginForm)
+            .dispatch('user/login', param)
             .then((res) => {
               if (res.data.code === 1) {
                 this.$message({

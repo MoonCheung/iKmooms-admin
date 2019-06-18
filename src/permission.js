@@ -14,6 +14,7 @@ NProgress.configure({
 const whiteList = ['/login'] // 没有重定向白名单
 
 router.beforeEach(async (to, from, next) => {
+  // TODO: to -> 即将要进入的目标路由对象
   // 开始进度条
   NProgress.start()
 
@@ -52,7 +53,6 @@ router.beforeEach(async (to, from, next) => {
 
           // 动态添加可访问路由
           router.addRoutes(accessRoutes)
-
           // hack方法确保addRoutes完整
           // 设置replace：true，因此导航不会留下历史记录
           next({
@@ -63,7 +63,7 @@ router.beforeEach(async (to, from, next) => {
           // 删除令牌并转到登录页面重新登录
           await store.dispatch('user/resetToken')
           Message.error(error || 'Has Error')
-          next(`/login?redirect=${to.path}`)
+          next({ path: `/login?redirect=${to.path}` })
           NProgress.done()
         }
       }
@@ -75,7 +75,7 @@ router.beforeEach(async (to, from, next) => {
       next()
     } else {
       // 其他无权访问的页面将重定向到登录页面。
-      next(`/login?redirect=${to.path}`)
+      next({ path: `/login?redirect=${to.path}` })
       NProgress.done()
     }
   }

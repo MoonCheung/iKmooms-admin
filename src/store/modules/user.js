@@ -57,14 +57,14 @@ const actions = {
         .then(res => {
           const { data } = res
           if (!data) {
-            reject('验证失败，请再次登录.')
+            reject('验证失败，请再次登录')
           }
 
           const { id, roles, name, avatar } = data
 
           // 角色必须是非空数组
           if (!roles || roles.length <= 0) {
-            reject('getInfo: 角色必须是非null数组！')
+            reject('角色必须是非null数组！')
           }
 
           commit('SET_ID', id)
@@ -102,7 +102,11 @@ const actions = {
     return new Promise((resolve, reject) => {
       updateUserInfo(param)
         .then(res => {
-          console.log(res)
+          const { data } = res
+
+          const { name, avatar } = data.result
+          commit('SET_NAME', name)
+          commit('SET_AVATAR', avatar)
           resolve(res)
         })
         .catch(error => {

@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-05-01 14:22:03
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-06-17 23:14:30
+ * @LastEditTime: 2019-06-18 17:49:49
  */
 
 import request from '@/utils/request'
@@ -24,7 +24,7 @@ export function login ({ username, password }) {
 export function getInfo (token) {
   return request({
     url: '/api/info',
-    method: 'get',
+    method: 'post',
     params: {
       token
     }
