@@ -27,10 +27,9 @@ Vue.use(Router)
 
 /**
  * constantRoutes
- * //所有权限通用路由表
- * //如首页和登录页和一些不用权限的公用页面
+ * 所有权限通用路由表
+ * 如首页和登录页和一些不用权限的公用页面
  */
-
 export const constantRoutes = [
   {
     path: '/login',
@@ -64,8 +63,8 @@ export const constantRoutes = [
 
 /**
  * asyncRoutes
- * //异步挂载的路由
- * //动态需要根据权限加载的路由表
+ * 异步挂载的路由
+ * 动态需要根据权限加载的路由表
  */
 export const asyncRoutes = [
   {

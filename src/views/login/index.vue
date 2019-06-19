@@ -1,6 +1,7 @@
 <template>
   <div class="login-container">
     <el-form ref="loginForm"
+             size="small"
              :model="loginForm"
              :rules="loginRules"
              class="login-form"
@@ -16,7 +17,7 @@
         </span>
         <el-input ref="username"
                   v-model="loginForm.username"
-                  placeholder="Username"
+                  placeholder="username"
                   name="username"
                   type="text"
                   tabindex="1"
@@ -31,7 +32,7 @@
                   ref="password"
                   v-model="loginForm.password"
                   :type="passwordType"
-                  placeholder="Password"
+                  placeholder="password"
                   name="password"
                   tabindex="2"
                   auto-complete="on"
@@ -43,6 +44,7 @@
       </el-form-item>
 
       <el-button :loading="loading"
+                 size="small"
                  type="primary"
                  style="width:100%;margin-bottom:30px;"
                  @click.native.prevent="handleLogin">Login</el-button>
@@ -160,7 +162,6 @@ $cursor: #fff;
 .login-container {
   .el-input {
     display: inline-block;
-    height: 47px;
     width: 85%;
 
     input {
@@ -168,9 +169,8 @@ $cursor: #fff;
       border: 0px;
       -webkit-appearance: none;
       border-radius: 0px;
-      padding: 12px 5px 12px 15px;
+      padding: 0;
       color: $light_gray;
-      height: 47px;
       caret-color: $cursor;
 
       &:-webkit-autofill {
@@ -222,10 +222,10 @@ $light_gray: #eee;
   }
 
   .svg-container {
-    padding: 6px 5px 6px 15px;
+    font-size: 12px;
+    padding: 0 4px 0 10px;
     color: $dark_gray;
     vertical-align: middle;
-    width: 30px;
     display: inline-block;
   }
 
@@ -244,7 +244,7 @@ $light_gray: #eee;
   .show-pwd {
     position: absolute;
     right: 10px;
-    top: 7px;
+    top: 1px;
     font-size: 16px;
     color: $dark_gray;
     cursor: pointer;
