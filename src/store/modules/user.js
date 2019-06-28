@@ -61,6 +61,7 @@ const actions = {
           }
 
           const { id, roles, name, avatar } = data
+          console.log(id, roles, name, avatar)
 
           // 角色必须是非空数组
           if (!roles || roles.length <= 0) {

@@ -3,7 +3,7 @@ const path = require('path')
 const defaultSettings = require('./src/settings.js')
 const webpack = require('webpack')
 
-function resolve(dir) {
+function resolve (dir) {
   return path.join(__dirname, dir)
 }
 
@@ -22,12 +22,10 @@ module.exports = {
   publicPath: '/',
   outputDir: 'dist',
   assetsDir: 'static',
-  // lintOnSave: process.env.NODE_ENV === 'development',
-  lintOnSave: false,
+  lintOnSave: process.env.NODE_ENV === 'development',
   productionSourceMap: false,
   devServer: {
     port: port,
-    // TODO: 之前值为true, 现在修改为false
     open: true,
     overlay: {
       warnings: false,
@@ -36,28 +34,21 @@ module.exports = {
     proxy: {
       // change xxx-api/login => mock/login
       // detail: https://cli.vuejs.org/config/#devserver-proxy
-      // [process.env.VUE_APP_BASE_API]: {
-      //   target: `http://127.0.0.1:${port}/mock`,
-      //   changeOrigin: true,
-      //   pathRewrite: {
-      //     ['^' + process.env.VUE_APP_BASE_API]: ''
-      //   }
-      // },
       [process.env.VUE_APP_BASE_API]: {
-        target: 'http://localhost:3030',
+        target: 'https://api.ikmoons.com',
         changeOrigin: true, // needed for virtual hosted sites
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: '' // rewrite path
         }
-        // router: {
-        //   // when request.headers.host == 'dev.localhost:3000',
-        //   // override target 'http://www.example.org' to 'http://localhost:8000'
-        //   '127.0.0.1:3030/api': 'http://127.0.0.1:9528'
-        // }
       }
+      // '/api': {
+      //   target: 'https://api.ikmoons.com/',
+      //   changeOrigin: true, // needed for virtual hosted sites
+      //   pathRewrite: {
+      //     '^/api': '' // rewrite path
+      //   }
+      // }
     }
-    // 暂时移除after:require()
-    // after: require('./mock/mock-server.js')
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
@@ -77,7 +68,7 @@ module.exports = {
     ],
     devtool: 'source-map'
   },
-  chainWebpack(config) {
+  chainWebpack (config) {
     config.plugins.delete('preload') // TODO: need test
     config.plugins.delete('prefetch') // TODO: need test
 
@@ -119,10 +110,12 @@ module.exports = {
       config
         .plugin('ScriptExtHtmlWebpackPlugin')
         .after('html')
-        .use('script-ext-html-webpack-plugin', [{
-          // `runtime` must same as runtimeChunk name. default is `runtime`
-          inline: /runtime\..*\.js$/
-        }])
+        .use('script-ext-html-webpack-plugin', [
+          {
+            // `runtime` must same as runtimeChunk name. default is `runtime`
+            inline: /runtime\..*\.js$/
+          }
+        ])
         .end()
       config.optimization.splitChunks({
         chunks: 'all',
@@ -148,6 +141,6 @@ module.exports = {
         }
       })
       config.optimization.runtimeChunk('single')
-    });
+    })
   }
 }

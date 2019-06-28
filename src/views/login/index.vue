@@ -91,6 +91,10 @@ export default {
       redirect: undefined
     }
   },
+  created () {
+    console.log('环境平台:', process.env.NODE_ENV);
+    console.log('VUE_APP_BASE_API:', process.env.VUE_APP_BASE_API);
+  },
   watch: {
     $route: {
       handler: function (route) {
