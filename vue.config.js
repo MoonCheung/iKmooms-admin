@@ -23,7 +23,8 @@ module.exports = {
   outputDir: 'dist', // 打包目录
   assetsDir: 'static',
   indexPath: 'index.html',
-  lintOnSave: process.env.NODE_ENV === 'development',
+  // lintOnSave: process.env.NODE_ENV === 'development',
+  lintOnSave: false,
   productionSourceMap: false,
   devServer: {
     port: port,
