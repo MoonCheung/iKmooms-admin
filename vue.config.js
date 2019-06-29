@@ -19,9 +19,10 @@ module.exports = {
    * In most cases please use '/' !!!
    * Detail: https://cli.vuejs.org/config/#publicpath
    */
-  publicPath: '/',
-  outputDir: 'dist',
+  publicPath: process.env.NODE_ENV === 'production' ? '/' : '/', // 部署应用包时的基本 URL
+  outputDir: 'dist', // 打包目录
   assetsDir: 'static',
+  indexPath: 'index.html',
   lintOnSave: process.env.NODE_ENV === 'development',
   productionSourceMap: false,
   devServer: {
@@ -34,6 +35,7 @@ module.exports = {
     proxy: {
       // change xxx-api/login => mock/login
       // detail: https://cli.vuejs.org/config/#devserver-proxy
+      // TODO: '/api': {} 也可以
       [process.env.VUE_APP_BASE_API]: {
         target: 'https://api.ikmoons.com',
         changeOrigin: true, // needed for virtual hosted sites
@@ -41,13 +43,6 @@ module.exports = {
           ['^' + process.env.VUE_APP_BASE_API]: '' // rewrite path
         }
       }
-      // '/api': {
-      //   target: 'https://api.ikmoons.com/',
-      //   changeOrigin: true, // needed for virtual hosted sites
-      //   pathRewrite: {
-      //     '^/api': '' // rewrite path
-      //   }
-      // }
     }
   },
   configureWebpack: {

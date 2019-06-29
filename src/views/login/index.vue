@@ -94,6 +94,7 @@ export default {
   created () {
     console.log('环境平台:', process.env.NODE_ENV);
     console.log('VUE_APP_BASE_API:', process.env.VUE_APP_BASE_API);
+    console.log('BASE_URL:', process.env.BASE_URL);
   },
   watch: {
     $route: {
