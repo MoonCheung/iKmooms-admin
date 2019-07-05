@@ -15,11 +15,3 @@ export function getQNToken () {
     method: 'get'
   })
 }
-
-export function uploadToQN (path, param) {
-  return request({
-    url: path,
-    method: 'post',
-    data: param
-  })
-}

@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'Vue Admin Template',
+  title: 'iKmoons.com - Admin',
 
   /**
    * @type {boolean} true | false

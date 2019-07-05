@@ -1,7 +1,8 @@
 'use strict'
-const path = require('path')
+const CompressionPlugin = require('compression-webpack-plugin')
 const defaultSettings = require('./src/settings.js')
 const webpack = require('webpack')
+const path = require('path')
 
 function resolve (dir) {
   return path.join(__dirname, dir)
@@ -25,6 +26,7 @@ module.exports = {
   indexPath: 'index.html',
   // lintOnSave: process.env.NODE_ENV === 'development',
   lintOnSave: false,
+  runtimeCompiler: true, // 默认值:false, 是否使用包含运行时编译器的 Vue 构建版本
   productionSourceMap: false,
   devServer: {
     port: port,
@@ -39,6 +41,7 @@ module.exports = {
       // TODO: '/api': {} 也可以
       [process.env.VUE_APP_BASE_API]: {
         target: 'https://api.ikmoons.com',
+        // target: 'http://127.0.0.1:3030',
         changeOrigin: true, // needed for virtual hosted sites
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: '' // rewrite path
@@ -55,16 +58,44 @@ module.exports = {
         '@': resolve('src')
       }
     },
-    // 人工配置:
+    // cdn引用时配置externals
+    externals: {
+      vue: 'Vue',
+      'element-ui': 'ELEMENT',
+      'vue-router': 'VueRouter',
+      vuex: 'Vuex',
+      axios: 'axios'
+    },
+    // 插件配置:
     plugins: [
       new webpack.ProvidePlugin({
         'window.Quill': 'quill/dist/quill.js',
         Quill: 'quill/dist/quill.js'
+      }),
+      new CompressionPlugin({
+        filename: '[path].gz[query]', // 目标文件名
+        algorithm: 'gzip', // 使用gzip压缩
+        test: new RegExp(
+          '\\.(js|css)$' // 压缩 js 与 css
+        ),
+        threshold: 10240, // 资源文件大于10240B=10kB时会被压缩
+        minRatio: 0.8 // 最小压缩比达到0.8时才会被压缩
       })
     ],
     devtool: 'source-map'
   },
-  chainWebpack (config) {
+  chainWebpack: config => {
+    // CDN加速
+    const cdn = {
+      css: ['//unpkg.com/element-ui@2.7.2/lib/theme-chalk/index.css'],
+      js: [
+        '//unpkg.com/vue@2.6.10/dist/vue.min.js',
+        '//unpkg.com/axios@0.19.0/dist/axios.min.js',
+        '//unpkg.com/vue-router@3.0.6/dist/vue-router.min.js',
+        '//unpkg.com/vuex@3.1.0/dist/vuex.min.js',
+        '//unpkg.com/element-ui@2.7.2/lib/index.js'
+      ]
+    }
     config.plugins.delete('preload') // TODO: need test
     config.plugins.delete('prefetch') // TODO: need test
 
@@ -137,6 +168,19 @@ module.exports = {
         }
       })
       config.optimization.runtimeChunk('single')
+    })
+    // 优化性能
+    config.performance
+      // false | "error" | "warning"
+      .hints(process.env.NODE_ENV === 'production' ? 'warning' : false)
+      // 入口起点表示针对指定入口，默认值是: 250000 (bytes)
+      .maxEntrypointSize(5000000)
+      // 资源(asset)是从 webpack 生成的任何文件。默认值是: 250000 (bytes)
+      .maxAssetSize(3000000)
+    // html中添加CDN
+    config.plugin('html').tap(args => {
+      args[0].cdn = cdn
+      return args
     })
   }
 }

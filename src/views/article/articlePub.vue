@@ -152,7 +152,7 @@ export default {
       // 七牛云配置
       token: '',
       regionUrl: 'https://upload-z2.qiniup.com', // 七牛云的上传地址，我这里是华南区
-      qiniulink: 'https://img.ikmoons.com/'       // 这是七牛云空间的外链默认域名
+      qiniulink: 'https://img.ikmoons.com/'      // 这是七牛云空间的外链默认域名
       // curdate: FormatDate(new Date())
     }
   },
@@ -265,12 +265,7 @@ export default {
           formdata.append('file', req.file)
           formdata.append('token', res.data.result.token)
           formdata.append('key', keyname)
-          // 使用axios封装函数直接上传七牛云引发报错,等上线之后就更改是否顺利成功
-          // uploadToQN(this.regionUrl, formdata).then(res => {
-          //   this.artform.banner = this.qiniulink + res.data.key
-          //   // console.log(this.artform.banner);
-          // })
-          // 暂时使用引入axios，通过post方式请求获得数据返回的
+          //通过post方式请求获得返回七牛云数据的
           axios.post(this.regionUrl, formdata, config).then(res => {
             this.artform.banner = this.qiniulink + res.data.key
           })
