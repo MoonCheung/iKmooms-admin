@@ -1,10 +1,11 @@
 'use strict'
 const CompressionPlugin = require('compression-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 const defaultSettings = require('./src/settings.js')
 const webpack = require('webpack')
 const path = require('path')
 
-function resolve (dir) {
+function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
@@ -26,7 +27,6 @@ module.exports = {
   indexPath: 'index.html',
   // lintOnSave: process.env.NODE_ENV === 'development',
   lintOnSave: false,
-  runtimeCompiler: true, // 默认值:false, 是否使用包含运行时编译器的 Vue 构建版本
   productionSourceMap: false,
   devServer: {
     port: port,
@@ -49,6 +49,7 @@ module.exports = {
       }
     }
   },
+  //键值对象时会合并配置，为方法时会改写配置
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
     // it can be accessed in index.html to inject the correct title.
@@ -64,9 +65,27 @@ module.exports = {
       'element-ui': 'ELEMENT',
       'vue-router': 'VueRouter',
       vuex: 'Vuex',
-      axios: 'axios'
+      axios: 'axios',
+      quill: 'Quill',
+      'highlight.js': 'highlight.js'
     },
-    // 插件配置:
+    devtool: 'source-map',
+    optimization: {
+      minimizer: [
+        new TerserPlugin({
+          terserOptions: {
+            warnings: false,
+            compress: {
+              drop_console: true,
+              drop_debugger: false,
+              pure_funcs: ['console.log'] //移除console
+            },
+            sourceMap: false,
+            parallel: true
+          }
+        })
+      ]
+    },
     plugins: [
       new webpack.ProvidePlugin({
         'window.Quill': 'quill/dist/quill.js',
@@ -81,19 +100,26 @@ module.exports = {
         threshold: 10240, // 资源文件大于10240B=10kB时会被压缩
         minRatio: 0.8 // 最小压缩比达到0.8时才会被压缩
       })
-    ],
-    devtool: 'source-map'
+    ]
   },
   chainWebpack: config => {
     // CDN加速
     const cdn = {
-      css: ['//unpkg.com/element-ui@2.7.2/lib/theme-chalk/index.css'],
+      css: [
+        '//unpkg.com/element-ui@2.7.2/lib/theme-chalk/index.css',
+        '//unpkg.com/quill@1.3.4/dist/quill.bubble.css',
+        '//unpkg.com/quill@1.3.4/dist/quill.core.css',
+        '//unpkg.com/quill@1.3.4/dist/quill.snow.css',
+        '//unpkg.com/highlight.js@9.15.6/styles/monokai-sublime.css'
+      ],
       js: [
         '//unpkg.com/vue@2.6.10/dist/vue.min.js',
         '//unpkg.com/axios@0.19.0/dist/axios.min.js',
         '//unpkg.com/vue-router@3.0.6/dist/vue-router.min.js',
         '//unpkg.com/vuex@3.1.0/dist/vuex.min.js',
-        '//unpkg.com/element-ui@2.7.2/lib/index.js'
+        '//unpkg.com/element-ui@2.7.2/lib/index.js',
+        '//unpkg.com/quill@1.3.4/dist/quill.min.js',
+        '//unpkg.com/highlight.js@9.15.6/lib/highlight.js'
       ]
     }
     config.plugins.delete('preload') // TODO: need test
@@ -137,12 +163,10 @@ module.exports = {
       config
         .plugin('ScriptExtHtmlWebpackPlugin')
         .after('html')
-        .use('script-ext-html-webpack-plugin', [
-          {
-            // `runtime` must same as runtimeChunk name. default is `runtime`
-            inline: /runtime\..*\.js$/
-          }
-        ])
+        .use('script-ext-html-webpack-plugin', [{
+          // `runtime` must same as runtimeChunk name. default is `runtime`
+          inline: /runtime\..*\.js$/
+        }])
         .end()
       config.optimization.splitChunks({
         chunks: 'all',
@@ -169,7 +193,7 @@ module.exports = {
       })
       config.optimization.runtimeChunk('single')
     })
-    // 优化性能
+    // 性能优化
     config.performance
       // false | "error" | "warning"
       .hints(process.env.NODE_ENV === 'production' ? 'warning' : false)
@@ -182,5 +206,30 @@ module.exports = {
       args[0].cdn = cdn
       return args
     })
+    // 性能优化:多页面
+    // config.optimization
+    //   .splitChunks({
+    //     chunks: "async",
+    //     minSize: 30000, // 最小尺寸，30000
+    //     minChunks: 1, // 最小 chunk ，默认1
+    //     maxAsyncRequests: 5, // 最大异步请求数， 默认5
+    //     maxInitialRequests: 3, // 最大初始化请求书，默认3
+    //     name: true,
+    //     // 这里开始设置缓存的 chunks
+    //     cacheGroups: {
+    //       priority: 0, // 缓存组优先级
+    //       vendors: { // key 为entry中定义的 入口名称
+    //         chunks: 'initial', // 必须三选一： "initial" | "all" | "async"(默认就是async)
+    //         test: /vue|element-ui/, // 正则规则验证，如果符合就提取 chunk
+    //         name: "vendors", // 要缓存的 分隔出来的 chunk 名称
+    //         minSize: 30000,
+    //         minChunks: 1,
+    //         enforce: true,
+    //         maxAsyncRequests: 5, // 最大异步请求数， 默认1
+    //         maxInitialRequests: 3, // 最大初始化请求书，默认1
+    //         reuseExistingChunk: true
+    //       }
+    //     }
+    //   })
   }
 }
