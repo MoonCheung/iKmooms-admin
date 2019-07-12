@@ -9,7 +9,7 @@ Blog backend management comes from the [vue-admin](https://github.com/PanJiaChen
 The background management is based on the node server can run, need to install the node server in advance
 
 - Maintained by [MoonCheung](salvador23@163.com)
-- Blog applet: [mpvue-applet](https://github.com/MoonCheung/mpvue-applet) is provided run by mpvue + Vant + ColorUI
+- Blog applet: [blog-applet](https://github.com/MoonCheung/blog-applet) is provided run by mpvue + Vant + ColorUI
 - admin server: [node-server](https://github.com/MoonCheung/node-server) is provided run by koa
 
 ## 程序结构
