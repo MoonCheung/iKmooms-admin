@@ -8,7 +8,7 @@
 Blog backend management comes from the [vue-admin](https://github.com/PanJiaChen/vue-admin-template) project template and is built and developed by the vue + ElementUI application <br/>
 The background management is based on the node server can run, need to install the node server in advance
 
-- Maintained by [MoonCheung](salvador23@163.com)
+- Maintained by [MoonCheung](mailto://salvador23@163.com)
 - Blog applet: [blog-applet](https://github.com/MoonCheung/blog-applet) is provided run by mpvue + Vant + ColorUI
 - admin server: [node-server](https://github.com/MoonCheung/node-server) is provided run by koa
 
