@@ -1,7 +1,7 @@
 {
   "name": "elem-admin",
   "version": "4.1.0",
-  "description": "I demonstrated it by creating the react project via the create-react-app",
+  "description": "A vue admin template with Element UI & axios & iconfont & permission control & lint",
   "author": "MoonCheung <salvador23@163.com>",
   "license": "MIT",
   "scripts": {
