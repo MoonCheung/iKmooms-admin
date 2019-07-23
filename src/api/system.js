@@ -7,11 +7,11 @@
  * @LastEditTime: 2019-05-26 00:18:18
  */
 
-import request from '@/utils/request'
+import request from '@/utils/request';
 
 export function getSystemList() {
   return request({
     url: '/api/system',
     method: 'get'
-  })
+  });
 }

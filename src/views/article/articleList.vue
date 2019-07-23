@@ -9,9 +9,9 @@
               <span>文章列表</span>
             </div>
             <div>
-              <el-table :data="artListData"
-                        style="width:100%"
-                        v-loading="listLoading">
+              <el-table v-loading="listLoading"
+                        :data="artListData"
+                        style="width:100%">
                 <el-table-column type="expand">
                   <template v-slot="props">
                     <el-form label-position="right"
@@ -32,24 +32,20 @@
                 </el-table-column>
                 <el-table-column type="index"
                                  label="ID"
-                                 width="40">
-                </el-table-column>
+                                 width="40" />
                 <el-table-column prop="title"
                                  label="标题"
-                                 header-align="center">
-                </el-table-column>
+                                 header-align="center" />
                 <el-table-column prop="catg"
                                  label="所属分类"
                                  width="120"
                                  header-align="center"
-                                 align="center">
-                </el-table-column>
+                                 align="center" />
                 <el-table-column prop="cdate"
                                  label="发布日期"
                                  width="150"
                                  header-align="center"
-                                 align="center">
-                </el-table-column>
+                                 align="center" />
                 <el-table-column label="状态"
                                  width="80"
                                  header-align="center"
@@ -64,13 +60,19 @@
                   <template v-slot="scope">
                     <el-button type="primary"
                                size="small"
-                               @click.native.prevent="editArt(scope.row)">编辑</el-button>
+                               @click.native.prevent="editArt(scope.row)">
+                      编辑
+                    </el-button>
                     <el-button type="info"
                                size="small"
-                               @click.native.prevent="chgArt(scope.row)">{{ scope.row.status == 0 ? '公开' : '私密' }}</el-button>
+                               @click.native.prevent="chgArt(scope.row)">
+                      {{ scope.row.status == 0 ? '公开' : '私密' }}
+                    </el-button>
                     <el-button type="danger"
                                size="small"
-                               @click.native.prevent="delArt(scope.row)">删除</el-button>
+                               @click.native.prevent="delArt(scope.row)">
+                      删除
+                    </el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -82,10 +84,10 @@
       <el-row>
         <el-col :span="24">
           <v-pagination v-show="total > 0"
-                        style="padding-top:10px;"
                         :total="total"
                         :page.sync="currentPage"
                         :limit.sync="limit"
+                        style="padding-top:10px;"
                         @pagination="getArtList" />
         </el-col>
       </el-row>
@@ -94,9 +96,9 @@
 </template>
 
 <script>
-import { articleList, delArticle, chgArtStatus } from '@/api/article'
-import vPagination from '@/components/Pagination'
-import './index.scss'
+import { articleList, delArticle, chgArtStatus } from '@/api/article';
+import vPagination from '@/components/Pagination';
+import './index.scss';
 
 export default {
   name: 'ArtList',
@@ -112,10 +114,10 @@ export default {
       limit: 10,
       total: 1,
       listLoading: true
-    }
+    };
   },
   created () {
-    this.getArtList()
+    this.getArtList();
   },
   methods: {
     // 编辑文章
@@ -133,23 +135,23 @@ export default {
               id: param.id,
               method: 'edit'
             }
-          })
+          });
         })
         .catch(() => {
           this.$message({
             type: 'info',
             message: '已取消编辑'
-          })
-        })
+          });
+        });
     },
     // 改变文章状态
     chgArt (param) {
-      let sts
-      param.status === 0 ? (sts = 1) : (sts = 0)
+      let sts;
+      param.status === 0 ? (sts = 1) : (sts = 0);
       const data = {
         id: param.id,
         status: sts
-      }
+      };
       this.$confirm('确认要改变该文章状态?', '提示', {
         distinguishCancelAndClose: true,
         confirmButtonText: '确认',
@@ -161,24 +163,24 @@ export default {
               this.$message({
                 type: 'success',
                 message: res.data.msg
-              })
+              });
               // 再次获取文章列表
-              this.getArtList()
+              this.getArtList();
             } else {
               this.$message({
                 type: 'error',
                 message: res.data.msg
-              })
+              });
             }
-          })
+          });
         })
         .catch(action => {
           this.$message({
             type: 'info',
             message:
               action === 'cancel' ? '放弃改变并离开页面' : '停留在当前页面'
-          })
-        })
+          });
+        });
     },
     // 删除文章
     delArt (param) {
@@ -193,46 +195,46 @@ export default {
               this.$message({
                 type: 'success',
                 message: res.data.msg
-              })
+              });
               // 再次获取文章列表
-              this.getArtList()
+              this.getArtList();
             } else {
               this.$message({
                 type: 'error',
                 message: res.data.msg
-              })
+              });
             }
-          })
+          });
         })
         .catch(action => {
           this.$message({
             type: 'info',
             message:
               action === 'cancel' ? '放弃删除并离开页面' : '停留在当前页面'
-          })
-        })
+          });
+        });
     },
     // 获取文章列表
     getArtList () {
-      this.listLoading = true
+      this.listLoading = true;
       const param = {
         curPage: this.currentPage,
         limit: this.limit
-      }
+      };
       articleList(param)
         .then(res => {
           if (res.data.code === 1) {
-            this.artListData = res.data.artData
-            this.total = res.data.total
+            this.artListData = res.data.artData;
+            this.total = res.data.total;
           }
           setTimeout(() => {
-            this.listLoading = false
-          }, 1.5 * 500)
+            this.listLoading = false;
+          }, 1.5 * 500);
         })
         .catch(err => {
-          console.error(err)
-        })
+          console.error(err);
+        });
     }
   }
-}
+};
 </script>

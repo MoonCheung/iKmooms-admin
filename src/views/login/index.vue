@@ -1,14 +1,16 @@
 <template>
   <div class="login-container">
     <el-form ref="loginForm"
-             size="small"
              :model="loginForm"
              :rules="loginRules"
+             size="small"
              class="login-form"
              auto-complete="on"
              label-position="left">
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <h3 class="title">
+          Login Form
+        </h3>
       </div>
 
       <el-form-item prop="username">
@@ -28,8 +30,8 @@
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
-        <el-input :key="passwordType"
-                  ref="password"
+        <el-input ref="password"
+                  :key="passwordType"
                   v-model="loginForm.password"
                   :type="passwordType"
                   placeholder="password"
@@ -47,32 +49,34 @@
                  size="small"
                  type="primary"
                  style="width:100%;margin-bottom:30px;"
-                 @click.native.prevent="handleLogin">Login</el-button>
+                 @click.native.prevent="handleLogin">
+        Login
+      </el-button>
     </el-form>
   </div>
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
-import md5 from 'md5'
+import { validUsername } from '@/utils/validate';
+import md5 from 'md5';
 
 export default {
   name: 'Login',
   data () {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
-        callback(new Error('请输入正确的用户名'))
+        callback(new Error('请输入正确的用户名'));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('密码不能少于6位数'))
+        callback(new Error('密码不能少于6位数'));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
     return {
       loginForm: {
         username: '',
@@ -89,6 +93,14 @@ export default {
       loading: false,
       passwordType: 'password',
       redirect: undefined
+    };
+  },
+  watch: {
+    $route: {
+      handler: function (route) {
+        this.redirect = route.query && route.query.redirect;
+      },
+      immediate: true
     }
   },
   created () {
@@ -96,57 +108,49 @@ export default {
     console.log('VUE_APP_BASE_API:', process.env.VUE_APP_BASE_API);
     console.log('BASE_URL:', process.env.BASE_URL);
   },
-  watch: {
-    $route: {
-      handler: function (route) {
-        this.redirect = route.query && route.query.redirect
-      },
-      immediate: true
-    }
-  },
   methods: {
     showPwd () {
       if (this.passwordType === 'password') {
-        this.passwordType = ''
+        this.passwordType = '';
       } else {
-        this.passwordType = 'password'
+        this.passwordType = 'password';
       }
       this.$nextTick(() => {
-        this.$refs.password.focus()
-      })
+        this.$refs.password.focus();
+      });
     },
     handleLogin () {
       let param = {
         username: this.loginForm.username,
         password: md5(this.loginForm.password)
-      }
+      };
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          this.loading = true
+          this.loading = true;
           this.$store
             .dispatch('user/login', param)
-            .then((res) => {
+            .then(res => {
               if (res.data.code === 1) {
                 this.$message({
                   message: res.data.msg,
                   type: 'success'
                 });
               }
-              this.$router.push({ path: this.redirect || '/' })
+              this.$router.push({ path: this.redirect || '/' });
               // console.log(this.$router); //路由信息
-              this.loading = false
+              this.loading = false;
             })
             .catch(() => {
-              this.loading = false
-            })
+              this.loading = false;
+            });
         } else {
-          console.log('提交错误!!')
-          return false
+          console.log('提交错误!!');
+          return false;
         }
-      })
+      });
     }
   }
-}
+};
 </script>
 
 <style lang="scss">

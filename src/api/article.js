@@ -7,66 +7,66 @@
  * @LastEditTime: 2019-06-16 18:01:13
  */
 
-import request from '@/utils/request'
+import request from '@/utils/request';
 
-export function insertArticle (param) {
+export function insertArticle(param) {
   return request({
     url: '/api/article/insart',
     method: 'post',
     data: param
-  })
+  });
 }
 
-export function articleList (param) {
+export function articleList(param) {
   return request({
     url: '/api/article/artlist',
     method: 'post',
     data: param
-  })
+  });
 }
 
-export function editArticle (param) {
+export function editArticle(param) {
   return request({
     url: '/api/article/editart',
     method: 'put',
     data: param
-  })
+  });
 }
 
-export function getArtDetl (param) {
+export function getArtDetl(param) {
   return request({
     url: '/api/article/getartdetl',
     method: 'post',
     data: param
-  })
+  });
 }
 
-export function delArticle (param) {
+export function delArticle(param) {
   return request({
     url: '/api/article/delart',
     method: 'post',
     data: param
-  })
+  });
 }
 
-export function chgArtStatus (param) {
+export function chgArtStatus(param) {
   return request({
     url: '/api/article/chgartsts',
     method: 'post',
     data: param
-  })
+  });
 }
 
-export function artAllLists () {
+export function artAllLists() {
   return request({
     url: '/api/article/artalllist',
     method: 'get'
-  })
+  });
 }
 
-export function getPvTotals () {
+export function getPvTotals() {
   return request({
     url: '/api/art/getpvtot',
     method: 'get'
-  })
+  });
 }

@@ -11,30 +11,34 @@
             <div class="clearfix">
               <el-button style="float: right;"
                          type="primary"
-                         @click="addTag">创建</el-button>
+                         @click="addTag">
+                创建
+              </el-button>
             </div>
-            <el-table :data="tagsData"
-                      style="width: 100%"
-                      v-loading="listLoading">
+            <el-table v-loading="listLoading"
+                      :data="tagsData"
+                      style="width: 100%">
               <el-table-column type="index"
-                               width="50"> </el-table-column>
+                               width="50" />
               <el-table-column prop="tagname"
-                               label="标签名称">
-              </el-table-column>
+                               label="标签名称" />
               <el-table-column prop="tagdesc"
-                               label="标签描述">
-              </el-table-column>
+                               label="标签描述" />
               <el-table-column prop="cdate"
-                               label="创建日期"> </el-table-column>
+                               label="创建日期" />
               <el-table-column label="操作"
                                width="160">
                 <template v-slot="scope">
                   <el-button type="primary"
                              size="small"
-                             @click.native.prevent="editTag(scope.row)">编辑</el-button>
+                             @click.native.prevent="editTag(scope.row)">
+                    编辑
+                  </el-button>
                   <el-button type="danger"
                              size="small"
-                             @click.native.prevent="delTag(scope.row)">删除</el-button>
+                             @click.native.prevent="delTag(scope.row)">
+                    删除
+                  </el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -45,32 +49,32 @@
       <el-row>
         <el-col :span="24">
           <v-pagination v-show="total > 0"
-                        style="padding-top:10px;"
                         :total="total"
                         :page.sync="currentPage"
                         :limit.sync="limit"
+                        style="padding-top:10px;"
                         @pagination="getTagList" />
         </el-col>
       </el-row>
       <!-- 对话框 -->
-      <el-dialog title="创建标签"
-                 :visible.sync="dialogFormVisible"
+      <el-dialog :visible.sync="dialogFormVisible"
+                 title="创建标签"
                  width="40%">
-        <el-form label-position="right"
-                 label-width="80px"
+        <el-form ref="tagsForm"
                  :model="tagsForm"
-                 ref="tagsForm"
-                 :rules="tagsformRules">
+                 :rules="tagsformRules"
+                 label-position="right"
+                 label-width="80px">
           <el-form-item label="标签名称"
                         prop="tagname">
             <el-input v-model="tagsForm.tagname"
-                      placeholder="请输入标签名称"></el-input>
+                      placeholder="请输入标签名称" />
           </el-form-item>
           <el-form-item label="标签描述"
                         prop="tagdesc">
-            <el-input type="textarea"
-                      v-model="tagsForm.tagdesc"
-                      placeholder="请输入标签描述"></el-input>
+            <el-input v-model="tagsForm.tagdesc"
+                      type="textarea"
+                      placeholder="请输入标签描述" />
           </el-form-item>
         </el-form>
         <span slot="footer"
@@ -85,9 +89,9 @@
 </template>
 
 <script>
-import { addTags, getTags, editTags, delTags } from '@/api/tag'
-import vPagination from '@/components/Pagination'
-import './index.scss'
+import { addTags, getTags, editTags, delTags } from '@/api/tag';
+import vPagination from '@/components/Pagination';
+import './index.scss';
 
 export default {
   name: 'ArtTag',
@@ -115,30 +119,31 @@ export default {
       },
       todo: '',
       listLoading: true
-    }
+    };
   },
   created () {
-    this.getTagList()
+    this.getTagList();
   },
+  mounted () { },
   methods: {
     // 创建新表单
     initForm () {
-      this.tagsForm.tagname = ''
-      this.tagsForm.tagdesc = ''
+      this.tagsForm.tagname = '';
+      this.tagsForm.tagdesc = '';
     },
     // 添加标签
     addTag () {
-      const _self = this
-      _self.todo = 'add'
-      _self.initForm()
-      _self.dialogFormVisible = true
+      const _self = this;
+      _self.todo = 'add';
+      _self.initForm();
+      _self.dialogFormVisible = true;
     },
     // 编辑标签
     editTag (param) {
-      const _self = this
-      _self.todo = 'edit'
-      _self.dialogFormVisible = true
-      _self.tagsForm = param
+      const _self = this;
+      _self.todo = 'edit';
+      _self.dialogFormVisible = true;
+      _self.tagsForm = param;
     },
     // 删除标签
     delTag (param) {
@@ -153,19 +158,19 @@ export default {
               this.$message({
                 type: 'success',
                 message: res.data.msg
-              })
+              });
               // 再次获取分类列表
-              this.getTagList()
+              this.getTagList();
             }
-          })
+          });
         })
         .catch(action => {
           this.$message({
             type: 'info',
             message:
               action === 'cancel' ? '放弃删除并离开页面' : '停留在当前页面'
-          })
-        })
+          });
+        });
     },
     // 向服务器提交数据
     submitData (tagsForm) {
@@ -175,58 +180,57 @@ export default {
             addTags(this.tagsForm)
               .then(res => {
                 if (res.data.code === 1) {
-                  this.dialogFormVisible = false
-                  this.getTagList()
+                  this.dialogFormVisible = false;
+                  this.getTagList();
                   this.$message({
                     message: res.data.msg,
                     type: 'success'
-                  })
+                  });
                 } else {
-                  this.$message.error(res.data.msg)
+                  this.$message.error(res.data.msg);
                 }
               })
               .catch(err => {
-                console.error(err)
-              })
+                console.error(err);
+              });
           } else {
             editTags(this.tagsForm)
               .then(res => {
                 if (res.data.code === 1) {
-                  this.dialogFormVisible = false
-                  this.getTagList()
+                  this.dialogFormVisible = false;
+                  this.getTagList();
                   this.$message({
                     message: res.data.msg,
                     type: 'success'
-                  })
+                  });
                 } else {
-                  this.$message.error(res.data.msg)
+                  this.$message.error(res.data.msg);
                 }
               })
               .catch(err => {
-                console.error(err)
-              })
+                console.error(err);
+              });
           }
         }
-      })
+      });
     },
     // 获取标签列表
     getTagList () {
-      this.listLoading = true
+      this.listLoading = true;
       const param = {
         curPage: this.currentPage,
         limit: this.limit
-      }
+      };
       getTags(param).then(res => {
-        this.tagsData = res.data.tagsData
+        this.tagsData = res.data.tagsData;
         if (res.data.tagsData.length > 0) {
-          this.total = res.data.total
+          this.total = res.data.total;
         }
-        this.listLoading = false
-      })
+        this.listLoading = false;
+      });
     }
-  },
-  mounted () { }
-}
+  }
+};
 </script>
 
 <style>

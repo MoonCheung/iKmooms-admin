@@ -1,16 +1,17 @@
-'use strict'
-const CompressionPlugin = require('compression-webpack-plugin')
-const TerserPlugin = require('terser-webpack-plugin')
-const defaultSettings = require('./src/settings.js')
-const webpack = require('webpack')
-const path = require('path')
+'use strict';
+const CompressionPlugin = require('compression-webpack-plugin');
+const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const defaultSettings = require('./src/settings.js');
+const webpack = require('webpack');
+const path = require('path');
 
 function resolve(dir) {
-  return path.join(__dirname, dir)
+  return path.join(__dirname, dir);
 }
 
-const name = defaultSettings.title || 'vue Admin Template' // page title
-const port = 9528 // dev port
+const name = defaultSettings.title || 'vue Admin Template'; // page title
+const port = 9528; // dev port
 
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
@@ -59,15 +60,13 @@ module.exports = {
         '@': resolve('src')
       }
     },
-    // cdn引用时配置externals
+    // 防止将某些 import 的包(package)打包到 bundle 中，而是在运行时(runtime)再去从外部获取这些扩展依赖
     externals: {
       vue: 'Vue',
       'element-ui': 'ELEMENT',
       'vue-router': 'VueRouter',
       vuex: 'Vuex',
-      axios: 'axios',
-      quill: 'Quill',
-      'highlight.js': 'highlight.js'
+      axios: 'axios'
     },
     devtool: 'source-map',
     optimization: {
@@ -99,37 +98,39 @@ module.exports = {
         ),
         threshold: 10240, // 资源文件大于10240B=10kB时会被压缩
         minRatio: 0.8 // 最小压缩比达到0.8时才会被压缩
+      }),
+      new webpack.DllReferencePlugin({
+        context: __dirname,
+        manifest: require('./public/render/vendor-manifest.json')
+      }),
+      // 将 dll 注入到 生成的 html 模板中
+      new AddAssetHtmlPlugin({
+        filepath: path.resolve(__dirname, './public/vendor/*.js'), // dll文件位置
+        publicPath: './vendor', // dll 引用路径
+        outputPath: './vendor' // dll最终输出的目录
       })
     ]
   },
   chainWebpack: config => {
     // CDN加速
     const cdn = {
-      css: [
-        '//unpkg.com/element-ui@2.7.2/lib/theme-chalk/index.css',
-        '//unpkg.com/quill@1.3.4/dist/quill.bubble.css',
-        '//unpkg.com/quill@1.3.4/dist/quill.core.css',
-        '//unpkg.com/quill@1.3.4/dist/quill.snow.css',
-        '//unpkg.com/highlight.js@9.15.6/styles/monokai-sublime.css'
-      ],
+      css: ['https://unpkg.com/element-ui@2.7.2/lib/theme-chalk/index.css'],
       js: [
-        '//unpkg.com/vue@2.6.10/dist/vue.min.js',
-        '//unpkg.com/axios@0.19.0/dist/axios.min.js',
-        '//unpkg.com/vue-router@3.0.6/dist/vue-router.min.js',
-        '//unpkg.com/vuex@3.1.0/dist/vuex.min.js',
-        '//unpkg.com/element-ui@2.7.2/lib/index.js',
-        '//unpkg.com/quill@1.3.4/dist/quill.min.js',
-        '//unpkg.com/highlight.js@9.15.6/lib/highlight.js'
+        'https://unpkg.com/vue@2.6.10/dist/vue.min.js',
+        'https://unpkg.com/axios@0.19.0/dist/axios.min.js',
+        'https://unpkg.com/vue-router@3.0.6/dist/vue-router.min.js',
+        'https://unpkg.com/vuex@3.1.0/dist/vuex.min.js',
+        'https://unpkg.com/element-ui@2.7.2/lib/index.js'
       ]
-    }
-    config.plugins.delete('preload') // TODO: need test
-    config.plugins.delete('prefetch') // TODO: need test
+    };
+    config.plugins.delete('preload'); // TODO: need test
+    config.plugins.delete('prefetch'); // TODO: need test
 
     // set svg-sprite-loader
     config.module
       .rule('svg')
       .exclude.add(resolve('src/icons'))
-      .end()
+      .end();
     config.module
       .rule('icons')
       .test(/\.svg$/)
@@ -140,7 +141,7 @@ module.exports = {
       .options({
         symbolId: 'icon-[name]'
       })
-      .end()
+      .end();
 
     // set preserveWhitespace
     config.module
@@ -148,26 +149,28 @@ module.exports = {
       .use('vue-loader')
       .loader('vue-loader')
       .tap(options => {
-        options.compilerOptions.preserveWhitespace = true
-        return options
+        options.compilerOptions.preserveWhitespace = true;
+        return options;
       })
-      .end()
+      .end();
 
     config
       // https://webpack.js.org/configuration/devtool/#development
       .when(process.env.NODE_ENV === 'development', config =>
         config.devtool('cheap-source-map')
-      )
+      );
 
     config.when(process.env.NODE_ENV !== 'development', config => {
       config
         .plugin('ScriptExtHtmlWebpackPlugin')
         .after('html')
-        .use('script-ext-html-webpack-plugin', [{
-          // `runtime` must same as runtimeChunk name. default is `runtime`
-          inline: /runtime\..*\.js$/
-        }])
-        .end()
+        .use('script-ext-html-webpack-plugin', [
+          {
+            // `runtime` must same as runtimeChunk name. default is `runtime`
+            inline: /runtime\..*\.js$/
+          }
+        ])
+        .end();
       config.optimization.splitChunks({
         chunks: 'all',
         cacheGroups: {
@@ -190,9 +193,9 @@ module.exports = {
             reuseExistingChunk: true
           }
         }
-      })
-      config.optimization.runtimeChunk('single')
-    })
+      });
+      config.optimization.runtimeChunk('single');
+    });
     // 性能优化
     config.performance
       // false | "error" | "warning"
@@ -200,12 +203,14 @@ module.exports = {
       // 入口起点表示针对指定入口，默认值是: 250000 (bytes)
       .maxEntrypointSize(5000000)
       // 资源(asset)是从 webpack 生成的任何文件。默认值是: 250000 (bytes)
-      .maxAssetSize(3000000)
+      .maxAssetSize(3000000);
     // html中添加CDN
     config.plugin('html').tap(args => {
-      args[0].cdn = cdn
-      return args
-    })
+      if (process.env.NODE_ENV === 'production') {
+        args[0].cdn = cdn;
+      }
+      return args;
+    });
     // 性能优化:多页面
     // config.optimization
     //   .splitChunks({
@@ -232,4 +237,4 @@ module.exports = {
     //     }
     //   })
   }
-}
+};

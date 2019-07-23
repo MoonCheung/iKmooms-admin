@@ -7,42 +7,42 @@
  * @LastEditTime: 2019-06-28 19:26:15
  */
 
-import request from '@/utils/request'
+import request from '@/utils/request';
 
-export function login ({ username, password }) {
+export function login({ username, password }) {
   const data = {
     username,
     password
-  }
+  };
   return request({
     url: '/api/login',
     method: 'post',
     data
-  })
+  });
 }
 
-export function getInfo (token) {
+export function getInfo(token) {
   return request({
     url: '/api/info',
     method: 'post',
     params: {
       token
     }
-  })
+  });
 }
 
-export function logout (token) {
+export function logout(token) {
   return request({
     url: '/api/logout',
     method: 'post',
     data: token
-  })
+  });
 }
 
-export function updateUserInfo (param) {
+export function updateUserInfo(param) {
   return request({
     url: '/api/upduser',
     method: 'patch',
     data: param
-  })
+  });
 }

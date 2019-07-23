@@ -1,7 +1,7 @@
 {
   "name": "elem-admin",
   "version": "4.1.0",
-  "description": "A vue admin template with Element UI & axios & iconfont & permission control & lint",
+  "description": "I demonstrated it by creating the react project via the create-react-app",
   "author": "MoonCheung <salvador23@163.com>",
   "license": "MIT",
   "scripts": {
@@ -12,7 +12,9 @@
     "lint": "eslint --ext .js,.vue src",
     "test:unit": "jest --clearCache && vue-cli-service test:unit",
     "test:ci": "npm run lint && npm run test:unit",
-    "svgo": "svgo -f src/icons/svg --config=src/icons/svgo.yml"
+    "svgo": "svgo -f src/icons/svg --config=src/icons/svgo.yml",
+    "format": "prettier-eslint --write \"src/**/*.js\"",
+    "dll": "webpack -p --progress --config ./webpack.dll.conf.js"
   },
   "dependencies": {
     "axios": "^0.19.0",
@@ -23,6 +25,7 @@
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
     "path-to-regexp": "2.4.0",
+    "quill": "^1.3.6",
     "vue": "2.6.10",
     "vue-quill-editor": "^3.0.6",
     "vue-router": "3.0.6",
@@ -36,20 +39,20 @@
     "@vue/cli-plugin-unit-jest": "^3.7.0",
     "@vue/cli-service": "3.6.0",
     "@vue/eslint-config-prettier": "^4.0.1",
-    "@vue/eslint-config-standard": "^4.0.0",
     "@vue/test-utils": "1.0.0-beta.29",
+    "add-asset-html-webpack-plugin": "^3.1.3",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "10.0.1",
     "babel-jest": "23.6.0",
     "babel-plugin-component": "^1.1.1",
     "chalk": "2.4.2",
+    "clean-webpack-plugin": "^3.0.0",
     "compression-webpack-plugin": "^3.0.0",
     "connect": "3.6.6",
     "eslint": "5.15.3",
-    "eslint-plugin-flowtype": "^3.9.0",
-    "eslint-plugin-html": "^5.0.5",
+    "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-prettier": "^3.1.0",
-    "eslint-plugin-vue": "5.2.2",
+    "eslint-plugin-vue": "^5.2.3",
     "html-webpack-plugin": "3.2.0",
     "mockjs": "1.0.1-beta3",
     "node-sass": "^4.9.0",
@@ -67,7 +70,8 @@
     "svgo": "1.2.2",
     "terser-webpack-plugin": "^1.3.0",
     "vue-eslint-parser": "^6.0.4",
-    "vue-template-compiler": "2.6.10"
+    "vue-template-compiler": "2.6.10",
+    "webpack-cli": "^3.3.6"
   },
   "engines": {
     "node": ">=8.9",

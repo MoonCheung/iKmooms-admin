@@ -5,22 +5,23 @@
                   :options="editorOption"
                   @blur="onEditorBlur($event)"
                   @focus="onEditorFocus($event)"
-                  @ready="onEditorReady($event)"></quill-editor>
+                  @ready="onEditorReady($event)" />
   </div>
 </template>
 
 <script>
-import hljs from 'highlight.js'
-import { container, ImageExtend, QuillWatch } from 'quill-image-extend-module'
-import { getQNToken, uploadToQN } from '@/api/qiniu'
-import { ImageDrop } from 'quill-image-drop-module'
-import ImageResize from 'quill-image-resize-module'
-import 'highlight.js/styles/monokai-sublime.css'
-import { Message } from 'element-ui'
-import axios from 'axios'
-Quill.register('modules/ImageExtend', ImageExtend)
-Quill.register('modules/imageDrop', ImageDrop)
-Quill.register('modules/imageResize', ImageResize)
+import Quill from 'quill';
+import hljs from 'highlight.js';
+import { container, ImageExtend, QuillWatch } from 'quill-image-extend-module';
+import { getQNToken, uploadToQN } from '@/api/qiniu';
+import { ImageDrop } from 'quill-image-drop-module';
+import ImageResize from 'quill-image-resize-module';
+import 'highlight.js/styles/monokai-sublime.css';
+import { Message } from 'element-ui';
+import axios from 'axios';
+Quill.register('modules/ImageExtend', ImageExtend);
+Quill.register('modules/imageDrop', ImageDrop);
+Quill.register('modules/imageResize', ImageResize);
 
 // 自定义Quill编辑器
 const toolbarOptions = [
@@ -38,18 +39,18 @@ const toolbarOptions = [
   [{ align: [] }],
   ['clean'],
   ['link', 'image', 'video']
-]
+];
 
 const qiniu = {
   token: ''
-}
+};
 
 const getToken = function () {
   getQNToken().then(res => {
-    qiniu.token = res.data.result.token
-  })
-}
-getToken()
+    qiniu.token = res.data.result.token;
+  });
+};
+getToken();
 
 export default {
   name: 'Editor',
@@ -58,8 +59,16 @@ export default {
       type: String,
       default: ''
     },
-    domain: String, // 七牛云上传的域地址,类型为String 比如自己所在地区选择，而这里是华南
-    baseUrl: String // 从七牛云上拿到自己的上传地址,类型为String,
+    domain: {
+      // 七牛云上传的域地址,类型为String 比如自己所在地区选择，而这里是华南
+      type: String,
+      default: ''
+    },
+    baseUrl: {
+      // 从七牛云上拿到自己的上传地址,类型为String,
+      type: String,
+      default: ''
+    }
   },
   data () {
     return {
@@ -71,7 +80,7 @@ export default {
             container: toolbarOptions, // 工具栏
             handlers: {
               image: function () {
-                QuillWatch.emit(this.quill.id)
+                QuillWatch.emit(this.quill.id);
               }
             }
           },
@@ -98,35 +107,35 @@ export default {
             action: this.domain,
             headers: xhr => { },
             response: res => {
-              return this.baseUrl + res.key
+              return this.baseUrl + res.key;
             },
             start: () => { },
             end: () => {
-              getToken()
+              getToken();
             },
             error: () => { },
             change: (xhr, formData) => {
               // 跟随form 提交必要参数
-              const file = formData.get('file')
-              const suffix = file.name.split('.')
-              const ext = suffix.splice(suffix.length - 1, 1)[0]
+              const file = formData.get('file');
+              const suffix = file.name.split('.');
+              const ext = suffix.splice(suffix.length - 1, 1)[0];
               //  文件名称
               formData.append(
                 'key',
                 `blogs/image/${suffix.join('.')}_${new Date().getTime() +
                 Math.floor(Math.random() * 100)}.${ext}`
-              )
-              formData.append('token', qiniu.token)
+              );
+              formData.append('token', qiniu.token);
             }
           }
         }
       }
-    }
+    };
   },
   watch: {
     // 通过$emit方式子组件向父组件通信
     content (newVal, oldVal) {
-      this.$emit('input', newVal)
+      this.$emit('input', newVal);
     }
   },
   methods: {
@@ -140,7 +149,7 @@ export default {
       // console.log("editor ready!", editor);
     }
   }
-}
+};
 </script>
 
 <style lang="sass">

@@ -7,13 +7,15 @@
                    class="card-panel">
             <div class="card-panel-icon-wrapper icon-list">
               <svg-icon icon-class="list"
-                        class-name='card-panel-icon' />
+                        class-name="card-panel-icon" />
             </div>
             <div class="card-panel-desc">
               <div class="card-panel-text">
                 全站文章数
               </div>
-              <div class="card-panel-num">{{artNum}}</div>
+              <div class="card-panel-num">
+                {{ artNum }}
+              </div>
             </div>
           </el-card>
         </el-col>
@@ -22,13 +24,15 @@
                    class="card-panel">
             <div class="card-panel-icon-wrapper icon-tags">
               <svg-icon icon-class="md-pricetags"
-                        class-name='card-panel-icon' />
+                        class-name="card-panel-icon" />
             </div>
             <div class="card-panel-desc">
               <div class="card-panel-text">
                 全站标签数
               </div>
-              <div class="card-panel-num">{{tagNum}}</div>
+              <div class="card-panel-num">
+                {{ tagNum }}
+              </div>
             </div>
           </el-card>
         </el-col>
@@ -37,13 +41,15 @@
                    class="card-panel">
             <div class="card-panel-icon-wrapper icon-eye">
               <svg-icon icon-class="eye-open"
-                        class-name='card-panel-icon' />
+                        class-name="card-panel-icon" />
             </div>
             <div class="card-panel-desc">
               <div class="card-panel-text">
                 全站阅读数
               </div>
-              <div class="card-panel-num">{{pvNum}}</div>
+              <div class="card-panel-num">
+                {{ pvNum }}
+              </div>
             </div>
           </el-card>
         </el-col>
@@ -52,13 +58,15 @@
                    class="card-panel">
             <div class="card-panel-icon-wrapper icon-textsms">
               <svg-icon icon-class="md-text"
-                        class-name='card-panel-icon' />
+                        class-name="card-panel-icon" />
             </div>
             <div class="card-panel-desc">
               <div class="card-panel-text">
                 全站评论数
               </div>
-              <div class="card-panel-num">无数据</div>
+              <div class="card-panel-num">
+                无数据
+              </div>
             </div>
           </el-card>
         </el-col>
@@ -83,14 +91,12 @@
                   </template>
                 </el-table-column>
                 <el-table-column prop="title"
-                                 label="标题">
-                </el-table-column>
+                                 label="标题" />
                 <el-table-column fixed="right"
                                  prop="cdate"
                                  label="发布时间"
                                  width="150"
-                                 header-align="center">
-                </el-table-column>
+                                 header-align="center" />
               </el-table>
             </div>
           </el-card>
@@ -102,64 +108,84 @@
               <span>本机统计数据</span>
               <el-button style="float: right; padding: 0"
                          type="text"
-                         @click.prevent="changeInit">刷新</el-button>
+                         @click.prevent="changeInit">
+                刷新
+              </el-button>
             </div>
             <el-row>
               <el-col :span="12">
                 <div class="card-status">
                   <div>
                     <span>运行状态：</span>
-                    <el-tag :type="Object.is(constants, '0')? 'success':'danger'"
-                            size="small">{{Object.is(constants,'0')? '服务器正在运行':'服务器出现错误'}}</el-tag>
+                    <el-tag :type="Object.is(constants, '0') ? 'success' : 'danger'"
+                            size="small">
+                      {{
+                      Object.is(constants, '0')
+                      ? '服务器正在运行'
+                      : '服务器出现错误'
+                      }}
+                    </el-tag>
                   </div>
                   <div>
                     <span>操作系统：</span>
                     <el-tag color="#495060"
                             size="small"
-                            class="card-tag">{{type}}</el-tag>
+                            class="card-tag">
+                      {{ type }}
+                    </el-tag>
                   </div>
                   <div>
                     <span>服务器主机名：</span>
                     <el-tag color="#409EFF"
                             size="small"
-                            class="card-tag">{{hostname}}</el-tag>
+                            class="card-tag">
+                      {{ hostname }}
+                    </el-tag>
                   </div>
                   <div>
                     <span>Nodejs编译系统：</span>
                     <el-tag color="#4CBE63"
                             size="small"
-                            class="card-tag">{{platform}}</el-tag>
+                            class="card-tag">
+                      {{ platform }}
+                    </el-tag>
                   </div>
                   <div>
                     <span>服务器发行版本：</span>
                     <el-tag color="#495060"
                             size="small"
-                            class="card-tag">{{release}}</el-tag>
+                            class="card-tag">
+                      {{ release }}
+                    </el-tag>
                   </div>
                   <div>
                     <span>服务器总内存数：</span>
                     <el-tag color="#409EFF"
                             size="small"
-                            class="card-tag">{{totalmemory}}</el-tag>
+                            class="card-tag">
+                      {{ totalmemory }}
+                    </el-tag>
                   </div>
                   <div>
                     <span>服务器可用内存数：</span>
                     <el-tag color="#409EFF"
                             size="small"
-                            class="card-tag">{{freememory}}</el-tag>
+                            class="card-tag">
+                      {{ freememory }}
+                    </el-tag>
                   </div>
                 </div>
               </el-col>
               <el-col :span="12">
                 <div class="card-progress">
-                  <el-progress type="circle"
-                               :percentage="percentage"
+                  <el-progress :percentage="percentage"
                                :width="220"
+                               type="circle"
                                status="text">
                     <div class="card-progress-text">
                       <h1>内存使用率</h1>
                       <p>综合服务器内存占比</p>
-                      <span>总占百分比:<i>{{percentage}}%</i></span>
+                      <span>总占百分比:<i>{{ percentage }}%</i></span>
                     </div>
                   </el-progress>
                 </div>
@@ -173,17 +199,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { getSystemList } from '@/api/system'
-import { artAllLists, getPvTotals } from '@/api/article'
-import { getTagTotals } from '@/api/tag'
-import './index.scss'
+import { mapGetters } from 'vuex';
+import { getSystemList } from '@/api/system';
+import { artAllLists, getPvTotals } from '@/api/article';
+import { getTagTotals } from '@/api/tag';
+import './index.scss';
 
 export default {
   name: 'Admin',
-  computed: {
-    ...mapGetters(['name', 'roles'])
-  },
   data () {
     return {
       constants: null,
@@ -201,63 +224,74 @@ export default {
       // 标签数
       tagNum: 0,
       // 阅读数
-      pvNum: 0,
-    }
+      pvNum: 0
+    };
+  },
+  computed: {
+    ...mapGetters(['name', 'roles'])
   },
   created () {
-    this.initSystem()
-    this.artAllList()
-    this.tagAllTotal()
-    this.pvAllTotal()
+    this.initSystem();
+    this.artAllList();
+    this.tagAllTotal();
+    this.pvAllTotal();
   },
   methods: {
     initSystem () {
-      getSystemList().then(res => {
-        if (res.data.code === 1) {
-          this.constants = res.data.constants,
-            this.release = res.data.release,
-            this.platform = res.data.platform,
-            this.hostname = res.data.hostname,
-            this.type = res.data.type,
-            this.totalmemory = res.data.totalmemory,
-            this.percentage = res.data.percentage,
-            this.freememory = res.data.Freememory
-        }
-      }).catch(err => {
-        console.error(err)
-      })
+      getSystemList()
+        .then(res => {
+          if (res.data.code === 1) {
+            (this.constants = res.data.constants),
+              (this.release = res.data.release),
+              (this.platform = res.data.platform),
+              (this.hostname = res.data.hostname),
+              (this.type = res.data.type),
+              (this.totalmemory = res.data.totalmemory),
+              (this.percentage = res.data.percentage),
+              (this.freememory = res.data.Freememory);
+          }
+        })
+        .catch(err => {
+          console.error(err);
+        });
     },
     changeInit () {
-      this.initSystem()
+      this.initSystem();
     },
     artAllList () {
-      artAllLists().then(res => {
-        if (res.data.code === 1) {
-          this.artData = res.data.artListData
-          this.artNum = res.data.artTotalData
-        }
-      }).catch(err => {
-        console.error(err)
-      })
+      artAllLists()
+        .then(res => {
+          if (res.data.code === 1) {
+            this.artData = res.data.artListData;
+            this.artNum = res.data.artTotalData;
+          }
+        })
+        .catch(err => {
+          console.error(err);
+        });
     },
     tagAllTotal () {
-      getTagTotals().then(res => {
-        if (res.data.code === 1) {
-          this.tagNum = res.data.tagTotalData
-        }
-      }).catch(err => {
-        console.error(err)
-      })
+      getTagTotals()
+        .then(res => {
+          if (res.data.code === 1) {
+            this.tagNum = res.data.tagTotalData;
+          }
+        })
+        .catch(err => {
+          console.error(err);
+        });
     },
     pvAllTotal () {
-      getPvTotals().then(res => {
-        if (res.data.code === 1) {
-          this.pvNum = res.data.result["0"].pv_count
-        }
-      }).catch(err => {
-        console.error(err);
-      })
+      getPvTotals()
+        .then(res => {
+          if (res.data.code === 1) {
+            this.pvNum = res.data.result['0'].pv_count;
+          }
+        })
+        .catch(err => {
+          console.error(err);
+        });
     }
   }
-}
+};
 </script>
