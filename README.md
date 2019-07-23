@@ -34,6 +34,7 @@ The background management is based on the node server can run, need to install t
 - 项目按需引入部分`element-ui`组件,以达到减小项目体积的目的,这样加载比较快
 - webpack 的`externals`选项需手动配置`vue`,`element-ui`等等,不让它打包出已安装依赖包,再次将 CDN 链接地址放入 index.html(静态文件),为项目加载更快,更稳定
 - gzip 压缩需要自行安装 webpack 插件，从 webpack 配置下使用 Gzip 压缩可大幅减少打包后文件的体积,这样加载快多
+- 通过DllPlugin,DllReferencePlugin webpack 插件提取第三方库，能够达到减少打包体积，加快编译速度，一般我们不会去改动一些库，不要一味将所有都打包出来获取构建时快感。
 
 ## 相关截图
 
