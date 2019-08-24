@@ -41,8 +41,8 @@ module.exports = {
       // detail: https://cli.vuejs.org/config/#devserver-proxy
       // TODO: '/api': {} 也可以
       [process.env.VUE_APP_BASE_API]: {
-        target: 'https://api.ikmoons.com',
-        // target: 'http://127.0.0.1:3030',
+        // target: 'https://api.ikmoons.com',
+        target: 'http://127.0.0.1:3030',
         changeOrigin: true, // needed for virtual hosted sites
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: '' // rewrite path
@@ -51,65 +51,66 @@ module.exports = {
     }
   },
   //键值对象时会合并配置，为方法时会改写配置
-  configureWebpack: {
-    // provide the app's title in webpack's name field, so that
-    // it can be accessed in index.html to inject the correct title.
-    name: name,
-    resolve: {
-      alias: {
-        '@': resolve('src')
-      }
-    },
-    // 防止将某些 import 的包(package)打包到 bundle 中，而是在运行时(runtime)再去从外部获取这些扩展依赖
-    externals: {
-      vue: 'Vue',
-      'element-ui': 'ELEMENT',
-      'vue-router': 'VueRouter',
-      vuex: 'Vuex',
-      axios: 'axios'
-    },
-    devtool: 'source-map',
-    optimization: {
-      minimizer: [
-        new TerserPlugin({
-          terserOptions: {
-            warnings: false,
-            compress: {
-              drop_console: true,
-              drop_debugger: false,
-              pure_funcs: ['console.log'] //移除console
-            },
-            sourceMap: false,
-            parallel: true
-          }
+  configureWebpack: config => {
+    const plugins = [];
+    if (process.env.NODE_ENV === 'production') {
+      // 为生产环境修改配置...
+      config.name = name;
+      config.devtool = 'source-map';
+      // 防止将某些 import 的包(package)打包到 bundle 中，而是在运行时(runtime)再去从外部获取这些扩展依赖
+      config.externals = {
+        vue: 'Vue',
+        'element-ui': 'ELEMENT',
+        'vue-router': 'VueRouter',
+        vuex: 'Vuex',
+        axios: 'axios'
+      };
+      config.optimization = {
+        minimizer: [
+          new TerserPlugin({
+            terserOptions: {
+              warnings: false,
+              compress: {
+                drop_console: true,
+                drop_debugger: false,
+                pure_funcs: ['console.log'] //移除console
+              },
+              sourceMap: false,
+              parallel: true
+            }
+          })
+        ]
+      };
+      plugins.push(
+        new CompressionPlugin({
+          filename: '[path].gz[query]', // 目标文件名
+          algorithm: 'gzip', // 使用gzip压缩
+          test: new RegExp(
+            '\\.(js|css)$' // 压缩 js 与 css
+          ),
+          threshold: 10240, // 资源文件大于10240B=10kB时会被压缩
+          minRatio: 0.8 // 最小压缩比达到0.8时才会被压缩
+        }),
+        new webpack.DllReferencePlugin({
+          context: __dirname,
+          manifest: require('./public/render/vendor-manifest.json')
+        }),
+        // 将 dll 注入到 生成的 html 模板中
+        new AddAssetHtmlPlugin({
+          filepath: path.resolve(__dirname, './public/vendor/*.js'), // dll文件位置
+          publicPath: './vendor', // dll 引用路径
+          outputPath: './vendor' // dll最终输出的目录
         })
-      ]
-    },
-    plugins: [
+      );
+    }
+    config.name = name;
+    plugins.push(
       new webpack.ProvidePlugin({
         'window.Quill': 'quill/dist/quill.js',
         Quill: 'quill/dist/quill.js'
-      }),
-      new CompressionPlugin({
-        filename: '[path].gz[query]', // 目标文件名
-        algorithm: 'gzip', // 使用gzip压缩
-        test: new RegExp(
-          '\\.(js|css)$' // 压缩 js 与 css
-        ),
-        threshold: 10240, // 资源文件大于10240B=10kB时会被压缩
-        minRatio: 0.8 // 最小压缩比达到0.8时才会被压缩
-      }),
-      new webpack.DllReferencePlugin({
-        context: __dirname,
-        manifest: require('./public/render/vendor-manifest.json')
-      }),
-      // 将 dll 注入到 生成的 html 模板中
-      new AddAssetHtmlPlugin({
-        filepath: path.resolve(__dirname, './public/vendor/*.js'), // dll文件位置
-        publicPath: './vendor', // dll 引用路径
-        outputPath: './vendor' // dll最终输出的目录
       })
-    ]
+    );
+    config.plugins = [...config.plugins, ...plugins];
   },
   chainWebpack: config => {
     // CDN加速
@@ -126,6 +127,8 @@ module.exports = {
     config.plugins.delete('preload'); // TODO: need test
     config.plugins.delete('prefetch'); // TODO: need test
 
+    //添加别名
+    config.resolve.alias.set('@', resolve('src'));
     // set svg-sprite-loader
     config.module
       .rule('svg')
