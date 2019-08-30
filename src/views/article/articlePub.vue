@@ -153,7 +153,7 @@ export default {
       // 七牛云配置
       token: '',
       regionUrl: 'https://upload-z2.qiniup.com', // 七牛云的上传地址，我这里是华南区
-      qiniulink: 'https://img.ikmoons.com/' // 这是七牛云空间的外链默认域名
+      qiniulink: 'https://static.ikmoons.com/' // 这是七牛云空间的外链默认域名
     };
   },
   // 计算属性被混入实例当中，且有缓存的
