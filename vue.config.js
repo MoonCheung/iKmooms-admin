@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2019-08-10 14:28:18
  * @LastEditors: MoonCheung
- * @LastEditTime: 2019-09-15 13:07:09
+ * @LastEditTime: 2019-09-15 13:46:09
  */
 'use strict';
 const CompressionPlugin = require('compression-webpack-plugin');
@@ -220,30 +220,5 @@ module.exports = {
       }
       return args;
     });
-    // 性能优化:多页面
-    // config.optimization
-    //   .splitChunks({
-    //     chunks: "async",
-    //     minSize: 30000, // 最小尺寸，30000
-    //     minChunks: 1, // 最小 chunk ，默认1
-    //     maxAsyncRequests: 5, // 最大异步请求数， 默认5
-    //     maxInitialRequests: 3, // 最大初始化请求书，默认3
-    //     name: true,
-    //     // 这里开始设置缓存的 chunks
-    //     cacheGroups: {
-    //       priority: 0, // 缓存组优先级
-    //       vendors: { // key 为entry中定义的 入口名称
-    //         chunks: 'initial', // 必须三选一： "initial" | "all" | "async"(默认就是async)
-    //         test: /vue|element-ui/, // 正则规则验证，如果符合就提取 chunk
-    //         name: "vendors", // 要缓存的 分隔出来的 chunk 名称
-    //         minSize: 30000,
-    //         minChunks: 1,
-    //         enforce: true,
-    //         maxAsyncRequests: 5, // 最大异步请求数， 默认1
-    //         maxInitialRequests: 3, // 最大初始化请求书，默认1
-    //         reuseExistingChunk: true
-    //       }
-    //     }
-    //   })
   }
 };
