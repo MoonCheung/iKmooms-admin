@@ -200,7 +200,7 @@ export default {
       },
       confLoading: false,
       regionUrl: 'https://upload-z2.qiniup.com', // 七牛云的上传地址，我这里是华南区
-      qiniulink: 'https://img.ikmoons.com/', // 这是七牛云空间的外链默认域名
+      qiniulink: 'https://static.ikmoons.com/', // 这是七牛云空间的外链默认域名
       userRules: {
         nickname: [{ required: true, message: '请输入名称', trigger: 'blur' }],
         oldPwd: [

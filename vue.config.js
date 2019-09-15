@@ -1,3 +1,11 @@
+/*
+ * @Description: vue 配置文件
+ * @Author: MoonCheung
+ * @Github: https://github.com/MoonCheung
+ * @Date: 2019-08-10 14:28:18
+ * @LastEditors: MoonCheung
+ * @LastEditTime: 2019-09-15 13:07:09
+ */
 'use strict';
 const CompressionPlugin = require('compression-webpack-plugin');
 const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
@@ -167,12 +175,10 @@ module.exports = {
       config
         .plugin('ScriptExtHtmlWebpackPlugin')
         .after('html')
-        .use('script-ext-html-webpack-plugin', [
-          {
-            // `runtime` must same as runtimeChunk name. default is `runtime`
-            inline: /runtime\..*\.js$/
-          }
-        ])
+        .use('script-ext-html-webpack-plugin', [{
+          // `runtime` must same as runtimeChunk name. default is `runtime`
+          inline: /runtime\..*\.js$/
+        }])
         .end();
       config.optimization.splitChunks({
         chunks: 'all',
