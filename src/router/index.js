@@ -30,8 +30,7 @@ Vue.use(Router);
  * 所有权限通用路由表
  * 如首页和登录页和一些不用权限的公用页面
  */
-export const constantRoutes = [
-  {
+export const constantRoutes = [{
     path: '/login',
     component: () => import('@/views/login/index'),
     hidden: true
@@ -47,17 +46,15 @@ export const constantRoutes = [
     path: '/',
     component: Layout,
     redirect: '/admin',
-    children: [
-      {
-        path: 'admin',
-        name: 'admin',
-        component: () => import('@/views/admin/index'),
-        meta: {
-          title: '仪盘表',
-          icon: 'dashboard'
-        }
+    children: [{
+      path: 'admin',
+      name: 'admin',
+      component: () => import('@/views/admin/index'),
+      meta: {
+        title: '仪盘表',
+        icon: 'dashboard'
       }
-    ]
+    }]
   }
 ];
 
@@ -66,8 +63,7 @@ export const constantRoutes = [
  * 异步挂载的路由
  * 动态需要根据权限加载的路由表
  */
-export const asyncRoutes = [
-  {
+export const asyncRoutes = [{
     path: '/art',
     component: Layout,
     redirect: '/article/artlist',
@@ -76,8 +72,7 @@ export const asyncRoutes = [
       title: '文章管理',
       icon: 'webcreate'
     },
-    children: [
-      {
+    children: [{
         path: 'artlist',
         name: 'ArtList',
         component: () => import('@/views/article/articleList'),
@@ -127,32 +122,28 @@ export const asyncRoutes = [
       title: '评论管理',
       icon: 'webchatboxes'
     },
-    children: [
-      {
-        path: 'cmtlist',
-        name: 'commentList',
-        component: () => import('@/views/comment/commentList'),
-        meta: {
-          title: '评论列表',
-          icon: 'list'
-        }
+    children: [{
+      path: 'cmtlist',
+      name: 'commentList',
+      component: () => import('@/views/comment/commentList'),
+      meta: {
+        title: '评论列表',
+        icon: 'list'
       }
-    ]
+    }]
   },
   {
     path: '/config',
     component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'config',
-        component: () => import('@/views/config/index'),
-        meta: {
-          title: '全局设置',
-          icon: 'settings'
-        }
+    children: [{
+      path: 'index',
+      name: 'config',
+      component: () => import('@/views/config/index'),
+      meta: {
+        title: '全局设置',
+        icon: 'settings'
       }
-    ]
+    }]
   },
   // 404 page must be placed at the end!!!
   {

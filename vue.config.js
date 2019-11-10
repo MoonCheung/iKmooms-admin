@@ -1,6 +1,7 @@
 'use strict';
 const CompressionPlugin = require('compression-webpack-plugin');
 const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const defaultSettings = require('./src/settings.js');
 const webpack = require('webpack');
@@ -127,8 +128,43 @@ module.exports = {
     config.plugins.delete('preload'); // TODO: need test
     config.plugins.delete('prefetch'); // TODO: need test
 
-    //添加别名
+    // 添加别名
     config.resolve.alias.set('@', resolve('src'));
+
+    // 提取到css文件中(暂时研究)
+    config.merge({
+      module: {
+        rules: [{
+          test: /\.(css|sass|scss)$/,
+          use: [
+            MiniCssExtractPlugin.loader,
+            {
+              loader: 'css-loader',
+              options: {
+                importLoaders: 2,
+                sourceMap: true
+              }
+            },
+            {
+              loader: 'postcss-loader',
+              options: {
+                plugins: () => [
+                  require('autoprefixer')
+                ],
+                sourceMap: true
+              }
+            },
+            {
+              loader: 'sass-loader',
+              options: {
+                sourceMap: true
+              }
+            }
+          ]
+        }]
+      }
+    })
+
     // set svg-sprite-loader
     config.module
       .rule('svg')
@@ -192,11 +228,22 @@ module.exports = {
             minChunks: 3, //  minimum common number
             priority: 5,
             reuseExistingChunk: true
+          },
+          css: {
+            test: /\.(css|sass|scss)$/,
+            name: "commons",
+            minChunks: 2,
           }
         }
       });
+      config.plugin('extract-css')
+        .use(MiniCssExtractPlugin, [{
+          filename: 'static/css/[name].css',
+          allChunks: true
+        }]);
       config.optimization.runtimeChunk('single');
     });
+
     // 性能优化
     config.performance
       // false | "error" | "warning"
