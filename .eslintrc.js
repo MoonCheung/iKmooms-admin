@@ -43,7 +43,8 @@ module.exports = {
         semi: true, // 行尾是否使用分号，默认为true
         trailingComma: 'none', //多行时尽可能打印句号。
         bracketSpacing: true, // 在对象文字中打印括号之间的空格。
-        jsxBracketSameLine: true
+        jsxBracketSameLine: true, // 放在最后一行末尾
+        vueIndentScriptAndStyle: true, // 在vue文件允许缩进
       }
     ],
     //////////////
