@@ -2,7 +2,7 @@
   <el-container>
     <el-main>
       <el-row :gutter="20">
-        <el-col :span="18">
+        <el-col :span="24">
           <el-card class="art-card">
             <div slot="header">
               <span>撰写新文章</span>
@@ -12,51 +12,104 @@
                      :rules="formRules"
                      label-width="100px"
                      class="el-formtable">
-              <el-form-item label="文章标题"
-                            prop="title">
-                <el-input v-model="artform.title"
-                          class="el-forminput"
-                          placeholder="请输入文章标题" />
-              </el-form-item>
-              <el-form-item label="文章描述"
-                            prop="desc">
-                <el-input v-model="artform.desc"
-                          class="el-forminput"
-                          placeholder="请输入文章描述" />
-              </el-form-item>
-              <el-form-item label="缩略图"
-                            prop="banner">
-                <el-input v-model="artform.banner"
-                          type="hidden"
-                          style="display: none" />
-                <el-upload ref="upload"
-                           :show-file-list="false"
-                           :action="regionUrl"
-                           :http-request="uploadImg"
-                           :before-upload="beforeUpload"
-                           class="el-formLoader"
-                           list-type="picture-card">
-                  <img v-if="artform.banner"
-                       :src="artform.banner"
-                       class="el-formbanner" />
-                  <i v-else
-                     class="el-icon-plus" />
-                </el-upload>
-              </el-form-item>
-              <el-form-item label="文章标签"
-                            prop="tag">
-                <el-select v-model="artform.tag"
-                           multiple
-                           filterable
-                           default-first-option
-                           style="width: 500px;"
-                           placeholder="请选择文章标签">
-                  <el-option v-for="item in tagList"
-                             :key="item._id"
-                             :label="item.tagname"
-                             :value="item.tagname" />
-                </el-select>
-              </el-form-item>
+              <el-row :gutter="20">
+                <el-col :span="14">
+                  <el-form-item label="文章标题"
+                                prop="title">
+                    <el-input v-model="artform.title"
+                              placeholder="请输入文章标题" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                  <el-form-item label="分类目录"
+                                prop="catg">
+                    <el-select v-model="artform.catg"
+                               placeholder="请选择">
+                      <el-option v-for="item in catgList"
+                                 :key="item._id"
+                                 :label="item.categoryname"
+                                 :value="item.categoryname">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="20">
+                <el-col :span="14">
+                  <el-form-item label="文章描述"
+                                prop="desc">
+                    <el-input v-model="artform.desc"
+                              placeholder="请输入文章描述" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                  <el-form-item label="文章转载"
+                                prop="reprint">
+                    <el-select v-model="artform.reprint"
+                               placeholder="请选择">
+                      <el-option v-for="item in repList"
+                                 :key="item._id"
+                                 :label="item.reprintname"
+                                 :value="item.reprintname">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="20">
+                <el-col :span="24">
+                  <el-form-item label="缩略图"
+                                prop="banner">
+                    <el-input v-model="artform.banner"
+                              type="hidden"
+                              style="display: none" />
+                    <el-upload ref="upload"
+                               :show-file-list="false"
+                               :action="regionUrl"
+                               :http-request="uploadImg"
+                               :before-upload="beforeUpload"
+                               class="el-formLoader"
+                               list-type="picture-card">
+                      <img v-if="artform.banner"
+                           :src="artform.banner"
+                           class="el-formbanner" />
+                      <i v-else
+                         class="el-icon-plus" />
+                    </el-upload>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="20">
+                <el-col :span="24">
+                  <el-form-item label="文章标签"
+                                prop="tag">
+                    <el-select v-model="artform.tag"
+                               multiple
+                               filterable
+                               default-first-option
+                               style="width: 500px;"
+                               placeholder="请选择文章标签">
+                      <el-option v-for="item in tagList"
+                                 :key="item._id"
+                                 :label="item.tagname"
+                                 :value="item.tagname" />
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="20">
+                <el-col :span="24">
+                  <el-form-item label="文章内容"
+                                prop="content">
+                    <!-- 引入自定义富文本组件这里 -->
+                    <!-- <v-quill-editor ref="myEditor"
+                                    v-model="artform.content"
+                                    :domain="regionUrl"
+                                    :base-url="qiniulink"></v-quill-editor> -->
+                    <v-mark-editor></v-mark-editor>
+                  </el-form-item>
+                </el-col>
+              </el-row>
               <!-- <el-form-item label="发布日期">
                 <el-date-picker @change="changeDate"
                                 v-model="form.curdate"
@@ -66,36 +119,17 @@
                                 value-format="yyyy-MM-dd">
                 </el-date-picker>
               </el-form-item> -->
-              <el-form-item label="文章内容"
-                            prop="content">
-                <!-- 引入自定义富文本组件这里 -->
-                <v-quill-editor ref="myEditor"
-                                v-model="artform.content"
-                                :domain="regionUrl"
-                                :base-url="qiniulink"></v-quill-editor>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary"
-                           @click="submitArticle('artform')">
-                  发布文章
-                </el-button>
-              </el-form-item>
+              <el-row :gutter="20">
+                <el-col :span="24">
+                  <el-form-item>
+                    <el-button type="primary"
+                               @click="submitArticle('artform')">
+                      发布文章
+                    </el-button>
+                  </el-form-item>
+                </el-col>
+              </el-row>
             </el-form>
-          </el-card>
-        </el-col>
-        <el-col :span="6">
-          <el-card>
-            <div slot="header">
-              <span>分类目录</span>
-            </div>
-            <el-select v-model="catg"
-                       placeholder="请选择">
-              <el-option v-for="item in catgList"
-                         :key="item._id"
-                         :label="item.categoryname"
-                         :value="item.categoryname">
-              </el-option>
-            </el-select>
           </el-card>
         </el-col>
       </el-row>
@@ -105,6 +139,7 @@
 
 <script>
 import vQuillEditor from '@/components/quill-editor';
+import vMarkEditor from '@/components/mark-editor';
 import { getQNToken } from '@/api/qiniu';
 import { insertArticle, getArtDetl, editArticle } from '@/api/article';
 import { getAllCatgs } from '@/api/category';
@@ -115,7 +150,8 @@ import './index.scss';
 export default {
   name: 'ArtPub',
   components: {
-    vQuillEditor
+    vQuillEditor,
+    vMarkEditor
   },
   data () {
     return {
@@ -124,9 +160,10 @@ export default {
         desc: '',
         banner: '',
         tag: '',
+        catg: '',
+        reprint: '',
         content: ''
       },
-      catg: '',
       formRules: {
         title: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
         desc: [{ required: true, message: '描述不能为空', trigger: 'blur' }],
@@ -148,6 +185,11 @@ export default {
         // { _id: "1", categoryname: '测试分类1' },
         // { _id: "2", categoryname: '测试分类2' },
         // { _id: "3", categoryname: '测试分类3' }
+      ],
+      repList: [
+        { _id: "1", reprintname: '原创' },
+        { _id: "2", reprintname: '转载' },
+        { _id: "3", reprintname: '混合' }
       ],
       bannerList: '',
       // 七牛云配置
@@ -180,7 +222,7 @@ export default {
         banner: this.artform.banner,
         tag: this.artform.tag,
         content: this.artform.content,
-        catg: this.catg
+        catg: this.artform.catg
       };
       if (Object.is(this.catg, '')) {
         this.$message({
