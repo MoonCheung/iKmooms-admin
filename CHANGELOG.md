@@ -13,3 +13,6 @@
 - 优化 gzip 压缩性能
 - 优化 element-ui 按需引入
 - 优化 DllPlugin，DllReferencePlugin webpack 插件
+- 移除 mock 假数据
+- 使用 codemirror 创建一个 Markdown 编辑器
+- 适当的创建按钮实现 markdown 语法，`markdown-it` + `highlight.js`用于预览解析
