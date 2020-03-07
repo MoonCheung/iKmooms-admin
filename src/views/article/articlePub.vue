@@ -44,13 +44,13 @@
                 </el-col>
                 <el-col :span="6">
                   <el-form-item label="文章转载"
-                                prop="reprint">
-                    <el-select v-model="artform.reprint"
+                                prop="origin">
+                    <el-select v-model="artform.origin"
                                placeholder="请选择">
-                      <el-option v-for="item in repList"
+                      <el-option v-for="item in origin"
                                  :key="item._id"
-                                 :label="item.reprintname"
-                                 :value="item.reprintname">
+                                 :label="item.originname"
+                                 :value="item._id">
                       </el-option>
                     </el-select>
                   </el-form-item>
@@ -101,12 +101,9 @@
                 <el-col :span="24">
                   <el-form-item label="文章内容"
                                 prop="content">
-                    <!-- 引入自定义富文本组件这里 -->
-                    <!-- <v-quill-editor ref="myEditor"
-                                    v-model="artform.content"
-                                    :domain="regionUrl"
-                                    :base-url="qiniulink"></v-quill-editor> -->
-                    <v-mark-editor></v-mark-editor>
+                    <!-- 引入自定义markdown组件这里 -->
+                    <v-mark-editor ref="markEditor"
+                                   v-model="artform.content"></v-mark-editor>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -138,7 +135,6 @@
 </template>
 
 <script>
-import vQuillEditor from '@/components/quill-editor';
 import vMarkEditor from '@/components/mark-editor';
 import { getQNToken } from '@/api/qiniu';
 import { insertArticle, getArtDetl, editArticle } from '@/api/article';
@@ -150,7 +146,6 @@ import './index.scss';
 export default {
   name: 'ArtPub',
   components: {
-    vQuillEditor,
     vMarkEditor
   },
   data () {
@@ -161,7 +156,7 @@ export default {
         banner: '',
         tag: '',
         catg: '',
-        reprint: '',
+        origin: '',
         content: ''
       },
       formRules: {
@@ -186,20 +181,17 @@ export default {
         // { _id: "2", categoryname: '测试分类2' },
         // { _id: "3", categoryname: '测试分类3' }
       ],
-      repList: [
-        { _id: "1", reprintname: '原创' },
-        { _id: "2", reprintname: '转载' },
-        { _id: "3", reprintname: '混合' }
+      origin: [
+        { _id: 0, originname: '原创' },
+        { _id: 1, originname: '转载' },
+        { _id: 2, originname: '混合' }
       ],
-      bannerList: '',
       // 七牛云配置
       token: '',
       regionUrl: 'https://upload-z2.qiniup.com', // 七牛云的上传地址，我这里是华南区
       qiniulink: 'https://static.ikmoons.com/' // 这是七牛云空间的外链默认域名
     };
   },
-  // 计算属性被混入实例当中，且有缓存的
-  computed: {},
   created () {
     console.log('处于开发状态：' + process.env.VUE_APP_BASE_API);
     console.log('处于开发状态：' + process.env.NODE_ENV);
@@ -212,7 +204,7 @@ export default {
       this.getArtDetails();
     }
   },
-  // 该方法被混入实例当中...
+  // 该方法被混入实例当中
   methods: {
     submitArticle () {
       const param = {
@@ -222,7 +214,8 @@ export default {
         banner: this.artform.banner,
         tag: this.artform.tag,
         content: this.artform.content,
-        catg: this.artform.catg
+        catg: this.artform.catg,
+        origin: this.artform.origin
       };
       if (Object.is(this.catg, '')) {
         this.$message({
@@ -305,21 +298,19 @@ export default {
         Math.floor(Math.random() * 100) +
         '.' +
         filetype;
-      getQNToken()
-        .then(res => {
-          const formdata = new FormData(); // 打印出空对象
-          // 利用append的内置方式
-          formdata.append('file', req.file);
-          formdata.append('token', res.data.result.token);
-          formdata.append('key', keyname);
-          //通过post方式请求获得返回七牛云数据的
-          axios.post(this.regionUrl, formdata, config).then(res => {
-            this.artform.banner = this.qiniulink + res.data.key;
-          });
-        })
-        .catch(err => {
-          console.error(err);
+      getQNToken().then(res => {
+        const formdata = new FormData(); // 打印出空对象
+        // 利用append的内置方式
+        formdata.append('file', req.file);
+        formdata.append('token', res.data.result.token);
+        formdata.append('key', keyname);
+        //通过post方式请求获得返回七牛云数据的
+        axios.post(this.regionUrl, formdata, config).then(res => {
+          this.artform.banner = this.qiniulink + res.data.key;
         });
+      }).catch(err => {
+        console.error(err);
+      });
     },
     // 上传图片之前验证文件合法性
     beforeUpload (file) {
@@ -341,8 +332,9 @@ export default {
       getArtDetl(param).then(res => {
         if (res.data.code === 1) {
           this.artform = res.data.ArtDetlData;
-          this.catg = res.data.ArtDetlData.catg;
-          this.$refs.myEditor.content = res.data.ArtDetlData.content;
+          const markCont = res.data.ArtDetlData.content;
+          // 将content数据通过$refs传递给子组件
+          this.$refs.markEditor.saveEditorMark(markCont);
         }
       });
     }
