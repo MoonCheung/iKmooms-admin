@@ -31,7 +31,7 @@ module.exports = {
   productionSourceMap: false,
   devServer: {
     port: port,
-    open: true,
+    open: false,
     overlay: {
       warnings: false,
       errors: true
@@ -50,6 +50,15 @@ module.exports = {
       }
     }
   },
+  // 全局样式
+  css: {
+    loaderOptions: {
+      sass: {
+        // 根据自己样式文件的位置调整
+        data: `@import "@/styles/variables.scss";`
+      }
+    }
+  },
   //键值对象时会合并配置，为方法时会改写配置
   configureWebpack: config => {
     const plugins = [];
@@ -63,7 +72,9 @@ module.exports = {
         'element-ui': 'ELEMENT',
         'vue-router': 'VueRouter',
         vuex: 'Vuex',
-        axios: 'axios'
+        axios: 'axios',
+        codemirror: 'CodeMirror',
+        highlight: 'hljs'
       };
       config.optimization = {
         minimizer: [
@@ -91,37 +102,38 @@ module.exports = {
           threshold: 10240, // 资源文件大于10240B=10kB时会被压缩
           minRatio: 0.8 // 最小压缩比达到0.8时才会被压缩
         }),
-        new webpack.DllReferencePlugin({
-          context: __dirname,
-          manifest: require('./public/render/vendor-manifest.json')
-        }),
-        // 将 dll 注入到 生成的 html 模板中
-        new AddAssetHtmlPlugin({
-          filepath: path.resolve(__dirname, './public/vendor/*.js'), // dll文件位置
-          publicPath: './vendor', // dll 引用路径
-          outputPath: './vendor' // dll最终输出的目录
-        })
+        // NOTE: 通过DllPlugin，DllReferencePlugin webpack方式提取单独库使用
+        // new webpack.DllReferencePlugin({
+        //   context: __dirname,
+        //   manifest: require('./public/render/vendor-manifest.json')
+        // }),
+        // // 将 dll 注入到 生成的 html 模板中
+        // new AddAssetHtmlPlugin({
+        //   filepath: path.resolve(__dirname, './public/vendor/*.js'), // dll文件位置
+        //   publicPath: './vendor', // dll 引用路径
+        //   outputPath: './vendor' // dll最终输出的目录
+        // })
       );
     }
     config.name = name;
-    plugins.push(
-      new webpack.ProvidePlugin({
-        'window.Quill': 'quill/dist/quill.js',
-        Quill: 'quill/dist/quill.js'
-      })
-    );
     config.plugins = [...config.plugins, ...plugins];
   },
   chainWebpack: config => {
     // CDN加速
     const cdn = {
-      css: ['https://unpkg.com/element-ui@2.7.2/lib/theme-chalk/index.css'],
+      css: [
+        'https://unpkg.com/element-ui@2.7.2/lib/theme-chalk/index.css',
+        'https://unpkg.com/browse/highlight.js@9.15.6/styles/monokai-sublime.css'
+      ],
       js: [
         'https://unpkg.com/vue@2.6.10/dist/vue.min.js',
         'https://unpkg.com/axios@0.19.0/dist/axios.min.js',
         'https://unpkg.com/vue-router@3.0.6/dist/vue-router.min.js',
         'https://unpkg.com/vuex@3.1.0/dist/vuex.min.js',
-        'https://unpkg.com/element-ui@2.7.2/lib/index.js'
+        'https://unpkg.com/element-ui@2.7.2/lib/index.js',
+        'https://unpkg.com/codemirror@5.52.0/lib/codemirror.js',
+        'https://unpkg.com/browse/highlight.js@9.15.6/lib/highlight.js',
+        // 'https://unpkg.com/markdown-it@10.0.0/index.js'
       ]
     };
     config.when(process.env.NODE_ENV === 'development', config => {

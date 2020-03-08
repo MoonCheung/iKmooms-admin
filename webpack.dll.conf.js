@@ -9,7 +9,7 @@ module.exports = {
   //入口
   entry: {
     // 需要提取的库文件
-    vendor: ['vue-quill-editor', 'highlight.js', 'quill']
+    vendor: ['markdown-it', 'highlight.js']
   },
   //输出
   output: {

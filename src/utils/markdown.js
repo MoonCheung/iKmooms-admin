@@ -4,10 +4,10 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2020-03-02 00:44:05
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-03-05 14:06:41
+ * @LastEditTime: 2020-03-08 10:44:20
  */
 
-import Markdown from 'markdown-it';
+import MarkdownIt from 'markdown-it';
 import abbr from 'markdown-it-abbr';
 import deflist from 'markdown-it-deflist';
 import emoji from 'markdown-it-emoji';
@@ -39,11 +39,11 @@ const config = {
       } catch (__) {}
     }
     // 如果没有语言设置，则显示为纯文本
-    return '<pre class="hljs"><code>' + hljs.highlight('plaintext', str, true).value + '</code></pre>'
+    return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>'
   }
 }
 
-const md = new Markdown(config).use(abbr)
+const md = new MarkdownIt(config).use(abbr)
   .use(deflist)
   .use(emoji)
   .use(footnote)

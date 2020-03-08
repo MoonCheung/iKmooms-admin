@@ -23,7 +23,8 @@
   <% for (var i in htmlWebpackPlugin.options.cdn&&htmlWebpackPlugin.options.cdn.js) { %>
   <script src="<%= htmlWebpackPlugin.options.cdn.js[i] %>"></script>
   <% } %>
-  <script src="./render/vendor.dll.js"></script>
+  <!-- NOTE: 通过DLL wenback打包出单独js文件插入src属性 -->
+  <!-- <script src="./render/vendor.dll.js"></script> -->
   <!-- built files will be auto injected -->
 </body>
 
