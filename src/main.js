@@ -109,8 +109,6 @@ Vue.use(Breadcrumb);
 Vue.use(BreadcrumbItem);
 Vue.use(Scrollbar);
 
-Vue.use(quillEditor);
-
 // Vue.prototype.$loading = Loading.service
 // Vue.prototype.$alert = MessageBox.alert
 // Vue.prototype.$prompt = MessageBox.prompt
