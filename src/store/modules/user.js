@@ -36,16 +36,14 @@ const actions = {
       login({
         username: username.trim(),
         password: password
-      })
-        .then(res => {
-          // console.log(res) // 从服务器获取用户信息
-          commit('SET_TOKEN', res.data.token);
-          setToken(res.data.token);
-          resolve(res);
-        })
-        .catch(error => {
-          reject(error);
-        });
+      }).then(res => {
+        // console.log(res) // 从服务器获取用户信息
+        commit('SET_TOKEN', res.data.token);
+        setToken(res.data.token);
+        resolve(res);
+      }).catch(error => {
+        reject(error);
+      });
     });
   },
 
@@ -53,29 +51,27 @@ const actions = {
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       // console.log(state.token) //打印出admin
-      getInfo(state.token)
-        .then(res => {
-          const { data } = res;
-          if (!data) {
-            reject('验证失败，请再次登录');
-          }
+      getInfo(state.token).then(res => {
+        const { data } = res;
+        if (!data) {
+          reject('验证失败，请再次登录');
+        }
 
-          const { id, roles, name, avatar } = data;
+        const { id, roles, name, avatar } = data;
 
-          // 角色必须是非空数组
-          if (!roles || roles.length <= 0) {
-            reject('角色必须是非null数组！');
-          }
+        // 角色必须是非空数组
+        if (!roles || roles.length <= 0) {
+          reject('角色必须是非null数组！');
+        }
 
-          commit('SET_ID', id);
-          commit('SET_ROLES', roles);
-          commit('SET_NAME', name);
-          commit('SET_AVATAR', avatar);
-          resolve(data);
-        })
-        .catch(error => {
-          reject(error);
-        });
+        commit('SET_ID', id);
+        commit('SET_ROLES', roles);
+        commit('SET_NAME', name);
+        commit('SET_AVATAR', avatar);
+        resolve(data);
+      }).catch(error => {
+        reject(error);
+      });
     });
   },
 
@@ -83,35 +79,31 @@ const actions = {
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
       // console.log(state.token) //打印出admin
-      logout(state.token)
-        .then(() => {
-          commit('SET_TOKEN', '');
-          commit('SET_ROLES', []);
-          removeToken();
-          resetRouter();
-          resolve();
-        })
-        .catch(error => {
-          reject(error);
-        });
+      logout(state.token).then(() => {
+        commit('SET_TOKEN', '');
+        commit('SET_ROLES', []);
+        removeToken();
+        resetRouter();
+        resolve();
+      }).catch(error => {
+        reject(error);
+      });
     });
   },
 
   // 更新用户信息
   updateUserInfo({ commit }, param) {
     return new Promise((resolve, reject) => {
-      updateUserInfo(param)
-        .then(res => {
-          const { data } = res;
+      updateUserInfo(param).then(res => {
+        const { data } = res;
 
-          const { name, avatar } = data.result;
-          commit('SET_NAME', name);
-          commit('SET_AVATAR', avatar);
-          resolve(res);
-        })
-        .catch(error => {
-          reject(error);
-        });
+        const { name, avatar } = data.result;
+        commit('SET_NAME', name);
+        commit('SET_AVATAR', avatar);
+        resolve(res);
+      }).catch(error => {
+        reject(error);
+      });
     });
   },
 

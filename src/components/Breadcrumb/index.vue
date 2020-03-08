@@ -56,10 +56,12 @@ export default {
     pathCompile (path) {
       // To solve this problem https://github.com/PanJiaChen/vue-element-admin/issues/561
       const { params } = this.$route;
+      console.log('cat params:', params)
       var toPath = pathToRegexp.compile(path);
       return toPath(params);
     },
     handleLink (item) {
+      console.log('cat click Item:', item);
       const { redirect, path } = item;
       if (redirect) {
         this.$router.push(redirect);

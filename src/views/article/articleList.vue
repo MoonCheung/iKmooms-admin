@@ -126,23 +126,21 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      })
-        .then(() => {
-          // 带有查询参数
-          this.$router.push({
-            name: 'ArtPub',
-            query: {
-              id: param.id,
-              method: 'edit'
-            }
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消编辑'
-          });
+      }).then(() => {
+        // 带有查询参数
+        this.$router.push({
+          name: 'ArtPub',
+          query: {
+            id: param.id,
+            method: 'edit'
+          }
         });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消编辑'
+        });
+      });
     },
     // 改变文章状态
     chgArt (param) {
@@ -156,31 +154,28 @@ export default {
         distinguishCancelAndClose: true,
         confirmButtonText: '确认',
         cancelButtonText: '返回'
-      })
-        .then(() => {
-          chgArtStatus(data).then(res => {
-            if (res.data.code === 1) {
-              this.$message({
-                type: 'success',
-                message: res.data.msg
-              });
-              // 再次获取文章列表
-              this.getArtList();
-            } else {
-              this.$message({
-                type: 'error',
-                message: res.data.msg
-              });
-            }
-          });
-        })
-        .catch(action => {
-          this.$message({
-            type: 'info',
-            message:
-              action === 'cancel' ? '放弃改变并离开页面' : '停留在当前页面'
-          });
+      }).then(() => {
+        chgArtStatus(data).then(res => {
+          if (res.data.code === 1) {
+            this.$message({
+              type: 'success',
+              message: res.data.msg
+            });
+            // 再次获取文章列表
+            this.getArtList();
+          } else {
+            this.$message({
+              type: 'error',
+              message: res.data.msg
+            });
+          }
         });
+      }).catch(action => {
+        this.$message({
+          type: 'info',
+          message: action === 'cancel' ? '放弃改变并离开页面' : '停留在当前页面'
+        });
+      });
     },
     // 删除文章
     delArt (param) {
@@ -188,31 +183,29 @@ export default {
         distinguishCancelAndClose: true,
         confirmButtonText: '确认',
         cancelButtonText: '返回'
-      })
-        .then(() => {
-          delArticle(param).then(res => {
-            if (res.data.code === 1) {
-              this.$message({
-                type: 'success',
-                message: res.data.msg
-              });
-              // 再次获取文章列表
-              this.getArtList();
-            } else {
-              this.$message({
-                type: 'error',
-                message: res.data.msg
-              });
-            }
-          });
-        })
-        .catch(action => {
-          this.$message({
-            type: 'info',
-            message:
-              action === 'cancel' ? '放弃删除并离开页面' : '停留在当前页面'
-          });
+      }).then(() => {
+        delArticle(param).then(res => {
+          if (res.data.code === 1) {
+            this.$message({
+              type: 'success',
+              message: res.data.msg
+            });
+            // 再次获取文章列表
+            this.getArtList();
+          } else {
+            this.$message({
+              type: 'error',
+              message: res.data.msg
+            });
+          }
         });
+      }).catch(action => {
+        this.$message({
+          type: 'info',
+          message:
+            action === 'cancel' ? '放弃删除并离开页面' : '停留在当前页面'
+        });
+      });
     },
     // 获取文章列表
     getArtList () {
@@ -221,19 +214,17 @@ export default {
         curPage: this.currentPage,
         limit: this.limit
       };
-      articleList(param)
-        .then(res => {
-          if (res.data.code === 1) {
-            this.artListData = res.data.artData;
-            this.total = res.data.total;
-          }
-          setTimeout(() => {
-            this.listLoading = false;
-          }, 1.5 * 500);
-        })
-        .catch(err => {
-          console.error(err);
-        });
+      articleList(param).then(res => {
+        if (res.data.code === 1) {
+          this.artListData = res.data.artData;
+          this.total = res.data.total;
+        }
+        setTimeout(() => {
+          this.listLoading = false;
+        }, 1.5 * 500);
+      }).catch(err => {
+        console.error(err);
+      });
     }
   }
 };
