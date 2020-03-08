@@ -162,14 +162,32 @@ export default {
       formRules: {
         title: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
         desc: [{ required: true, message: '描述不能为空', trigger: 'blur' }],
-        tag: [
-          {
-            type: 'array',
-            required: true,
-            message: '请至少选择一个标签',
-            trigger: 'change'
-          }
-        ]
+        banner: [{
+          required: true,
+          message: '缩略图不能为空',
+          trigger: 'blur'
+        }],
+        catg: [{
+          required: true,
+          message: '请至少选择一个分类',
+          trigger: 'change'
+        }],
+        origin: [{
+          required: true,
+          message: '请至少选择一个转载',
+          trigger: 'change'
+        }],
+        tag: [{
+          type: 'array',
+          required: true,
+          message: '请至少选择一个标签',
+          trigger: 'change'
+        }],
+        content: [{
+          required: true,
+          message: '内容不能为空',
+          trigger: 'blur'
+        }]
       },
       tagList: [
         // { _id: "1", tagname: "javascript" },
@@ -217,52 +235,45 @@ export default {
         catg: this.artform.catg,
         origin: this.artform.origin
       };
-      if (Object.is(this.catg, '')) {
-        this.$message({
-          message: '文章分类不得为空，请再次选择',
-          type: 'warning'
-        });
-      } else {
-        this.$refs.artform.validate(valid => {
-          if (valid) {
-            if (this.$route.query.method !== 'edit') {
-              insertArticle(param).then(res => {
-                if (res.data.code === 1) {
-                  this.$message({
-                    message: res.data.msg,
-                    type: 'success'
-                  });
-                  this.$router.push({
-                    name: 'ArtList'
-                  });
-                } else {
-                  this.$message({
-                    message: res.data.msg,
-                    type: 'error'
-                  });
-                }
-              });
-            } else {
-              editArticle(param).then(res => {
-                if (res.data.code === 1) {
-                  this.$message({
-                    message: res.data.msg,
-                    type: 'success'
-                  });
-                  this.$router.push({
-                    name: 'ArtList'
-                  });
-                } else {
-                  this.$message({
-                    message: res.data.msg,
-                    type: 'error'
-                  });
-                }
-              });
-            }
+      this.$refs.artform.validate(valid => {
+        if (valid) {
+          if (this.$route.query.method !== 'edit') {
+            insertArticle(param).then(res => {
+              if (res.data.code === 1) {
+                this.$message({
+                  message: res.data.msg,
+                  type: 'success'
+                });
+                this.$router.push({
+                  name: 'ArtList'
+                });
+              } else {
+                this.$message({
+                  message: res.data.msg,
+                  type: 'error'
+                });
+              }
+            });
+          } else {
+            editArticle(param).then(res => {
+              if (res.data.code === 1) {
+                this.$message({
+                  message: res.data.msg,
+                  type: 'success'
+                });
+                this.$router.push({
+                  name: 'ArtList'
+                });
+              } else {
+                this.$message({
+                  message: res.data.msg,
+                  type: 'error'
+                });
+              }
+            });
           }
-        });
-      }
+        }
+      });
     },
     // 获取标签列表
     getAllTagsList () {
