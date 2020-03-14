@@ -65,7 +65,7 @@
                 全站评论数
               </div>
               <div class="card-panel-num">
-                无数据
+                {{cmtNum}}
               </div>
             </div>
           </el-card>
@@ -202,6 +202,7 @@
 import { mapGetters } from 'vuex';
 import { getSystemList } from '@/api/system';
 import { artAllLists, getPvTotals } from '@/api/article';
+import { getAllCmts } from '@/api/comment';
 import { getTagTotals } from '@/api/tag';
 import './index.scss';
 
@@ -224,7 +225,9 @@ export default {
       // 标签数
       tagNum: 0,
       // 阅读数
-      pvNum: 0
+      pvNum: 0,
+      // 评论数
+      cmtNum: 0
     };
   },
   computed: {
@@ -235,62 +238,64 @@ export default {
     this.artAllList();
     this.tagAllTotal();
     this.pvAllTotal();
+    this.cmtAllTotal();
   },
   methods: {
     initSystem () {
-      getSystemList()
-        .then(res => {
-          if (res.data.code === 1) {
-            (this.constants = res.data.constants),
-              (this.release = res.data.release),
-              (this.platform = res.data.platform),
-              (this.hostname = res.data.hostname),
-              (this.type = res.data.type),
-              (this.totalmemory = res.data.totalmemory),
-              (this.percentage = res.data.percentage),
-              (this.freememory = res.data.Freememory);
-          }
-        })
-        .catch(err => {
-          console.error(err);
-        });
+      getSystemList().then(res => {
+        if (res.data.code === 1) {
+          (this.constants = res.data.constants),
+            (this.release = res.data.release),
+            (this.platform = res.data.platform),
+            (this.hostname = res.data.hostname),
+            (this.type = res.data.type),
+            (this.totalmemory = res.data.totalmemory),
+            (this.percentage = res.data.percentage),
+            (this.freememory = res.data.Freememory);
+        }
+      }).catch(err => {
+        console.error(err);
+      });
     },
     changeInit () {
       this.initSystem();
     },
     artAllList () {
-      artAllLists()
-        .then(res => {
-          if (res.data.code === 1) {
-            this.artData = res.data.artListData;
-            this.artNum = res.data.artTotalData;
-          }
-        })
-        .catch(err => {
-          console.error(err);
-        });
+      artAllLists().then(res => {
+        if (res.data.code === 1) {
+          this.artData = res.data.artListData;
+          this.artNum = res.data.artTotalData;
+        }
+      }).catch(err => {
+        console.error(err);
+      });
     },
     tagAllTotal () {
-      getTagTotals()
-        .then(res => {
-          if (res.data.code === 1) {
-            this.tagNum = res.data.tagTotalData;
-          }
-        })
-        .catch(err => {
-          console.error(err);
-        });
+      getTagTotals().then(res => {
+        if (res.data.code === 1) {
+          this.tagNum = res.data.tagTotalData;
+        }
+      }).catch(err => {
+        console.error(err);
+      });
     },
     pvAllTotal () {
-      getPvTotals()
-        .then(res => {
-          if (res.data.code === 1) {
-            this.pvNum = res.data.result['0'].pv_count;
-          }
-        })
-        .catch(err => {
-          console.error(err);
-        });
+      getPvTotals().then(res => {
+        if (res.data.code === 1) {
+          this.pvNum = res.data.result['0'].pv_count;
+        }
+      }).catch(err => {
+        console.error(err);
+      });
+    },
+    cmtAllTotal () {
+      getAllCmts().then(res => {
+        if (res.data.code === 1) {
+          this.cmtNum = res.data.result;
+        }
+      }).catch(err => {
+        console.error(err);
+      })
     }
   }
 };
