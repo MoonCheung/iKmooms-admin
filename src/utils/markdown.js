@@ -4,7 +4,7 @@
  * @Github: https://github.com/MoonCheung
  * @Date: 2020-03-02 00:44:05
  * @LastEditors: MoonCheung
- * @LastEditTime: 2020-03-08 10:44:20
+ * @LastEditTime: 2020-03-21 23:56:19
  */
 
 import MarkdownIt from 'markdown-it';
@@ -22,7 +22,7 @@ import toc from 'markdown-it-toc';
 import hljs from './highlight';
 
 const config = {
-  html: false,
+  html: true,
   breaks: false,
   linkify: false,
   injected: true,
