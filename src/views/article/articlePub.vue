@@ -141,7 +141,7 @@ import { getQNToken } from '@/api/qiniu';
 import { insertArticle, getArtDetl, editArticle } from '@/api/article';
 import { getAllCatgs } from '@/api/category';
 import { getAllTags } from '@/api/tag';
-import axios from 'axios';
+import * as qiniu from 'qiniu-js';
 import './index.scss';
 
 export default {
@@ -206,7 +206,6 @@ export default {
         { _id: 2, originname: '混合' }
       ],
       // 七牛云配置
-      token: '',
       regionUrl: 'https://upload-z2.qiniup.com', // 七牛云的上传地址，我这里是华南区
       qiniulink: 'https://static.ikmoons.com/' // 这是七牛云空间的外链默认域名
     };
@@ -294,32 +293,75 @@ export default {
     },
     // 上传缩略图
     uploadImg (req) {
-      const config = {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      };
-      let filetype = '';
-      if (req.file.type === 'image/png') {
-        filetype = 'png';
-      } else {
-        filetype = 'jpg';
-      }
+      const { file } = req;
       // 重命名要上传的文件
-      const keyname =
+      const key =
         'blogs/image/' +
         new Date().getTime() +
         Math.floor(Math.random() * 100) +
-        '.' +
-        filetype;
+        '.' + file.name.split('.')[1];
+      /*
+      * fname: string，文件原文件名.
+      * params: object，用来放置自定义变量;
+      * mimeType: null || array，用来限制上传文件类型，为 null 时表示不对文件类型限制；
+      * 限制类型放到数组里： ["image/png", "image/jpeg", "image/gif"]
+      */
+      const putExtra = {
+        fname: file.name,
+        params: {},
+        mimeType: ["image/png", "image/jpeg", "image/gif"]
+      };
+      const config = {
+        useCdnDomain: true,
+        region: qiniu.region.z2 // 华南
+      };
+      const options = {
+        quality: 0.92,
+        noCompressIfLarger: true,
+        maxWidth: 740,
+        maxHeight: 400
+      }
       getQNToken().then(res => {
-        const formdata = new FormData(); // 打印出空对象
-        // 利用append的内置方式
-        formdata.append('file', req.file);
-        formdata.append('token', res.data.result.token);
-        formdata.append('key', keyname);
-        // 通过post方式请求获得返回七牛云数据的
-        axios.post(this.regionUrl, formdata, config).then(res => {
-          this.artform.banner = this.qiniulink + res.data.key;
-        });
+        const self = this;
+        const getToken = res.data.result.token;
+        qiniu.compressImage(file, options).then(data => {
+          const observable = qiniu.upload(data.dist, key, getToken, putExtra, config)
+          observable.subscribe({
+            next (res) {
+              // 提示文件进度
+              let totalPercent = 0;
+              totalPercent += res.total.percent;
+              const h = self.$createElement;
+              if (Object.is(totalPercent, 100)) {
+                self.$notify({
+                  title: '上传成功',
+                  message: h('div', { style: 'display:flex; flex-flow:column wrap; justify-content:flex-start; align-content:center;' }, [
+                    h('span', null, `当前上传进度:${totalPercent}%`),
+                    h('span', null, `已上传大小，单位为字节:${res.total.loaded}`),
+                    h('span', null, `本次上传的总量控制信息:${res.total.size}`),
+                  ]),
+                  type: 'success'
+                })
+              }
+            },
+            error (err) {
+              // 提示错误
+              self.$message({
+                message: err,
+                type: 'error'
+              });
+            },
+            complete (res) {
+              // 完成后的操作
+              self.artform.banner = self.qiniulink + res.key;
+            }
+          })
+        }).catch(err => {
+          self.$message({
+            message: err,
+            type: 'error'
+          });
+        })
       }).catch(err => {
         console.error(err);
       });
