@@ -89,12 +89,7 @@
 </template>
 
 <script>
-import {
-  addCategory,
-  getCategory,
-  editCategory,
-  delCategory
-} from '@/api/category';
+import { addCategory, getCategory, editCategory, delCategory } from '@/api/category';
 import vPagination from '@/components/Pagination';
 import './index.scss';
 
@@ -166,65 +161,59 @@ export default {
         distinguishCancelAndClose: true,
         confirmButtonText: '确认',
         cancelButtonText: '返回'
-      })
-        .then(() => {
-          delCategory(param).then(res => {
-            if (res.data.code === 1) {
-              this.$message({
-                type: 'success',
-                message: res.data.msg
-              });
-              // 再次获取分类列表
-              this.getCatgList();
-            }
-          });
-        })
-        .catch(action => {
-          this.$message({
-            type: 'info',
-            message:
-              action === 'cancel' ? '放弃删除并离开页面' : '停留在当前页面'
-          });
+      }).then(() => {
+        delCategory(param).then(res => {
+          if (res.data.code === 1) {
+            this.$message({
+              type: 'success',
+              message: res.data.msg
+            });
+            // 再次获取分类列表
+            this.getCatgList();
+          }
         });
+      }).catch(action => {
+        this.$message({
+          type: 'info',
+          message:
+            action === 'cancel' ? '放弃删除并离开页面' : '停留在当前页面'
+        });
+      });
     },
     // 向服务器提交数据
     submitData (catgForm) {
       this.$refs.catgForm.validate(valid => {
         if (valid) {
           if (this.todo === 'add') {
-            addCategory(this.catgForm)
-              .then(res => {
-                if (res.data.code === 1) {
-                  this.dialogFormVisible = false;
-                  this.getCatgList();
-                  this.$message({
-                    message: res.data.msg,
-                    type: 'success'
-                  });
-                } else {
-                  this.$message.error(res.data.msg);
-                }
-              })
-              .catch(err => {
-                console.error(err);
-              });
+            addCategory(this.catgForm).then(res => {
+              if (res.data.code === 1) {
+                this.dialogFormVisible = false;
+                this.getCatgList();
+                this.$message({
+                  message: res.data.msg,
+                  type: 'success'
+                });
+              } else {
+                this.$message.error(res.data.msg);
+              }
+            }).catch(err => {
+              console.error(err);
+            });
           } else {
-            editCategory(this.catgForm)
-              .then(res => {
-                if (res.data.code === 1) {
-                  this.dialogFormVisible = false;
-                  this.getCatgList();
-                  this.$message({
-                    message: res.data.msg,
-                    type: 'success'
-                  });
-                } else {
-                  this.$message.error(res.data.msg);
-                }
-              })
-              .catch(err => {
-                console.error(err);
-              });
+            editCategory(this.catgForm).then(res => {
+              if (res.data.code === 1) {
+                this.dialogFormVisible = false;
+                this.getCatgList();
+                this.$message({
+                  message: res.data.msg,
+                  type: 'success'
+                });
+              } else {
+                this.$message.error(res.data.msg);
+              }
+            }).catch(err => {
+              console.error(err);
+            });
           }
         }
       });
