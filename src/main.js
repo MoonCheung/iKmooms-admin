@@ -49,7 +49,8 @@ import {
   MenuItemGroup,
   Breadcrumb,
   BreadcrumbItem,
-  Scrollbar
+  Scrollbar,
+  Notification
 } from 'element-ui';
 
 import '@/styles/index.scss'; // global css
@@ -113,6 +114,7 @@ Vue.use(Scrollbar);
 // Vue.prototype.$alert = MessageBox.alert
 // Vue.prototype.$prompt = MessageBox.prompt
 Vue.prototype.$confirm = MessageBox.confirm;
+Vue.prototype.$notify = Notification;
 Vue.prototype.$message = Message;
 
 new Vue({

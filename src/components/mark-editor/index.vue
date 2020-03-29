@@ -16,6 +16,14 @@
             @click="drawImage">图片</li>
         <li class="-h3"
             @click="drawH3Title">H3</li>
+        <li class="file">
+          <el-upload class="uploadFile"
+                     :action="regions"
+                     :http-request="onUploadFile"
+                     :show-file-list="false">
+            文件
+          </el-upload>
+        </li>
         <li class="save"
             @click="saveAsMarkdown">保存</li>
       </ul>
@@ -53,12 +61,21 @@ import "codemirror/theme/material.css";
 import 'highlight.js/styles/monokai-sublime.css';
 // github markdown 样式
 import 'github-markdown-css/github-markdown.css';
+// 七牛SDK
+import { getQNToken } from '@/api/qiniu';
+import * as qiniu from 'qiniu-js';
 
 export default {
   name: 'MarkEditor',
   data () {
     return {
       content: '',
+    }
+  },
+  props: {
+    regions: {
+      type: String,
+      default: ''
     }
   },
   // 计算属性被混入实例当中，且有缓存的
@@ -96,7 +113,9 @@ export default {
       // 回车键自动补全上一步格式
       extraKeys: {
         "Enter": "newlineAndIndentContinueMarkdownList"
-      }
+      },
+      // 自动对焦
+      autofocus: true
     });
     this.editor.setSize('auto', '600');
     // 当用户输入发生更改时会触发
@@ -125,8 +144,7 @@ export default {
     drawQuote () {
       const codemirror = this.editor;
       const start = '> ';
-      const end = '\n';
-      this.replaceSelection(codemirror, start, end);
+      this.replaceSelection(codemirror, start);
     },
     // 代码
     drawCode () {
@@ -139,22 +157,92 @@ export default {
     drawLink () {
       const codemirror = this.editor;
       const start = '[';
-      const end = '](https://)';
+      const end = ']()';
       this.replaceSelection(codemirror, start, end);
     },
     // 图像
     drawImage () {
       const codemirror = this.editor;
       const start = '![';
-      const end = '](https://)';
+      const end = ']()';
       this.replaceSelection(codemirror, start, end);
     },
     // H3标题
     drawH3Title () {
       const codemirror = this.editor;
       const start = '### ';
-      const end = '\n';
-      this.replaceSelection(codemirror, start, end);
+      this.replaceSelection(codemirror, start);
+    },
+    // 上传文件
+    onUploadFile (req) {
+      const { file } = req;
+      const key = 'blogs/media/' +
+        new Date().getTime() +
+        Math.floor(Math.random() * 100) + '.' +
+        file.name.split('.')[1];
+      const mediaType = ["video/mp4", "video/webm", "video/ogg"];
+      /*
+      * fname: string，文件原文件名.
+      * params: object，用来放置自定义变量;
+      * mimeType: null || array，用来限制上传文件类型，为 null 时表示不对文件类型限制；
+      * 限制类型放到数组里： ["image/png", "image/jpeg", "image/gif"]
+      */
+      const putExtra = {
+        fname: file.name,
+        params: {},
+        mimeType: ["video/mp4", "video/webm", "video/ogg", "audio/ogg", "audio/mpeg", "audio/wav"]
+      };
+      const config = {
+        useCdnDomain: true,
+        region: qiniu.region.z2 // 华南
+      };
+      getQNToken().then(res => {
+        const self = this;
+        const getToken = res.data.result.token;
+        const observable = qiniu.upload(file, key, getToken, putExtra, config)
+        observable.subscribe({
+          next (res) {
+            // 提示文件进度
+            let totalPercent = 0;
+            totalPercent += res.total.percent;
+            const h = self.$createElement;
+            if (Object.is(totalPercent, 100)) {
+              self.$notify({
+                title: '上传成功',
+                message: h('div', { style: 'display:flex; flex-flow:column wrap; justify-content:flex-start; align-content:center;' }, [
+                  h('span', null, `当前上传进度:${totalPercent}%`),
+                  h('span', null, `已上传大小，单位为字节:${res.total.loaded}`),
+                  h('span', null, `本次上传的总量控制信息:${res.total.size}`),
+                ]),
+                type: 'success'
+              })
+            }
+          },
+          error (err) {
+            // 提示错误
+            self.$message({
+              message: err,
+              type: 'error'
+            });
+          },
+          complete (res) {
+            // 完成后的操作
+            // 上传成功以后会返回key 和 hash，key就是文件名了！
+            const codemirror = self.editor;
+            if (mediaType.includes(file.type)) {
+              const start = `<video id="video" controls="" preload="none">\r  <source id="${res.key.split('.')[1]}" src="https://static.ikmoons.com/${res.key}" type="video/mp4">\r  <p>您的浏览器不支持HTML5视频元素</p>\r</video><br/>`;
+              const end = '\n';
+              self.replaceHTMLSelection(codemirror, start, end);
+            } else {
+              const start = `<audio id="audio" controls="" preload="none">\r  <source id="${res.key.split('.')[1]}" src="https://static.ikmoons.com/${res.key}" type="video/mp4">\r  <p>您的浏览器不支持HTML5音频元素</p>\r</audio><br/>`;
+              const end = '\n';
+              self.replaceHTMLSelection(codemirror, start, end);
+            }
+          }
+        })
+      }).catch(err => {
+        console.error(err)
+      })
     },
     // 保存markdown
     saveAsMarkdown () {
@@ -165,14 +253,25 @@ export default {
       this.saveFile(this.content, `${data + time}.md`);
     },
     // 替换光标选中项内容
-    replaceSelection (cm, start, end) {
+    replaceSelection (cm, start, end = "\n") {
       const startPoint = cm.getCursor('start');
       const endPoint = cm.getCursor('end');
-      let text = cm.getSelection();
+      const text = cm.getSelection();
       cm.replaceSelection(start + text + end);
       startPoint.ch += start.length;
-      endPoint.ch += start.length;
+      endPoint.ch += end.length;
       cm.setSelection(startPoint, endPoint);
+      cm.focus();
+    },
+    // 替换光标选中项HTML内容
+    replaceHTMLSelection (cm, start, end) {
+      const startPoint = cm.getCursor('start');
+      const endPoint = cm.getCursor('end');
+      const text = cm.getSelection();
+      startPoint.ch += start.length;
+      endPoint.ch += end.length;
+      cm.setSelection(startPoint, endPoint);
+      cm.replaceSelection(start + text + end);
       cm.focus();
     },
     // 保存文件

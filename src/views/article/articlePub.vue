@@ -103,6 +103,7 @@
                                 prop="content">
                     <!-- 引入自定义markdown组件这里 -->
                     <v-mark-editor ref="markEditor"
+                                   :regions="regionUrl"
                                    v-model="artform.content"></v-mark-editor>
                   </el-form-item>
                 </el-col>
@@ -315,7 +316,7 @@ export default {
         formdata.append('file', req.file);
         formdata.append('token', res.data.result.token);
         formdata.append('key', keyname);
-        //通过post方式请求获得返回七牛云数据的
+        // 通过post方式请求获得返回七牛云数据的
         axios.post(this.regionUrl, formdata, config).then(res => {
           this.artform.banner = this.qiniulink + res.data.key;
         });
