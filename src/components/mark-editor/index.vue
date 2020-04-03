@@ -230,11 +230,11 @@ export default {
             // 上传成功以后会返回key 和 hash，key就是文件名了！
             const codemirror = self.editor;
             if (mediaType.includes(file.type)) {
-              const start = `<video class="video" controls="" preload="none">\r  <source class="${res.key.split('.')[1]}" src="https://static.ikmoons.com/${res.key}" type="${file.type}">\r  <p>您的浏览器不支持HTML5视频元素</p>\r</video><br/>`;
+              const start = `<video id="player" class="video" controls="" preload="none">\r  <source class="${res.key.split('.')[1]}" src="https://static.ikmoons.com/${res.key}" type="${file.type}">\r  <p>您的浏览器不支持HTML5视频元素</p>\r</video><br/>`;
               const end = '\n';
               self.replaceHTMLSelection(codemirror, start, end);
             } else {
-              const start = `<audio class="audio" controls="" preload="none">\r  <source class="${res.key.split('.')[1]}" src="https://static.ikmoons.com/${res.key}" type="${file.type}">\r  <p>您的浏览器不支持HTML5音频元素</p>\r</audio><br/>`;
+              const start = `<audio id="player" class="audio" controls="" preload="none">\r  <source class="${res.key.split('.')[1]}" src="https://static.ikmoons.com/${res.key}" type="${file.type}">\r  <p>您的浏览器不支持HTML5音频元素</p>\r</audio><br/>`;
               const end = '\n';
               self.replaceHTMLSelection(codemirror, start, end);
             }
