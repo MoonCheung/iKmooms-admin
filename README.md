@@ -18,6 +18,8 @@ The background management is based on the node server can run, need to install t
 
 ## 相关截图
 
+![后台管理](https://static.ikmoons.com/blogs/image/admin_ikmoons_com.png)
+
 ## 执行命令
 
 ### Build Setup
