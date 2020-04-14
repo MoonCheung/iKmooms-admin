@@ -27,7 +27,7 @@ The background management is based on the node server can run, need to install t
 
 ```bash
 # clone the project
-git clone https://github.com/MoonCheung/vue-backstage.git
+git clone git@github.com:MoonCheung/iKmooms-admin.git
 
 # enter the project directory
 cd vue-backstage
