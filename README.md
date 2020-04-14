@@ -11,8 +11,9 @@ The background management is based on the node server can run, need to install t
 ## 其他相关项目
 
 - Maintained by [MoonCheung](mailto://salvador23@163.com)
-- Blog applet: [blog-applet](https://github.com/MoonCheung/blog-applet) is provided run by mpvue + Vant + ColorUI
-- admin server: [node-server](https://github.com/MoonCheung/node-server) is provided run by koa
+- Blog site: [iKmoons.com](https://github.com/MoonCheung/iKmoons.com) Construction and development based on nuxt.js framework
+- Blog applet: [blog-applet](https://github.com/MoonCheung/blog-applet) Build and develop based on mpvue + Vant + ColorUI
+- admin server: [node-server](https://github.com/MoonCheung/node-server) Build development based on koa node
 
 ### 更新记录: [CHANGELOG.md](./CHANGELOG.md)
 
